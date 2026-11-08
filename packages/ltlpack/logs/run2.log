@@ -1,0 +1,15 @@
+start 2026-11-07 14:48:29
+ltlfilt (spot) 2.16.1
+*** This is NuSMV 2.6.0 (compiled on Wed Oct 14 15:36:56 2015)
+SELFTEST_OK
+NuSMV binary: /Users/gina/nl2semiformal/ltl_engines/scripts/bin/NuSMV | ltlfilt: /Users/gina/nl2semiformal/ltl_engines/scripts/bin/ltlfilt
+abstract_pt {'ok': 478} total 478
+smv_pt {'ok': 449, 'skip window>128': 24, "ERR Command '['/Users/gina/nl2semiformal/ltl_engines/scripts": 5} total 478
+spot_pt_literal {'skip': 39, 'ERR >>> (H (b_no_fail -> c_336344e992))\n       ^\nsyntax erro': 3, 'ERR >>> (H ((b_Fin_roll_hold & ((Y (!b_Fin_roll_hold)) | (!(': 3, 'ERR >>> (H (c_38329cd45c -> c_d5cabc2431))\n       ^\nsyntax e': 2, 'ERR >>> (H (c_36a5e5db06 -> c_551c190a19))\n       ^\nsyntax e': 2, 'ERR >>> (H (c_4b4a80bb22 -> c_847e05ed4b))\n       ^\nsyntax e': 2} total 478
+abstract_ft {'-': 362, 'ok': 116} total 478
+spot_ft {'-': 362, 'ok': 116} total 478
+525 / 610
+550 / 610
+575 / 610
+600 / 610
+end 2026-11-07 15:42:23

@@ -1,0 +1,478 @@
+{"id": "ctl|TSM-002|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-002|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|TSM-002|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-002|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-002|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-002|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-002|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-002|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-002|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003a|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003a|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|TSM-003a|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003a|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003a|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003a|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003a|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003a|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003a|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003b|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003b|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|TSM-003b|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003b|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003b|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003b|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003b|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003b|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003b|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003c|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003c|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|TSM-003c|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003c|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003c|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003c|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003c|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003c|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TSM-003c|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-001v1|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-001v1|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-001v1|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-001v1|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-001v1|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-001v1|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-001v1|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-001v1|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-001v1|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-002|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-002|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-002|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-002|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-002|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-002|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-002|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-002|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-002|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-003|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003v2|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003v2|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-003v2|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003v2|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003v2|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003v2|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003v2|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-003v2|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-004|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004v2|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004v2|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-004v2|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004v2|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004v2|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004v2|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004v2|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-004v2|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-005|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-005|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-005|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-005|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-005|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-005|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-005|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-005|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-006|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-006|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-006|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-006|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-006|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-006|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-006|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-006|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-007|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007v2|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007v2|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-007v2|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007v2|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007v2|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007v2|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007v2|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-007v2|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v1|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v1|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-008v1|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v1|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v1|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v1|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v1|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v1|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v2|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v2|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-008v2|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v2|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v2|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v2|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v2|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-008v2|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-009|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-009|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-009|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-009|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-009|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-009|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-009|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-009|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-010|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-010|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-010|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-010|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-010|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-010|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-010|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-010|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-010|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v1|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v1|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-011v1|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v1|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v1|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v1|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v1|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v1|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v1|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v2|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v2|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-011v2|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v2|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v2|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v2|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v2|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-011v2|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-012|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012_weak|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012_weak|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-012_weak|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012_weak|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012_weak|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012_weak|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012_weak|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-012_weak|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-013|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-013|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|FSM-013|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-013|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-013|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-013|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-013|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-013|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|FSM-013|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-001|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-001|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|TUI-001|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-001|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-001|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-001|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-001|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-001|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-001|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|TUI-003|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v2|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v2|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|TUI-003v2|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v2|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v2|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v2|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v2|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v2|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v3|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v3|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|TUI-003v3|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v3|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v3|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v3|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v3|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|TUI-003v3|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|NN-003A|identity#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003A|identity#ref", "kind": "ref", "abstract_pt": "ok", "smv_pt": "skip window>128", "abstract_ft": "ok"}
+{"id": "ctl|NN-003A|contrapositive#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003A|or_form#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003A|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003A|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003A|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003A|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|NN-003A|converse#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003B|identity#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003B|identity#ref", "kind": "ref", "abstract_pt": "ok", "smv_pt": "skip window>128", "abstract_ft": "ok"}
+{"id": "ctl|NN-003B|contrapositive#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003B|or_form#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003B|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003B|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003B|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-003B|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|NN-003B|converse#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-004|identity#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-004|identity#ref", "kind": "ref", "abstract_pt": "ok", "smv_pt": "skip window>128", "abstract_ft": "ok"}
+{"id": "ctl|NN-004|contrapositive#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-004|or_form#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-004|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-004|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-004|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|NN-004|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|NN-004|converse#gen", "kind": "gen", "abstract_pt": "ok", "smv_pt": "skip window>128"}
+{"id": "ctl|AP-000|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-000|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-000|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-000|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-000|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-000|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-000|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-000|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-000|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-001|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-001|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-001|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-001|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-001|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-001|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-001|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-001|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-001|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-002|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-002|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-002|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-002|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-002|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-002|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-002|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-002|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-002|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003A|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003A|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-003A|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003A|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003A|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003A|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003A|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003A|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003A|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003B|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003B|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-003B|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003B|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003B|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003B|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003B|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003B|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003B|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003C|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003C|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-003C|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003C|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003C|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003C|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003C|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003C|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003C|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003D|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003D|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-003D|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003D|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003D|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003D|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003D|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003D|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-003D|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004a|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004a|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-004a|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004a|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004a|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004a|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004a|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004a|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004a|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004b|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004b|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-004b|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004b|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004b|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004b|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004b|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004b|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-004b|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-008|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-008|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-008|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-008|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-008|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-008|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-008|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-008|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-008|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010a|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010a|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-010a|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010a|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010a|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010a|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010a|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010a|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010a|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010b|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010b|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-010b|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010b|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010b|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010b|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010b|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010b|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010bv2|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010bv2|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|AP-010bv2|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010bv2|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010bv2|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010bv2|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010bv2|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010bv2|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|AP-010bv2|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001a|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001a|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|SWIM-001a|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001a|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001a|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001a|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001a|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001a|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001a|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001b|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001b|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|SWIM-001b|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001b|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001b|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001b|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001b|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001b|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-001b|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-002|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-002|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|SWIM-002|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-002|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-002|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-002|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-002|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-002|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|SWIM-002|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|EUL-004|identity#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|EUL-004|identity#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "ctl|EUL-004|contrapositive#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|EUL-004|or_form#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|EUL-004|onset_trigger#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|EUL-004|plus_exists_A#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|EUL-004|or_exists_notA#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|EUL-004|response_always#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "ctl|EUL-004|converse#gen", "kind": "gen", "abstract_pt": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-001|25965115#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-001|25965115#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-001|60333966#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-001|83928368#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-001|38582527#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-001|64121414#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-001|8401319#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-001|25111226#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-002|12754041#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-002|22402930#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-00_TRIPLEX-RM-002|53824299#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N01|22747981#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N01|19871642#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N01|45337249#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N01|43090277#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N01|90874009#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N01|35933060#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N01|13812891#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N02|70897943#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N02|93142683#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N02|58913132#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N02|70689937#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N02|58283249#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N02|24851382#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N02|95923214#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-01_FSM-N02|39320994#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-02_TUSTIN-N1|21103980#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-02_TUSTIN-N1|42316437#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-02_TUSTIN-N2|94059683#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-02_TUSTIN-N2|94059683#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N01|87399858#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N01|87399858#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N01|29691980#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N01|36413642#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N01|42612140#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N01|8015646#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|4612956#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|4612956#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|66535049#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|72107451#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|8370194#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|48916117#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|91215358#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|7552382#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-03_REG-N02|47559197#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-04_NLG-N2p3|29745800#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-04_NLG-N2p3|40902509#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-04_NLG-N2p3|15831495#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-04_NLG-N2p3|97421731#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-04_NLG-N2p3|81327712#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-04_NLG-N2p3|7387127#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-04_NLG-N2p3|27629111#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-05_NN-N1|98667895#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-05_NN-N2|27083620#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-06_EB-N1|47267335#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-06_EB-N1|47267335#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-08_SWIM-N1|54700164#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-08_SWIM-N1|2809877#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-08_SWIM-N1|70013595#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-08_SWIM-N1|67497995#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-08_SWIM-N1|26196170#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-08_SWIM-N1|65719865#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-08_SWIM-N1|88996776#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-09_EUL-N1|48868271#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-09_EUL-N1|48868271#ref", "kind": "ref", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-09_EUL-N1|89845360#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-09_EUL-N1|81816435#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-09_EUL-N1|89644176#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}
+{"id": "d8|LM-09_EUL-N1|23501757#gen", "kind": "gen", "abstract_pt": "ok", "abstract_ft": "ok"}

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Wrapper for Spot's ltlfilt. Runs it inside the long-lived container ltl-spot (image ltl-spot:local) so that
+# ltl_engines.py can call it like a locally installed binary.
+exec docker exec -i ltl-spot ltlfilt "$@"

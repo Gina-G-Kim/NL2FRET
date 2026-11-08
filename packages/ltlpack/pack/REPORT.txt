@@ -1,0 +1,24 @@
+## controls (expected role defined by the mutation, independent of any engine): match / n
+| mutation | n | z3 (judge4) | nusmv | spot_ft | z3b |
+|---|---|---|---|---|---|
+| identity | 47 | 47 | 44 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| contrapositive | 47 | 47 | 44 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| or_form | 47 | 47 | 44 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| onset_trigger | 47 | 47 | 44 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| plus_exists_A | 47 | 44 | 44 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| or_exists_notA | 47 | 47 | 42 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| response_always | 47 | 47 | 0 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| converse | 47 | 47 | 44 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| rename_all | 42 | 42 | 40 (err/na 2) | 0 (err/na 42) | 0 (err/na 42) |
+| rename_first | 47 | 47 | 44 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| rename_half | 47 | 47 | 44 (err/na 3) | 0 (err/na 47) | 0 (err/na 47) |
+| total | 512 | 509 | 434 | 0 | 0 |
+
+## generated sentences (d8): engine role vs judge4 z3 role (anchor mode)
+nusmv agree 85 / 98 {('NEITHER', 'NEITHER'): 45, ('PROOF', 'PROOF'): 4, ('SAME', 'SAME'): 24, ('PROOF', 'DEGEN'): 1, ('REFUTE', 'REFUTE'): 12, ('PROOF', 'ERR'): 5, ('PROOF', 'NEITHER'): 2, ('NEITHER', 'ERR'): 2, ('SAME', 'ERR'): 3}
+spot_ft agree 83 / 98 {('NEITHER', 'NEITHER'): 46, ('PROOF', 'PROOF'): 5, ('SAME', 'SAME'): 20, ('REFUTE', 'REFUTE'): 12, ('PROOF', 'NEITHER'): 5, ('SAME', 'NEITHER'): 4, ('SAME', 'ERR'): 3, ('PROOF', 'ERR'): 2, ('NEITHER', 'ERR'): 1}
+z3b agree 0 / 98 {('NEITHER', 'n/a'): 47, ('PROOF', 'n/a'): 12, ('SAME', 'n/a'): 27, ('REFUTE', 'n/a'): 12}
+
+## engine vs engine (d8): nusmv vs spot_ft
+{('NEITHER', 'NEITHER'): 47, ('PROOF', 'PROOF'): 4, ('SAME', 'SAME'): 20, ('DEGEN', 'PROOF'): 1, ('REFUTE', 'REFUTE'): 12, ('ERR', 'NEITHER'): 4, ('SAME', 'NEITHER'): 4, ('ERR', 'ERR'): 6}
+seconds per pair (median): {'nusmv': 0.25, 'spot_ft': 0.96, 'z3b': None}

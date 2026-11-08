@@ -1,0 +1,129 @@
+{
+ "checks": {
+  "pre_split": {
+   "nasa_papers": 195,
+   "lockheed_martin": 61,
+   "overlap": 12,
+   "distinct_total": 244
+  },
+  "post_split": {
+   "nasa_papers": 183,
+   "lockheed_martin": 49,
+   "fsm": 12,
+   "distinct_total": 244
+  },
+  "fsm_exact_match_with_both_originals": true,
+  "gold_keys_in_outputs": 0,
+  "reconstructed_lockheed_martin": 61,
+  "reconstructed_nasa_papers": 195,
+  "duplicate_nl_across_groups": 0
+ },
+ "A_cases": 183,
+ "A_by_origin": {
+  "nasa_tr": 42,
+  "external_repo": 138,
+  "paper_or_slides": 3
+ },
+ "A_by_source_code": {
+  "CP22": 1,
+  "TC4": 10,
+  "WF23": 9,
+  "IR20": 7,
+  "PLC23": 2,
+  "MLV": 79,
+  "UC69": 18,
+  "DRONE": 41,
+  "CR21": 12,
+  "RC22": 1,
+  "LM10": 1,
+  "BG20": 1,
+  "TUT22": 1
+ },
+ "A_set_membership": {
+  "v1_pairs": 45,
+  "pool_v2": 167,
+  "v2_main": 68,
+  "nl3_calib": 99,
+  "v7_dev": 94
+ },
+ "A_dev_roles": {
+  "nasa_dev": 25,
+  "ext_dev": 69
+ },
+ "A_legacy": {
+  "fret_template_bench": 20,
+  "fret_retest_v2": 51
+ },
+ "B_cases": 49,
+ "B_by_challenge": {
+  "00_TRIPLEX": 4,
+  "01_FSM": 1,
+  "02_TUSTIN": 3,
+  "03_REG": 10,
+  "04_NLG": 6,
+  "05_NN": 4,
+  "06_EB": 2,
+  "07_AP": 10,
+  "08_SWIM": 2,
+  "09_EUL": 7
+ },
+ "B_by_stratum": {
+  "conditional": 15,
+  "invariant": 22,
+  "timed": 10,
+  "scoped": 2
+ },
+ "B_files": {
+  "hbourbouh/lm_challenges original_models/0_triplex/0_triplex_reqs.docx": 4,
+  "hbourbouh/lm_challenges original_models/1_fsm/1_fsm_reqs.docx": 1,
+  "hbourbouh/lm_challenges original_models/2_tustin/2_tustin_reqs.docx": 3,
+  "hbourbouh/lm_challenges original_models/3_regulators/3_regs_reqs.docx": 10,
+  "hbourbouh/lm_challenges original_models/4_nlguide/4_nlguide_reqs.docx": 6,
+  "hbourbouh/lm_challenges original_models/5_nn/5_nn_reqs.docx": 4,
+  "hbourbouh/lm_challenges original_models/6_eb/6_eb_reqs.docx": 2,
+  "hbourbouh/lm_challenges original_models/7_autopilot/7_ap_requirements.docx": 10,
+  "hbourbouh/lm_challenges original_models/8_swim/8_swim_reqs.docx": 2,
+  "hbourbouh/lm_challenges original_models/9_euler/9_euler321_I2B_reqs.docx": 7
+ },
+ "used_in_result_dirs": {
+  "nl4/results_smoke": {
+   "lockheed_martin": 5,
+   "fsm": 1,
+   "original_61_basis": 6
+  },
+  "nl5/results_smoke2": {
+   "lockheed_martin": 5,
+   "fsm": 1,
+   "original_61_basis": 6
+  },
+  "nl6/results_pre": {
+   "lockheed_martin": 5,
+   "fsm": 1,
+   "original_61_basis": 6
+  },
+  "nl7/results_lm": {
+   "lockheed_martin": 49,
+   "fsm": 12,
+   "original_61_basis": 61
+  },
+  "nl7/results_pre": {
+   "lockheed_martin": 5,
+   "fsm": 1,
+   "original_61_basis": 6
+  },
+  "v8_dict8/bench/results_dict8": {
+   "lockheed_martin": 16,
+   "fsm": 2,
+   "original_61_basis": 18
+  }
+ },
+ "F_cases": 12,
+ "F_set_membership_nasa_papers": {
+  "v1_pairs": 12,
+  "pool_v2": 0,
+  "v2_main": 0,
+  "nl3_calib": 0,
+  "v7_dev": 0
+ },
+ "sigdict_sha256": "a190a714c61622b24fd93dcfb83001b3e45fc66c83315c3a6f50b04d2dfd7cf3"
+}

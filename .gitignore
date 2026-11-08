@@ -1,0 +1,61 @@
+# .gitignore for the NL2FRET repository
+# Principle: final results (jsonl files, judgment results, reports, MANIFEST and FROZEN*.sha256 files) are tracked,
+# except those under experiments/, which is excluded as a whole (see the end of this file).
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments (experiments/nl2fret/.venv is 1.2 GB and contains hard-coded absolute paths, so it is not tracked)
+.venv/
+venv/
+env/
+
+# Operating system and editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+*secret*
+*credentials*
+
+# Temporary working directories (FRET check work files, 812 generated NuSMV .smv inputs, etc.)
+work/
+tmp/
+.mock_state/
+results_mock/
+
+# Archives (input and result zips; the result folders also exist unpacked)
+*.zip
+
+# LaTeX build artifacts (docs/paper)
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+
+# Docker cache
+.docker/
+
+# Exclusions decided by the project owner (2026-11-08)
+testnote.md
+experiments/
+
+# ---- Open items (whether to track them is for the project owner to decide) ----
+# 1. Large result folders: experiments/nl7/results_lm (about 67 MB), experiments/nl3/results_nl3 (about 36 MB), etc.
+#    They are tracked at present. If size becomes a problem, uncomment the next line to exclude only large raw
+#    outputs such as calls.jsonl.
+# experiments/**/calls.jsonl
+# 2. The 11 paper PDFs (experiments/nl2fret/pdfs, about 25 MB) and docs/paper/*.pdf: tracked at present.
+# 3. Run logs (run.log, console.log, *_console.log) are run records and are kept tracked.
+# 4. Because *.zip is excluded, the original input archives (inputs/*.zip) are not in git. Store them elsewhere
+#    if they must be preserved.
+# 5. Because experiments/ is excluded as a whole, items 1 to 3 above (tracking of results inside the experiment
+#    folders) do not currently apply.

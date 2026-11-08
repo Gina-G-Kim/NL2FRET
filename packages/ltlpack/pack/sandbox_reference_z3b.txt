@@ -1,0 +1,24 @@
+## controls (expected role defined by the mutation, independent of any engine): match / n
+| mutation | n | z3 (judge4) | nusmv | spot_ft | z3b |
+|---|---|---|---|---|---|
+| identity | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| contrapositive | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| or_form | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| onset_trigger | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| plus_exists_A | 47 | 44 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| or_exists_notA | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 42 (err/na 3) |
+| response_always | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| converse | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| rename_all | 42 | 42 | 0 (err/na 42) | 0 (err/na 42) | 40 (err/na 2) |
+| rename_first | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| rename_half | 47 | 47 | 0 (err/na 47) | 0 (err/na 47) | 44 (err/na 3) |
+| total | 512 | 509 | 0 | 0 | 478 |
+
+## generated sentences (d8): engine role vs judge4 z3 role (anchor mode)
+nusmv agree 0 / 98 {('NEITHER', 'n/a'): 47, ('PROOF', 'n/a'): 12, ('SAME', 'n/a'): 27, ('REFUTE', 'n/a'): 12}
+spot_ft agree 0 / 98 {('NEITHER', 'n/a'): 47, ('PROOF', 'n/a'): 12, ('SAME', 'n/a'): 27, ('REFUTE', 'n/a'): 12}
+z3b agree 82 / 98 {('NEITHER', 'NEITHER'): 45, ('PROOF', 'PROOF'): 5, ('SAME', 'SAME'): 20, ('REFUTE', 'REFUTE'): 12, ('PROOF', 'ERR'): 7, ('NEITHER', 'ERR'): 2, ('SAME', 'ERR'): 7}
+
+## engine vs engine (d8): nusmv vs spot_ft
+{('n/a', 'n/a'): 98}
+seconds per pair (median): {'nusmv': None, 'spot_ft': None, 'z3b': 0.01}

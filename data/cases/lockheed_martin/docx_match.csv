@@ -1,0 +1,62 @@
+case_id,group,challenge,docx_path_in_repo,locator,match,docx_git_blob_sha1
+LM-00_TRIPLEX-RM-001,lockheed_martin,00_TRIPLEX,original_models/0_triplex/0_triplex_reqs.docx,RM-001,exact_in_joined_text,a1c299a16b8bc6aa7fb69cb63fd1b086328c2710
+LM-00_TRIPLEX-RM-002,lockheed_martin,00_TRIPLEX,original_models/0_triplex/0_triplex_reqs.docx,RM-002,normalized_in_joined_text,a1c299a16b8bc6aa7fb69cb63fd1b086328c2710
+LM-00_TRIPLEX-RM-003,lockheed_martin,00_TRIPLEX,original_models/0_triplex/0_triplex_reqs.docx,RM-003,exact_in_joined_text,a1c299a16b8bc6aa7fb69cb63fd1b086328c2710
+LM-00_TRIPLEX-RM-004,lockheed_martin,00_TRIPLEX,original_models/0_triplex/0_triplex_reqs.docx,RM-004,exact_in_joined_text,a1c299a16b8bc6aa7fb69cb63fd1b086328c2710
+LM-01_FSM-N07,lockheed_martin,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #7,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-02_TUSTIN-N1,lockheed_martin,02_TUSTIN,original_models/2_tustin/2_tustin_reqs.docx,Requirements #1,exact_paragraph,653cea9a8d6834af30ac2cd14dd05876f0d8f10f
+LM-02_TUSTIN-N2,lockheed_martin,02_TUSTIN,original_models/2_tustin/2_tustin_reqs.docx,Requirements #2,exact_paragraph,653cea9a8d6834af30ac2cd14dd05876f0d8f10f
+LM-02_TUSTIN-N3,lockheed_martin,02_TUSTIN,original_models/2_tustin/2_tustin_reqs.docx,Requirements #3,exact_paragraph,653cea9a8d6834af30ac2cd14dd05876f0d8f10f
+LM-03_REG-N01,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #1,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N02,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #2,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N03,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #3,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N04,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #4,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N05,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #5,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N06,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #6,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N07,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #7,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N08,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #8,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N09,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #9,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-03_REG-N10,lockheed_martin,03_REG,original_models/3_regulators/3_regs_reqs.docx,Initial Requirements #10,exact_paragraph,bd18bfd8ad4d8323b1732be9c57bc542c13e627d
+LM-04_NLG-N1,lockheed_martin,04_NLG,original_models/4_nlguide/4_nlguide_reqs.docx,Initial Requirements #1,exact_paragraph,a33c23199833b8ad8734ebc6b122c872042f03b5
+LM-04_NLG-N2p3,lockheed_martin,04_NLG,original_models/4_nlguide/4_nlguide_reqs.docx,Initial Requirements #2 and #3,normalized_in_joined_text,a33c23199833b8ad8734ebc6b122c872042f03b5
+LM-04_NLG-N4,lockheed_martin,04_NLG,original_models/4_nlguide/4_nlguide_reqs.docx,Initial Requirements #4,normalized_in_joined_text,a33c23199833b8ad8734ebc6b122c872042f03b5
+LM-04_NLG-N5,lockheed_martin,04_NLG,original_models/4_nlguide/4_nlguide_reqs.docx,Initial Requirements #5,exact_in_joined_text,a33c23199833b8ad8734ebc6b122c872042f03b5
+LM-04_NLG-N6,lockheed_martin,04_NLG,original_models/4_nlguide/4_nlguide_reqs.docx,Initial Requirements #6 with tolerance paragraph,normalized_in_joined_text,a33c23199833b8ad8734ebc6b122c872042f03b5
+LM-04_NLG-N7,lockheed_martin,04_NLG,original_models/4_nlguide/4_nlguide_reqs.docx,Initial Requirements #7,normalized_in_joined_text,a33c23199833b8ad8734ebc6b122c872042f03b5
+LM-05_NN-N1,lockheed_martin,05_NN,original_models/5_nn/5_nn_reqs.docx,Requirements #1,exact_in_joined_text,f5ce7d37c629f1d42ea878f55edb1d2401791a5c
+LM-05_NN-N2,lockheed_martin,05_NN,original_models/5_nn/5_nn_reqs.docx,Requirements #2,exact_in_joined_text,f5ce7d37c629f1d42ea878f55edb1d2401791a5c
+LM-05_NN-N3,lockheed_martin,05_NN,original_models/5_nn/5_nn_reqs.docx,Requirements #3,exact_in_joined_text,f5ce7d37c629f1d42ea878f55edb1d2401791a5c
+LM-05_NN-N4,lockheed_martin,05_NN,original_models/5_nn/5_nn_reqs.docx,Requirements #4,exact_paragraph,f5ce7d37c629f1d42ea878f55edb1d2401791a5c
+LM-06_EB-N1,lockheed_martin,06_EB,original_models/6_eb/6_eb_reqs.docx,Requirements #1,exact_paragraph,0d8d74006d4e98d14d5eb1eb138f602a70e42423
+LM-06_EB-N2,lockheed_martin,06_EB,original_models/6_eb/6_eb_reqs.docx,Requirements #2,exact_paragraph,0d8d74006d4e98d14d5eb1eb138f602a70e42423
+LM-07_AP-0,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,Requirements (altitude hold),exact_in_joined_text,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.1,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.1 Requirement cell,exact_paragraph,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.2,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.2 Requirement cell,exact_paragraph,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.3,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.3 Requirement cell,normalized_in_joined_text,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.4,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.4 Requirement cell,normalized_in_joined_text,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.5,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.5 Requirement cell,exact_paragraph,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.6,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.6 Requirement cell,exact_paragraph,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.7,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.7 Requirement cell,exact_paragraph,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.8,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.8 Requirement cell,exact_paragraph,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-07_AP-1.10,lockheed_martin,07_AP,original_models/7_autopilot/7_ap_requirements.docx,section 1.10 Requirement cell,normalized_in_joined_text,309626bcf14ecb5ae586a44fc728fa0bdc800ee5
+LM-08_SWIM-N1,lockheed_martin,08_SWIM,original_models/8_swim/8_swim_reqs.docx,Requirement 1 (formula block through IF CAT III),normalized_in_joined_text,ea3f15e80ed51d009bc5ef7e0ae362926be1d9e5
+LM-08_SWIM-N2,lockheed_martin,08_SWIM,original_models/8_swim/8_swim_reqs.docx,Requirement 2,exact_paragraph,ea3f15e80ed51d009bc5ef7e0ae362926be1d9e5
+LM-09_EUL-N1,lockheed_martin,09_EUL,original_models/9_euler/9_euler321_I2B_reqs.docx,Requirements #1,exact_paragraph,394d685fe7c129cc861624a363947fbf72b69c88
+LM-09_EUL-N2,lockheed_martin,09_EUL,original_models/9_euler/9_euler321_I2B_reqs.docx,Requirements #2,exact_paragraph,394d685fe7c129cc861624a363947fbf72b69c88
+LM-09_EUL-N3,lockheed_martin,09_EUL,original_models/9_euler/9_euler321_I2B_reqs.docx,Requirements #3,exact_paragraph,394d685fe7c129cc861624a363947fbf72b69c88
+LM-09_EUL-N4,lockheed_martin,09_EUL,original_models/9_euler/9_euler321_I2B_reqs.docx,Requirements #4,exact_paragraph,394d685fe7c129cc861624a363947fbf72b69c88
+LM-09_EUL-N6,lockheed_martin,09_EUL,original_models/9_euler/9_euler321_I2B_reqs.docx,Requirements #6,normalized_in_joined_text,394d685fe7c129cc861624a363947fbf72b69c88
+LM-09_EUL-N7,lockheed_martin,09_EUL,original_models/9_euler/9_euler321_I2B_reqs.docx,Requirements #7,exact_paragraph,394d685fe7c129cc861624a363947fbf72b69c88
+LM-09_EUL-N8,lockheed_martin,09_EUL,original_models/9_euler/9_euler321_I2B_reqs.docx,Requirements #8,exact_in_joined_text,394d685fe7c129cc861624a363947fbf72b69c88
+LM-01_FSM-N01,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #1,exact_in_joined_text,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N02,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #2,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N03,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #3,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N04,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #4,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N05,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #5,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N06,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #6,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N08,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #8,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N09,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #9,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N10,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #10,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N11,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #11,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N12,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #12,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a
+LM-01_FSM-N13,fsm,01_FSM,original_models/1_fsm/1_fsm_reqs.docx,Requirements #13,exact_paragraph,004ad48e641e1847c31875447ff6fc5956c12d3a

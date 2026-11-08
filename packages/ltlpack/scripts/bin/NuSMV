@@ -1,0 +1,4 @@
+#!/bin/bash
+# Wrapper for NuSMV. Runs it inside the long-lived container ltl-nusmv (image cst-nusmv:local).
+# pack/work is mounted at the same path in the container, so the file arguments resolve identically.
+exec docker exec -i ltl-nusmv /opt/nusmv/bin/NuSMV "$@"
