@@ -8,7 +8,7 @@ Cleanup date: 2026-11-08. All moves were made with plain `mv`; no git commands w
 nl2semiformal/                  root (name and location unchanged)
   README.md  STRUCTURE.md  MOVE_LOG.csv  Makefile  .gitignore
   testnote.md                   run instructions maintained by the project owner, kept at the root
-  docs/                         paper, references, analysis-format document, survey notes of this cleanup (refactor_plan)
+  docs/                         paper (in progress, excluded from git), references, analysis-format document, survey notes of this cleanup (refactor_plan)
   prompts/INDEX.md              index of the prompt and instruction documents (originals are inside the experiment folders)
   data/INDEX.md                 index of the input data with hashes (originals are inside the experiment folders)
   data/cases/                   organized input cases: nasa_papers/ (183), lockheed_martin/ (49), fsm/ (12; original membership in ORIGIN_MAP.csv). Each folder has a SOURCES.md
@@ -60,7 +60,7 @@ The full mapping is in `MOVE_LOG.csv` (per folder, with file counts before and a
 | The external material `~/NL2FRET_REFSQ_2026` (Overleaf copy) is outside the repository and was not moved | Its relationship to `docs/paper` is unknown |
 
 ## 4b. Later changes (2026-11-08)
-- `testnote.md` and `experiments/` were added to `.gitignore` (project owner's request). As a result, git does not track the results and code inside the experiment folders, so the input cases were organized separately in the tracked `data/cases/`.
+- `testnote.md` and `experiments/` were added to `.gitignore` (project owner's request). Later the same day `docs/paper/` (the paper in progress) was added as well; it stays on disk but is not tracked. As a result, git does not track the results and code inside the experiment folders, so the input cases were organized separately in the tracked `data/cases/`.
 - `data/cases/` and `tools/build_cases.py` were added. The input cases form three groups (`nasa_papers` 183, `lockheed_martin` 49, `fsm` 12); the pre-split total 195 + 61 - overlap 12 = 244 equals the post-split total.
 - Language (2026-11-08): the code-level and project-level text of the tracked files is written in professional English: code comments and docstrings, the output labels of the helper scripts, and the project documentation (README, INDEX, SOURCES, STRUCTURE, UNVERIFIED and similar files). Korean was kept where it is essential: the experiment records and instruction documents (`experiments/`, which is frozen evidence and excluded from git, and `testnote.md`), the content documents written by the project owner (`docs/NL2FRET_v6_main_analysis_ppt_format.md`, the analysis report) and the received package README (`packages/ltlpack/pack/README_MAC.md` and its copy `packages/ltlpack/docs/README_MAC.md`), and data values copied from the source datasets (for example the `verified` notes in `nasa_papers/legacy_fretish_inputs.jsonl`).
 - Provenance research (2026-11-08): `tools/verify_lm_docx.py` (comparison with the original Lockheed Martin docx files; no network access) and its result `data/cases/lockheed_martin/docx_match.csv` were added, and the `SOURCES.md` of each group now contains an NTRS verification table, the repository history, and license notices.

@@ -18,7 +18,7 @@ natural-language items (data) --> [conversion runner: Claude CLI call with a per
 |---|---|
 | `experiments/` | 12 experiment runs. Each folder holds the code copy of that run, its input data, results and hash manifests. Folder names and internal structure are unchanged |
 | `packages/ltlpack/` | NuSMV and Spot comparison study (610 pairs), Docker wrappers, and the Dockerfile of the Spot image |
-| `docs/` | Paper, references, the analysis-format document, and the survey notes of this cleanup |
+| `docs/` | Paper in progress (`docs/paper/`, excluded from git), references, the analysis-format document, and the survey notes of this cleanup |
 | `data/cases/` | Input cases in three groups: `nasa_papers` (NASA reports and other papers, 183), `lockheed_martin` (49) and `fsm` (12 cases whose natural-language text occurs identically in both sources). `SOURCES.md` in each folder records where the cases were collected; `fsm/ORIGIN_MAP.csv` records their original membership |
 | `prompts/`, `data/`, `results/` | Location indexes (`INDEX.md`). The originals are inside the experiment folders |
 | `engines/` | Locations of the external engines (Docker images) and installation notes |
