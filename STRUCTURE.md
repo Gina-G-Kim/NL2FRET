@@ -8,17 +8,20 @@ Cleanup date: 2026-11-08. All moves were made with plain `mv`; no git commands w
 nl2semiformal/                  root (name and location unchanged)
   README.md  STRUCTURE.md  MOVE_LOG.csv  Makefile  .gitignore
   testnote.md                   run instructions maintained by the project owner, kept at the root
-  docs/                         paper (in progress, excluded from git), references, analysis-format document, survey notes of this cleanup (refactor_plan)
-  prompts/INDEX.md              index of the prompt and instruction documents (originals are inside the experiment folders)
+  docs/                         paper (in progress, excluded from git), references, analysis-format document, survey notes of this cleanup (refactor_plan, excluded from git)
+  prompts/current/              the current prompts as files: model-facing prompts, assembled system prompts, instruction prompts (added 2026-11-11, see section 4c)
+  prompts/INDEX.md              index of the current prompts and of the historical prompt and instruction documents (historical originals are inside the experiment folders)
+  nl2fret_tool/                 the final tool, release 1.2.0 (frozen, 75 files; added 2026-11-11, see section 4c)
+  docker/                       build recipes of the Docker images fret-lab and cst-nusmv (added 2026-11-11, see section 4c)
   data/INDEX.md                 index of the input data with hashes (originals are inside the experiment folders)
   data/cases/                   organized input cases: nasa_papers/ (183), lockheed_martin/ (49), fsm/ (12; original membership in ORIGIN_MAP.csv). Each folder has a SOURCES.md
   tools/build_cases.py          script that rebuilds data/cases from experiments/
+  tools/render_prompts.py       renders prompts/current/system_prompts/ from nl2fret_tool/bench (and checks them with --check)
   results/INDEX.md              index of the result folders (originals are inside the experiment folders)
   experiments/                  14 experiment run folders (12 existing ones with names and internal structure unchanged, plus nusmv_paper and judge_recording added on 2026-11-09)
   packages/ltlpack/             NuSMV/Spot comparison study (formerly ltl_engines; includes pack/, scripts/, notes/ and others)
-  engines/README.md             locations of the external engines (Docker images) and installation notes
   tests/run_selftests.sh        wrapper that runs the existing selftests and a representative metric
-  unsorted/                     files whose purpose could not be determined, and the list (UNSORTED.md)
+  unsorted/                     files whose purpose could not be determined (excluded from git)
 ```
 
 ## 2. Classification rules (none newly created)
@@ -67,6 +70,23 @@ The full mapping is in `MOVE_LOG.csv` (per folder, with file counts before and a
 - NuSMV paper-style test (2026-11-09): the project owner updated `testnote.md` with a new instruction that was written without knowledge of this repository's structure. Where the instruction conflicted with the repository rules, the rules were followed and every deviation is listed in the run report (`experiments/nusmv_paper/bench/nusmv_paper/REPORT.md`, section 7). The run folder follows the layout of the earlier runs (`bench/`, `docs/`, `notes/`, `scripts/`, `logs/`, `zips/`): the instruction text is kept as `docs/NL2FRET_NUSMV_PAPER.md`, the working folder named in the instruction (`nusmv_paper/`) is `bench/nusmv_paper/`, and the delivery zip is `zips/nusmv_paper.zip`. No git command was used: the instruction's `git clone` was replaced by an HTTP download of the author repository, and the third-party code (GPL-3.0) is kept out of the delivery zip.
 - Judge recording extension (2026-11-09): a second instruction written without knowledge of this repository asked for raw-data recording in the paper-style NuSMV judge and a regression check, without any measurement. The run folder `experiments/judge_recording/` follows the same layout (`bench/judge_recording/` is the working folder named in the instruction, `docs/NL2FRET_JUDGE_RECORDING.md` is the instruction copy, the delivery zip is `zips/judge_recording.zip`). Existing files of earlier runs were not modified; the code was copied into the new folder and the copies were compared by sha256. The deviations from the instruction are listed in `experiments/judge_recording/bench/judge_recording/RECORDING_CHANGES.md`, last section. For this run, additions were made to README.md, STRUCTURE.md, prompts/INDEX.md, results/INDEX.md and UNVERIFIED.md (existing entries changed only in counts and in the `testnote.md` hash).
 
+## 4c. Later changes (2026-11-11): final tool and current prompts moved into tracked folders
+
+At the request of the project owner, the final tool and the current prompts are now files in the repository instead of locations inside the git-excluded `experiments/`. This supersedes two rows of the decision table in section 4 ("`prompts/`, `data/` and `results/` hold indexes only" for the prompts, and "No `src/nl2fret` was created" for the final tool). Those decisions were made on 2026-11-08 without asking; the target structure of the cleanup instruction listed `prompts/` and `src/nl2fret/` or `scripts/`.
+
+| Change | Detail |
+|---|---|
+| `nl2fret_tool/` added | The unpacked release 1.2.0 of the tool (`nl2fret_tool_v1.2.zip`, sha256 `430ff36588f1559180a75472f7a08b15061c330e67a84f5fa250324bbabb367e`, 75 files). The package layout is kept as released (`bench/`, `judging/`, `data/`, `docs/`, `tests/`, `Makefile`, manifests), because both manifests (`bench/FROZEN_MANIFEST.sha256`, 38 files, sha256 `176b144fe280158e05a4ec4a5aa9c7e912fab067b8e989ccacd12a2f2f16e571`; `JUDGE_FROZEN_MANIFEST.sha256`, 18 files, sha256 `1fda2c1982c14c7ae7363c8c5ced72c11d0019afe9804a5693a35cae15aa154b`) and the relative paths of the code depend on it. A flat `src/nl2fret/` was not built: moving files out of the package layout would change the pinned paths and break both manifest checks. Checked after the copy: `diff -r` against a fresh unpacking of the zip shows no difference, 38 of 38 and 18 of 18 manifest entries are OK, no file of the tool is matched by the root or by the package `.gitignore` |
+| `prompts/current/` added | `fretish_guide.md` and `templates/` (copies from `nl2fret_tool/bench`), `system_prompts/` (the 21 assembled system prompts of the 19 methods of the 61-item main run, rendered by `tools/render_prompts.py` from the project copy of the tool; the 18 prompts of run A are byte-identical to the `snapshot/` of the main run), `instructions/` (four instruction prompts: v8, tool freeze, 61-item inputs, 61-item main run) and `SHA256SUMS` |
+| `prompts/INDEX.md` | Section 1 indexes the current prompts, section 2 is the earlier location table (95 entries) plus the 5 instruction documents of 2026-11-10 and 2026-11-11 |
+| `README.md`, `data/INDEX.md` | New section and rows for the tool and the current prompts; `data/INDEX.md` notes that the tool carries the answer key in `nl2fret_tool/data/reference/` |
+| `.gitignore` | `docs/refactor_plan/` and `unsorted/` added at the project owner's request (the entries `docs/paper/`, `experiments/`, `testnote.md` and `UNVERIFIED.md` were already there). The folders stay on disk. A `.gitignore` entry has no effect on files that git already tracks: by reading the git index and the last commit (without running git), `docs/paper/` (18 files in the last commit, pushed to `origin/main`) and `docs/refactor_plan/` (2 files) are tracked, `unsorted/` is not. They leave the tracking only after `git rm -r --cached docs/paper docs/refactor_plan` and a commit, which the project owner runs; earlier commits keep them |
+| `docker/` added | At the request of the project owner, replacing the "origin unknown" notes. `docker/fret-lab/`: Dockerfile, `fret.sh`, `.dockerignore` and `LICENSE` copied from the project `~/fret`; the Dockerfile was matched instruction by instruction with `docker history` of `fret-lab:latest`, and `fret.sh` is the exact file taken from the image (the working copy in `~/fret` is newer). `docker/cst-nusmv/`: the three-line Dockerfile of the experiment `cst_test` (round 3, E10) and a manifest of the 175 files of its build context (the official NuSMV 2.6.0 binaries, not stored here); the context was checked against the original (175 of 175 OK). Details and commands are in the README of each folder |
+| `engines/` removed | At the request of the project owner. The folder held one file, `engines/README.md` (a table of the three Docker images and their origin); its content moved unchanged into the section "External engines" of `README.md`. The earlier file stays in the git history |
+| Not changed | `experiments/` (including the per-run code copies and the running 61-item generation run), `MOVE_LOG.csv` (nothing was moved; the additions are copies), `UNVERIFIED.md`, the root `Makefile` |
+
+Not in `nl2fret_tool/`: the RQ analysis scripts of the earlier runs (for example `experiments/nl3/analyze3.py`, `experiments/nl2fret/tools_extra/`) and the NuSMV and Spot comparison study (`packages/ltlpack/`, which was already outside `experiments/`). They are not part of release 1.2.0.
+
 ## 5. Path repairs (no logic changes)
 
 | Target | Change |
@@ -83,17 +103,17 @@ The full mapping is in `MOVE_LOG.csv` (per folder, with file counts before and a
 
 | Component | Location | Notes |
 |---|---|---|
-| Prompts | `experiments/*/NL2FRET_*.md`, `experiments/*/prompts/`, `templates/` | `prompts/INDEX.md` |
+| Prompts | current: `prompts/current/`; historical: `experiments/*/NL2FRET_*.md`, `experiments/*/prompts/`, `templates/` | `prompts/INDEX.md` |
 | Data | `experiments/*/data/` | `data/INDEX.md` |
-| Conversion runner | `experiments/*/run_pipeline.py`, `cli.py`, `units3.py`, `prompts3.py`, `common.py` | per-run copies |
-| FRET compile | `experiments/*/fretparse.py`, `fret_check/` | requires the Docker image `fret-lab` |
-| Kind2 realizability | `experiments/*/fret_check/check.py`, `tools/fret_rlz.py` | the engine is inside the Docker image |
-| z3/NuSMV/Spot judgment | `packages/ltlpack/pack/tools/ltl_engines.py` | |
+| Conversion runner | final: `nl2fret_tool/bench/run_pipeline.py`, `cli.py`, `units3.py`, `prompts3.py`, `common.py`; earlier runs: `experiments/*/` | per-run copies in `experiments/` |
+| FRET compile | final: `nl2fret_tool/bench/fretparse.py`, `fret_check/`; earlier runs: `experiments/*/` | requires the Docker image `fret-lab` |
+| Kind2 realizability | final: `nl2fret_tool/bench/fret_check/check.py`, `fret_check/tools/fret_rlz.py`; earlier runs: `experiments/*/fret_check/check.py` | the engine is inside the Docker image |
+| z3/NuSMV/Spot judgment | final judge: `nl2fret_tool/judging/nl2fret_judge/`; comparison study: `packages/ltlpack/pack/tools/ltl_engines.py` | |
 | Control experiments | `packages/ltlpack/pack/data/pairs.jsonl` | |
 | RQ analysis | `experiments/nl3/analyze3.py`, `nl2fret/tools_extra/`, `score3.py`, `score_lm.py`, `analysis/` in the result folders | |
 | Reports | `REPORT*.md`, `FINAL_REPORT*.md`, `RUN_RECORD.md`, `DEV_RECORD.md` and `RLZ_RECORD.md` in the result folders, `docs/paper` | |
 | judge3/judge4/judge5, `sk.py`, `rq.py` | **Not found on this machine** | Unknown |
 
 ## 7. Known limitations
-- The Docker images (`fret-lab:latest`, `ltl-spot:local`, `cst-nusmv:local`) live outside the repository. See `engines/README.md`.
+- The Docker images (`fret-lab:latest`, `ltl-spot:local`, `cst-nusmv:local`) live outside the repository; their build recipes are in `docker/fret-lab/`, `docker/cst-nusmv/` and `packages/ltlpack/scripts/docker_spot/`. See "External engines" in `README.md` (formerly `engines/README.md`). The images were not rebuilt from these recipes, so the rebuilt images have not been compared with the existing ones.
 - No `requirements.txt` was created. There is no pinned dependency list (the 4 lines of `experiments/nl2fret/requirements.txt` are mostly unpinned), and the instructions from v4 onward state that the Python commands use only the standard library (z3b in `ltl_engines` is optional).

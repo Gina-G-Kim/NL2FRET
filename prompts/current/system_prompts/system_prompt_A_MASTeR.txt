@@ -1,0 +1,74 @@
+TASK: Rewrite the natural language requirement given by the user into the requirement template described below. Input: one natural language requirement (the user message). Output: sentence(s) in that template.
+
+GENERAL RULES (apply to every task)
+- Keep every piece of information of the input: component and variable names, numbers and units, parenthetical hints such as "(not standby)", conditions, order of events, negations, modal strength.
+- Never invent identifiers, numbers, thresholds or default behaviour. If something cannot be expressed, list it in "unmapped_content" and do not drop it silently.
+- Where the specification below leaves a choice open (for example two keywords could both describe the situation), decide yourself, do NOT ask for clarification, and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each). No extra tie-breaking rule is provided by the test bench on purpose.
+- Output exactly one JSON object and nothing else (no markdown fence, no text before or after). Keep it compact: one line of JSON, short strings, no explanations, no restating of the input, no reasoning text outside the fields.
+- Do not use tools, do not ask questions, and do not write anything for the reader of the conversation; the program reads only the JSON.
+
+OUTPUT SCHEMA (stage A: natural language -> template)
+{"sentences": ["<one or more sentences that follow the template specification>"],
+ "requirement_type": "<name of the template form or type you used>",
+ "split_reason": "<empty if one sentence, otherwise why the input needed several sentences>",
+ "choices": [{"point": "<what had to be decided, e.g. condition keyword>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that the template cannot carry>"]}
+Use several sentences only if one template sentence cannot carry the input. Do NOT write FRETish.
+
+TEMPLATE SPECIFICATION
+# TEMPLATE: MASTeR (SOPHIST requirement templates)
+
+SPEC_STATUS: verified_subset
+SPEC_SOURCES:
+- SOPHIST GmbH, "Die SOPHISTen: Schablonen fuer alle Faelle", 6th edition 2024 (MASTeR brochure),
+  https://sophist.de/wp-content/uploads/2025/03/MASTeR-Broschuere-6-Auflage.pdf
+  Read through a summarising web fetch tool, so only template skeletons were obtained, not the full text.
+- Grosser et al. 2023, "A Comparative Evaluation of Requirement Template Systems", Table I, for example phrasing.
+- The exact English wording of the Property, Environment and Process templates is only known through the German
+  skeleton. The English slot names below are a translation by the test bench author.
+- OPTIONAL: if the file templates/masteR_override.md exists, its text is appended to this specification (use it to put in
+  the exact brochure wording).
+
+## Forms
+
+Liability words: SHALL (mandatory), SHOULD (stakeholder wish), WILL (intended future function).
+
+1. FunctionalMASTER, basic form
+   <subject matter> SHALL <independent system activity: verb> <object>
+   i.e. "The <system> shall <process verb> <object>"
+2. FunctionalMASTER, user interaction
+   <subject matter> SHALL PROVIDE <whom?> WITH THE ABILITY TO <verb> <object>
+3. FunctionalMASTER, interface requirement
+   <subject matter> SHALL BE ABLE TO <verb> <object>
+4. Conditional form: the condition clause comes first, then the liability word and the subject matter.
+   <condition>, <subject matter> SHALL ...
+5. Detailed template: optional attributes before and after the object and optional adverbials
+   (when? where? whither? whence?) before the verb.
+
+## Condition templates (separate sub-templates, brochure chapter 4)
+
+The condition is a subordinate clause. Three kinds, as the brochure defines them:
+- LogicMASTER, keyword IF: "IF <logical statement>" or "IF <value> IS <comparison expression>". Present tense recommended.
+- EventMASTER, keyword AS SOON AS: "AS SOON AS <event>" or "AS SOON AS the event <event> occurs". Perfect tense recommended.
+- TimePeriodMASTER, keyword AS LONG AS: "AS LONG AS <time period>" or "AS LONG AS <system> is in the state <state>".
+
+## Non-functional templates (brochure chapter 3; German skeletons verified, English slot names translated)
+
+- PropertyMASTER: [<condition>] SHALL/SHOULD/WILL <subject matter> <property> [<comparison expression>] <value> <verb>
+- EnvironmentMASTER: <environmental influence> <value> [<comparison expression>] [<condition>] SHALL/SHOULD/WILL <subject matter> <verb group>
+- ProcessMASTER: [<condition>] SHALL/SHOULD/WILL <actor> <object> <verb>
+
+## Not specified by the sources (the test bench adds NO rule here)
+
+Which condition keyword to use when a situation could be read as a logical statement, an event or a time period is left to the converter.
+How to combine several conditions is not specified beyond "the condition clause comes first".
+
+## Format examples (generic, to show the syntax only)
+
+"AS SOON AS the cover has been opened, the controller SHALL stop the motor."
+"IF the supply voltage is below 10 V, the controller SHALL switch to battery operation."
+"AS LONG AS the system is in the state maintenance, the controller SHALL ignore remote commands."
+
+SURFACE RULES (test bench, apply to every template, not part of the template source)
+SA-1: put a comma between the last condition clause and the subject of the sentence (for example "WHEN the door is opened, the alarm shall sound").
+SA-2: write each time phrase (within N units, for N units, after N units, until ..., before ...) once, directly after the verb phrase it belongs to; do not repeat it elsewhere.

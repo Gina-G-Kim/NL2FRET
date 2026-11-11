@@ -51,6 +51,11 @@ UNVERIFIED.md
 experiments/
 docs/paper/
 
+# Added 2026-11-11 at the project owner's request: survey notes of the cleanup, and files whose purpose could not be determined
+# (A .gitignore entry does not affect files that are already tracked; see STRUCTURE.md section 4c.)
+docs/refactor_plan/
+unsorted/
+
 # ---- Open items (whether to track them is for the project owner to decide) ----
 # 1. Large result folders: experiments/nl7/results_lm (about 67 MB), experiments/nl3/results_nl3 (about 36 MB), etc.
 #    They are tracked at present. If size becomes a problem, uncomment the next line to exclude only large raw

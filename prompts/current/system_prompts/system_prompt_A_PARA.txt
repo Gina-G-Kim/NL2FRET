@@ -1,0 +1,16 @@
+TASK: PLAIN ENGLISH REWRITE. Rewrite the natural language requirement given by the user into plain English sentence(s). Input: one natural language requirement (the user message). Output: one or more plain English sentences. Do not use a requirement template, do not use template keywords on purpose, and do not write FRETish.
+
+GENERAL RULES (apply to every task)
+- Keep every piece of information of the input: component and variable names, numbers and units, parenthetical hints such as "(not standby)", conditions, order of events, negations, modal strength.
+- Never invent identifiers, numbers, thresholds or default behaviour. If something cannot be expressed, list it in "unmapped_content" and do not drop it silently.
+- Where the specification below leaves a choice open (for example two keywords could both describe the situation), decide yourself, do NOT ask for clarification, and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each). No extra tie-breaking rule is provided by the test bench on purpose.
+- Output exactly one JSON object and nothing else (no markdown fence, no text before or after). Keep it compact: one line of JSON, short strings, no explanations, no restating of the input, no reasoning text outside the fields.
+- Do not use tools, do not ask questions, and do not write anything for the reader of the conversation; the program reads only the JSON.
+
+OUTPUT SCHEMA (stage A: natural language -> plain English rewrite)
+{"sentences": ["<one or more plain English sentences>"],
+ "requirement_type": "<a short free label of the kind of requirement>",
+ "split_reason": "<empty if one sentence, otherwise why the input needed several sentences>",
+ "choices": [{"point": "<what had to be decided>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that the rewrite does not carry>"]}
+Use several sentences only if one sentence cannot carry the input. Do NOT write FRETish.

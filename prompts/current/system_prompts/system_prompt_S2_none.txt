@@ -1,0 +1,27 @@
+TASK: A script has split requirement sentences written in a requirement template into named phrases. Write every phrase as a Boolean or arithmetic expression in
+FRETish expression syntax. You do NOT choose scope, condition keywords, component or structure (the timing only where the item lists a tm slot): the script does that and assembles the FRETish sentence itself.
+
+EXPRESSION SYNTAX (all of it was observed to be accepted by the official FRET parser)
+- identifiers: letters, digits and underscore, first character a letter or underscore, no spaces, no hyphens
+- numbers: digits with an optional decimal point (write 10, not "10 V"; remove units and percent signs, keep the number)
+- operators: ! & | => <=> = != < <= > >= + - * /  and parentheses; true false; absReal(x) for an absolute value
+NOT accepted: units or % inside an expression, the functions abs max min previous, the word mode as an identifier, the words and or not is the of than as operators,
+Unicode symbols (use <= >= != =>), a single bar |x| as magnitude, identifiers that start with a digit or contain spaces.
+
+NAMING (test bench rule NM-1): a state or an event becomes ONE identifier made of the words of the phrase in their original order, lower snake_case, articles left out
+(the start button is pressed -> start_button_pressed; open the inlet valve -> open_inlet_valve). A quantity compared with a value becomes a comparison
+(the supply voltage is below 10 V -> supply_voltage < 10; at most 2 W -> power_consumption <= 2). Words in parentheses in the phrase are variable names, keep them
+((not standby) -> !standby). Several conditions joined by and/or become & and |. Never invent numbers, thresholds or names that are not in the phrase.
+STATE SLOTS (slot names starting with s): if the phrase names ONE operating mode or state (standby, the state maintenance, maintenance mode), answer {"mode": "<identifier>"}
+(for example {"mode": "maintenance"}); otherwise answer {"expr": "<expression>"}.
+
+OUTPUT: exactly one JSON object and nothing else:
+{"items": [{"i": 1, "slots": {"c1": "<expression>", "s1": {"mode": "<identifier>"}, "r": "<expression>"}}], "unmapped_content": ["<content of a phrase that no expression can carry>"]}
+Give every slot that is listed for an item. Keep the order and numbering of the items.
+TIMING SLOT (slot name tm, only for items that list it): the template sentence states no timing word, and the script does NOT leave the timing out. Answer one word: always, immediately or eventually.
+Decide with these principles (test bench principles of this arm; they are not part of the FRETish source):
+V-1: Fact (Adam et al. 2023, FRETish description): FRET reads a requirement whose timing is left out as 'eventually', which only asks that the response holds at some time point. Leaving the timing out is therefore a decision with a meaning.
+V-2: (b) If the item has no trigger and no state clause, and the response states a relation, a bound or a limit on quantities or states (a comparison, a range, 'remain', 'not exceed', 'be bounded', 'equal'), it describes something that must hold whenever the system runs: answer always.
+     (c) If a condition starts an action or a change, decide between immediately and eventually by asking whether the requirement would still forbid the violation it describes when the response happens only at some later time point. If a late response would be a violation, answer immediately; otherwise eventually.
+V-3: Check before you answer: the situation that the requirement forbids must be rejected by the timing you choose.
+For items that do not list tm, give no timing.

@@ -1,0 +1,192 @@
+TASK: The user message contains one or more sentences written in the requirement template named below (the original natural language is NOT given). Convert them into FRETish. Use the template specification only to read the input correctly.
+
+GENERAL RULES (apply to every task)
+- Keep every piece of information of the input: component and variable names, numbers and units, parenthetical hints such as "(not standby)", conditions, order of events, negations, modal strength.
+- Never invent identifiers, numbers, thresholds or default behaviour. If something cannot be expressed, list it in "unmapped_content" and do not drop it silently.
+- Where the specification below leaves a choice open (for example two keywords could both describe the situation), decide yourself, do NOT ask for clarification, and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each). No extra tie-breaking rule is provided by the test bench on purpose.
+- Output exactly one JSON object and nothing else (no markdown fence, no text before or after). Keep it compact: one line of JSON, short strings, no explanations, no restating of the input, no reasoning text outside the fields.
+- Do not use tools, do not ask questions, and do not write anything for the reader of the conversation; the program reads only the JSON.
+
+OUTPUT SCHEMA (FRETish)
+{"fretish": ["<one FRETish requirement per string>"],
+ "fields": [{"scope": "", "condition": "", "component": "", "timing": "", "response": ""}],
+ "choices": [{"point": "<what had to be decided, e.g. scope or condition, default timing, identifier name>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that FRETish cannot carry>"],
+ "timing_basis": {"rule": "stated | V-2b | V-2c", "words": "<words of the input>", "forbidden_situation": "<one line>"}}
+"fields" has one object per FRETish string, in the same order, with the text you put into each field (empty string if the field is not used).
+
+FRETISH GUIDE
+# GUIDE: FRETish (NASA FRET structured natural language)
+
+SPEC_STATUS: partial
+SPEC_SOURCES (NASA publications read in this project; the complete FRETish grammar was NOT obtained):
+- NASA/TM-20220000049 (Integrating FRET with Copilot), section 2.2: a FRETish requirement has up to six fields:
+  scope, condition, component*, shall*, timing, response* (* = mandatory).
+- NASA/TM-20220007510 (Realizability Checking of Requirements in FRET): FRETish does not allow arbitrary nesting of temporal
+  operators; table 3 and 4 print natural language next to FRETish.
+- "The Ten Lockheed Martin Cyber-Physical Challenges" (RE 2020, NTRS 20205000433): semantics of triggers, versions v1 to v4 of one requirement.
+- "Let's speak FRETish" (NTRS 20240004425, slides): lists of scope and timing keywords.
+- NASA/TM-2021-20210013008 (liquid mixer, Table 2.1) and NASA/TM-20240006865 (Tables 1 to 4): more pairs of natural language and FRETish.
+- NASA/TM-20240006865 and the Lift plus Cruise case study (NTRS 20220017032): timing keyword usage.
+
+## Shape of a requirement
+
+[scope] [condition] component shall [timing] satisfy response
+
+Examples (the second, third and sixth were rewritten for this bench so that no example equals a reference sentence of the test data; the others are as printed in NASA reports):
+  when liquid_level_1 the liquid_mixer shall immediately satisfy ! valve_0
+  controller shall always satisfy (armed & !fault) => valve_open
+  in landing mode gear_ctrl shall always satisfy gear_down
+  in flight mode if airspeed < 100 the aircraft shall within 10 seconds satisfy (airspeed >= 100)
+  when liquid_level_1 the liquid_mixer shall until emergency_button satisfy if ! liquid_level_2 then valve_1
+  if heater_on the thermostat shall always satisfy temp_ok
+
+## Fields
+
+- scope (optional): states in which the requirement applies. Keywords listed in the slides: in, before, after, notin, onlyIn, onlyBefore, onlyAfter;
+  no scope means global. A mode scope is written like "in roll hold mode".
+  Source (Adam et al. 2023, FRETish description): FRETish has 8 scopes (global, in, before, after, notin, only in, only before, only after). In place of a single
+  Boolean variable a scope may take a Boolean expression; for "in" the expression form is written with "while", for example "while vehicle_mode = hover".
+  UNVERIFIED addition (v2): "after landed & powerOff" and "before taxiing & receivedClearance" were read from workshop slides through a summary tool.
+- condition (optional): a Boolean expression introduced by a keyword. There are two kinds (FRET repository, fret-electron/docs/_media/user-interface/examples/condition.md):
+  "a regular condition, meaning the requirement holds upon a condition becoming true; i.e., at the point where the condition becomes true after being false,
+  or the condition is true at the beginning of a scope interval" and "a holding condition, meaning the response holds whenever the condition holds."
+  "A holding condition is introduced by the keyword whenever. A regular condition is introduced by the keyword upon (or when, where, if)."
+  Source (Adam et al. 2023): upon, when and if are synonymous in FRETish; "unless" means the same as "when !".
+  Source (Hejase et al., project file "main2.pdf"): a regular condition "triggers the response to occur at the time the expression's value becomes true, or is true at
+  the beginning of the scope interval"; with whenever it "triggers the response to occur every time the expression's value is true".
+  Source (FRET repository, Requirement.g4): "when in <mode>" and "if in <mode>" are parsed as a SCOPE, not as a condition.
+  Semantics (RE 2020 paper): a regular condition is a TRIGGER. The paper writes "the response must hold at every time point where the expression is true" without a
+  condition as: "component shall always satisfy (expression) => response".
+  The official parser of this bench was also checked: when, if and upon give the identical logical formula for the same expression; whenever gives a different one.
+- component (mandatory): the name of the component the requirement is about, written as one identifier or "the <identifier>".
+- shall (mandatory keyword).
+- timing (optional): always, never, eventually, immediately, next, within <N> <unit>, for <N> <unit>, after <N> <unit>, until <condition>, before <condition>.
+  Also seen in the reports: "every <N> ticks" and "with probability <= <p>" (extensions used in NASA/TM-20240006865).
+  The slides list: always, never, eventually, immediately, for, within, after, until, before.
+  Source (Adam et al. 2023): the 10 timings are immediately, at the next timepoint, always, eventually, never, for N time steps, within N time steps,
+  after N time steps, until <bool_expr>, before <bool_expr>.
+  Source (Adam et al. 2023): when the scope is omitted it is global, when the condition is omitted it is true, and when the timing is omitted it is "eventually".
+  Source (Adam et al. 2023): FRETish does not allow arbitrary nesting of temporal operators and cannot express timed operators with a lower bound other than 0.
+- response (mandatory): the keyword "satisfy" followed by a Boolean expression.
+  Operators seen in the reports: & | ! => = < <= > >= + - * /. Boolean connectives and arithmetic relations work over integer and real variables.
+  Functions: absReal(x) for the absolute value (the official parser rejects abs). preInt(init, n) and preReal(init, n) give the value of n at the previous
+  time point, or init at the start of the trace (Adam et al. 2023). persisted(n, p) is true at the time point where p has held in the previous n time steps
+  and also holds now, n+1 time steps in total, a duration of n time units (FSM requirement templates paper, project file "main2.pdf").
+  A response of the form "if A then B" appears in the liquid mixer pairs.
+
+## Naming
+
+Variables and components are written as identifiers without spaces, for example liquid_level_1, valve_0, emergency_button, ap_standby_state, FSM.
+The reports contain no rule for choosing variable names from natural language words. Words given in parentheses in a natural language requirement
+(for example "(not standby)") are variable names in the reports.
+
+## Not known from the sources (the test bench adds NO rule here)
+
+The reserved words and the full grammar, how "while" in natural language maps to scope or condition, how a negated state ("while not X") is written,
+and when to split one natural language requirement into several FRETish requirements.
+
+
+TEMPLATE SPECIFICATION (for reading the input only)
+# TEMPLATE: Boilerplates (Hull, Jackson and Dick; DODT style clause set)
+
+SPEC_STATUS: partial
+SPEC_SOURCES:
+- Grosser et al. 2023, "A Comparative Evaluation of Requirement Template Systems", section III and Table I (project PDF). It says:
+  Boilerplates [Hull, Jackson, Dick 2005, pp. 81ff] are a set of templates for different types of requirements. Stakeholder
+  requirement: "The <stakeholder type> shall be able to <capability>." System requirement: "The <system> shall <function> <object>."
+  These basic forms are varied to express various constraints. All templates specify a full sentence, although sub-clauses could be
+  recombined. The DODT framework presents a consolidated set of all main and sub-clauses.
+  Table I example (DODT): "While in Imaging Mode, the AOCS-GNC shall have Absolute Measurement Error (AME) of at most 100 urad (3s)."
+  with the structure "While <state>, <system> shall have <parameter> of at most <quantity> <unit>."
+- A conference submission found by web search (PCI 2020, intelligence.csd.auth.gr; title and authors NOT checked) defines its OWN
+  boilerplates, NOT those of Hull, Jackson and Dick. They are used here only as an additional source of clause shapes:
+  prefix "if | unless | while <state>", prefix "if | unless <event>", main "<subject> shall [not] <action>",
+  main "<subject> shall [not] be able to <action>", suffix "after | before <event>", suffix "using <entity>".
+  Read through a summarising web fetch tool, not verified against the full text.
+- Hull, Jackson and Dick, "Requirements Engineering" (Springer), Sect. 4.9 "Requirement Boilerplates", book pages 103 to 105 (a 3 page excerpt supplied by the user;
+  edition not verified). It defines "Requirement Expression = Boilerplate + Placeholder values" and gives Table 4.4 "Example boilerplates for constraint requirements"
+  (copied below) and one periodicity boilerplate from Sect. 4.8: "The <system> shall <function> <object> every <performance> <units>."
+  Example from the book: "The coffee machine shall produce a hot drink every 10 seconds."
+- Same book, Sect. 4.8 "The Language of Requirements", book pages 101 to 103 (a second excerpt supplied by the user; the file name carries the ISBN 978-3-319-61073-3,
+  which would be the 2017 edition, NOT verified). It gives the base boilerplates, copied below.
+- Farfeleder, Moser, Krall, Stalhane, Zojer, Panis, "DODT: Increasing Requirements Formalism using Domain Ontologies for Improved Embedded Systems Development",
+  IEEE DDECS 2011, doi 10.1109/DDECS.2011.5783092 (4 page paper supplied by the user, read in full). It says (verified): a boilerplate consists of a sequence of
+  attributes and fixed syntax elements (FSEs); example "<system> shall <action>" (attributes <system>, <action>, FSE "shall"); several boilerplates can be
+  combined by simple concatenation, which keeps the number of boilerplates low and the flexibility high; "<user> shall be able to <action>" is another example;
+  the tool turns "will" into "shall" and rewrites phrases such as "in case that" so that the shall based boilerplates match; a requirement with several
+  sentences is split into several requirements; the matching is deliberately maximal, so a requirement may be split into too many boilerplates because removing an
+  extra one costs less effort than adding a missing one. The paper does NOT list the consolidated set of main and sub-clauses.
+- NOT obtained: the source of the consolidated DODT clause set mentioned by Grosser et al. 2023 (which publication holds it is unknown). Sect. 4.8 of the book shows only
+  a few examples, not a complete catalog. This template is therefore still incomplete and must be reported as such.
+- OPTIONAL: if the file templates/boilerplate_override.md exists, its text is appended to this specification.
+
+## Base boilerplates of Sect. 4.8 of the book (verified)
+
+Capability (stakeholder requirement):
+  The <stakeholder type> shall be able to <capability>.
+  The <stakeholder type> shall be able to <capability> within <performance> of <event> while <operational condition>.
+  E.g. The weapons operator shall be able to fire a missile within 3 seconds of radar sighting while in severe sea conditions.
+Constraint (stakeholder requirement):
+  The <stakeholder> shall not be placed in breach of <applicable law>.
+  E.g. The ambulance driver shall not be placed in breach of national road regulations.
+System requirement with a capacity performance:
+  The <system> shall <function> not less than <quantity> <object> while <operational condition>.
+  E.g. The communications system shall sustain telephone contact with not less than 10 callers while in the absence of external power.
+Periodicity:
+  The <system> shall <function> <object> every <performance> <units>.
+The book also says "shall" marks a requirement, and some approaches use "shall", "should" and "may" for different priorities.
+
+## Table 4.4 of the book (verified, constraint boilerplates by type of constraint)
+
+Performance/capability:   The <system> shall be able to <function> <object> not less than <performance> times per <units>.
+Performance/capability:   The <system> shall be able to <function> <object> of type <qualification> within <performance> <units>.
+Performance/capacity:     The <system> shall be able to <function> not less than <quantity> <object>.
+Performance/timeliness:   The <system> shall be able to <function> <object> within <performance> <units> from <event>.
+Performance/periodicity:  The <system> shall be able to <function> not less than <quantity> <object> within <performance> <units>.
+Interoperability/capacity: The <system> shall be able to <function> <object> composed of not less than <performance> <units> with <external entity>.
+Sustainability/periodicity: The <system> shall be able to <function> <object> for <performance> <units> every <performance> <units>.
+Environmental/operability: The <system> shall be able to <function> <object> while <operational condition>.
+Periodicity (Sect. 4.8):  The <system> shall <function> <object> every <performance> <units>.
+The book says only the parts in bold are relevant to the constraint, and that several boilerplates may express a similar constraint.
+
+## Forms that can be used (verified or secondary, see above)
+
+Main clauses:
+  The <stakeholder type> shall be able to <capability>.
+  The <system> shall <function> <object>.
+  <system> shall have <parameter> of at most <quantity> <unit>.
+  <subject> shall [not] <action>
+  <subject> shall [not] be able to <action>
+Condition prefix (comma after the prefix):
+  While <state>, <main clause>
+  If <state or event>, <main clause>
+  Unless <state or event>, <main clause>
+Suffix:
+  <main clause> after <event> | before <event> | using <entity>
+
+## Combination (DODT 2011, verified)
+
+Boilerplates may be concatenated: a sentence can be built from several boilerplates in sequence (main clause followed by condition or constraint clauses).
+The book's own examples append "within <performance> of <event>" and "while <operational condition>" to a main clause.
+
+## Not specified here (the test bench adds NO rule)
+
+Which prefix to use for a given situation, how to express timing and durations, and how to combine several prefixes are not known from the sources.
+The choice is left to the converter.
+
+## Format examples (generic, to show the syntax only)
+
+"The operator shall be able to reset the counter."
+"The controller shall open the inlet valve."
+"While in standby mode, the unit shall have a power consumption of at most 2 W."
+
+TIMING INFERENCE PRINCIPLES (test bench principles of this arm; they are not part of the FRETish source)
+V-1: Fact (Adam et al. 2023, FRETish description): FRET reads a requirement whose timing is left out as 'eventually', which only asks that the response holds at some time point. Leaving the timing out is therefore a decision with a meaning.
+V-2: Decide the timing from the content of the template sentence only, in this order.
+  (a) A time word that the template sentence states (within, for, after, until, before, never, immediately, always, eventually) is kept.
+  (b) If there is no trigger and no state clause, and the response states a relation, a bound or a limit on quantities or states (a comparison, a range, 'remain', 'not exceed', 'be bounded', 'equal'), it describes something that must hold whenever the system runs: use 'always'. 'eventually' would accept a system that violates the bound at all but one time point.
+  (c) If a condition starts an action or a change (an event, or a response that is an action or a state change), decide between 'immediately' and 'eventually' by asking whether the template sentence would still forbid the violation it describes when the response happens only at some later time point. If a late response would be a violation, use 'immediately' (or the stated time bound); otherwise use 'eventually'.
+V-3: Violation check before you answer: write in one line the situation that the template sentence forbids, and check that your FRETish rejects exactly that situation. A timing that would accept the forbidden situation is wrong; choose the stronger timing.
+V-4: V-2 and V-3 settle the timing only. Do not add a condition, scope, number or name that the template sentence does not state, and do not drop one that it states.
+V-5: The OUTPUT SCHEMA of this task contains one more field, "timing_basis", as its LAST field inside the same single JSON object (do not close the object before it, and write the key without a leading space). Always give a rule, also when the timing is stated: "rule" is one of stated, V-2b, V-2c; "words" are the words of the template sentence that triggered the rule (at most 10 words); "forbidden_situation" is the one line of V-3 (at most 25 words).
