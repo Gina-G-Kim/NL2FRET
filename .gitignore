@@ -31,7 +31,7 @@ work/
 tmp/
 .mock_state/
 results_mock/
-UNVERIFIED.md/
+UNVERIFIED.md
 
 # Archives (input and result zips; the result folders also exist unpacked)
 *.zip
