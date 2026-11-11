@@ -19,6 +19,7 @@ The original prompt and instruction documents stay inside each experiment folder
 | `experiments/fret_template_bench/templates/masteR.md` | 9f33ee00d27a |
 | `experiments/fret_template_bench/templates/spider.md` | 22da82a2f231 |
 | `experiments/fret_template_bench/templates/spider_override.md` | 43401e8d694c |
+| `experiments/judge_recording/docs/NL2FRET_JUDGE_RECORDING.md` | a6b8953b9fec |
 | `experiments/nl2fret/NL2FRET_PROMPT_v1.md` | f6228448c9b7 |
 | `experiments/nl2fret/prompts/fretish_guide.md` | 568e9c517766 |
 | `experiments/nl2fret/templates/adv_ears.md` | 013f6afd16f8 |
@@ -70,6 +71,7 @@ The original prompt and instruction documents stay inside each experiment folder
 | `experiments/nl7/templates/ears.md` | 7d1b29218d10 |
 | `experiments/nl7/templates/masteR.md` | 33cbe67863de |
 | `experiments/nl7/templates/spider.md` | 1c8c13d8f4b2 |
+| `experiments/nusmv_paper/docs/NL2FRET_NUSMV_PAPER.md` | 565a8dc6015b |
 | `experiments/v7_dev0/bench/NL2FRET_PROMPT_v7_DEV0.md` | 718b9a520e4d |
 | `experiments/v7_dev0/bench/prompts/fretish_guide.md` | dd654d7d7fcf |
 | `experiments/v7_dev0/bench/templates/adv_ears.md` | 013f6afd16f8 |
@@ -96,6 +98,6 @@ The original prompt and instruction documents stay inside each experiment folder
 | `experiments/v8_dict8/docs/NL2FRET_RLZ_DICT8.md` | 2a96505c6379 |
 | `packages/ltlpack/pack/README_MAC.md` | f78ab67ffd0b |
 | `docs/NL2FRET_v6_main_analysis_ppt_format.md` | 9a302384ba80 |
-| `testnote.md` | 274eca85787d |
+| `testnote.md` | a6b8953b9fec |
 
-93 entries in total. Files with the same name in different experiment folders can have different contents (see the hash column).
+95 entries in total. Files with the same name in different experiment folders can have different contents (see the hash column). `testnote.md` is a living file: the hash above is its value on 2026-11-09 21:03, when it was copied to `experiments/judge_recording/docs/NL2FRET_JUDGE_RECORDING.md` (byte-identical at that time). Its earlier value 565a8dc6015b (18:27 the same day) is the hash of the copy `experiments/nusmv_paper/docs/NL2FRET_NUSMV_PAPER.md`.

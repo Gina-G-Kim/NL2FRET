@@ -16,7 +16,7 @@ natural-language items (data) --> [conversion runner: Claude CLI call with a per
 
 | Location | Contents |
 |---|---|
-| `experiments/` | 12 experiment runs. Each folder holds the code copy of that run, its input data, results and hash manifests. Folder names and internal structure are unchanged |
+| `experiments/` | 14 experiment runs. Each folder holds the code copy of that run, its input data, results and hash manifests. Folder names and internal structure are unchanged |
 | `packages/ltlpack/` | NuSMV and Spot comparison study (610 pairs), Docker wrappers, and the Dockerfile of the Spot image |
 | `docs/` | Paper in progress (`docs/paper/`, excluded from git), references, the analysis-format document, and the survey notes of this cleanup |
 | `data/cases/` | Input cases in three groups: `nasa_papers` (NASA reports and other papers, 183), `lockheed_martin` (49) and `fsm` (12 cases whose natural-language text occurs identically in both sources). `SOURCES.md` in each folder records where the cases were collected; `fsm/ORIGIN_MAP.csv` records their original membership |
@@ -37,6 +37,8 @@ natural-language items (data) --> [conversion runner: Claude CLI call with a per
 | `experiments/nl6`, `nl7` | v6 LM preflight (first attempt), then rerun and main run (61 items) |
 | `experiments/v7_dev0`, `v7_dev1` | v7 development set, first and second run (94 items) |
 | `experiments/v8_dict8` | v8 signal-dictionary smoke run and realizability stage |
+| `experiments/nusmv_paper` | NuSMV judgment in the style of Danso et al. (SecDev '26): Equiv, Sound, Compl and N/M on the 610 stored pairs of `packages/ltlpack`, comparison with the stored judge4 verdicts, and a check of the paper's author repository |
+| `experiments/judge_recording` | Recording extension of the paper-style NuSMV judge (per-pair raw records: queries, SMV files, NuSMV output, atom abstraction, run header) and a regression check on 27 pairs; no measurement was made |
 | `experiments/fret_template_bench`, `fret_retest_v2` | Earlier experiments (classification unknown; names preserved) |
 
 ## How to run

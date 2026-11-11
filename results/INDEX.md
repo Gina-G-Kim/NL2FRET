@@ -10,6 +10,8 @@ The result folders stay inside each experiment folder: they are tied to `snapsho
 | `experiments/fret_template_bench/results_pilot_low` | 17 |
 | `experiments/fret_template_bench/results_run1` | 23 |
 | `experiments/fret_template_bench/results_smoke` | 17 |
+| `experiments/judge_recording/bench/judge_recording/records_check` | 62 |
+| `experiments/judge_recording/bench/judge_recording/results_check` | 6 |
 | `experiments/nl2fret/results_dry` | 0 |
 | `experiments/nl2fret/results_nl2fret` | 74 |
 | `experiments/nl2fret/results_nl2fret_5reps` | 64 |
@@ -26,6 +28,7 @@ The result folders stay inside each experiment folder: they are tied to `snapsho
 | `experiments/nl6/results_pre` | 66 |
 | `experiments/nl7/results_lm` | 68 |
 | `experiments/nl7/results_pre` | 63 |
+| `experiments/nusmv_paper/bench/nusmv_paper/results` | 43 |
 | `experiments/v7_dev0/bench/results_dev` | 42 |
 | `experiments/v7_dev1/bench/results_dev` | 42 |
 | `experiments/v7_dev1/bench/results_dev1` | 43 |
@@ -34,4 +37,4 @@ The result folders stay inside each experiment folder: they are tied to `snapsho
 | `packages/ltlpack/run1_noengines/results` | 2 |
 | `results` | 0 |
 
-29 folders in total.
+32 folders in total. The reports of the `nusmv_paper` run (`REPORT.md`, `MAPPING.md`, `AUTHOR_IMPL.md`, `NOTES.md`) are next to its `results` folder, in `experiments/nusmv_paper/bench/nusmv_paper/`. The report of the `judge_recording` run (`RECORDING_CHANGES.md`, `NOTES.md`) is in `experiments/judge_recording/bench/judge_recording/`; its `records/` folder holds only the field description (`README.md`), and the records of the regression check are in `records_check/` (the main measurement records would go to `records/`).
