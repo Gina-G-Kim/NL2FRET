@@ -1,0 +1,57 @@
+TASK: Rewrite the natural language requirement given by the user into the requirement template described below. Input: one natural language requirement (the user message). Output: sentence(s) in that template.
+
+GENERAL RULES (apply to every task)
+- Keep every piece of information of the input: component and variable names, numbers and units, parenthetical hints such as "(not standby)", conditions, order of events, negations, modal strength.
+- Never invent identifiers, numbers, thresholds or default behaviour. If something cannot be expressed, list it in "unmapped_content" and do not drop it silently.
+- Where the specification below leaves a choice open (for example two keywords could both describe the situation), decide yourself, do NOT ask for clarification, and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each). No extra tie-breaking rule is provided by the test bench on purpose.
+- Output exactly one JSON object and nothing else (no markdown fence, no text before or after). Keep it compact: one line of JSON, short strings, no explanations, no restating of the input, no reasoning text outside the fields.
+- Do not use tools, do not ask questions, and do not write anything for the reader of the conversation; the program reads only the JSON.
+
+OUTPUT SCHEMA (stage A: natural language -> template)
+{"sentences": ["<one or more sentences that follow the template specification>"],
+ "requirement_type": "<name of the template form or type you used>",
+ "split_reason": "<empty if one sentence, otherwise why the input needed several sentences>",
+ "choices": [{"point": "<what had to be decided, e.g. condition keyword>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that the template cannot carry>"]}
+Use several sentences only if one template sentence cannot carry the input. Do NOT write FRETish.
+
+TEMPLATE SPECIFICATION
+# TEMPLATE: EARS (Easy Approach to Requirements Syntax)
+
+SPEC_STATUS: verified_subset
+SPEC_SOURCES:
+- Grosser et al. 2023, "A Comparative Evaluation of Requirement Template Systems" (project PDF), Table I and text.
+- Majumdar et al. 2011, Adv-EARS, Table 1, column "Definition in EARS" (project PDF).
+- The original EARS paper (Mavin et al. 2009) was NOT read in this project. The ordering of clauses in the Complex type
+  is therefore not verified.
+
+## Sentence types and keyword syntax
+
+1. Ubiquitous (no keyword):
+   The <system name> shall <system response>
+2. Event-driven:
+   WHEN <optional preconditions> <trigger> the <system name> shall <system response>
+3. Unwanted behaviour:
+   IF <optional preconditions> <trigger>, THEN the <system name> shall <system response>
+4. State-driven:
+   WHILE <in a specific state> the <system name> shall <system response>
+5. Optional feature:
+   WHERE <feature is included> the <system name> shall <system response>
+6. Complex: a combination of the keyword clauses above in one sentence.
+   The order of the clauses is not verified in the sources.
+
+## Not specified by the sources (the test bench adds NO rule here)
+
+There is no separate slot for timing in the templates: timing words, if any, must be put somewhere in the sentence.
+When a situation fits more than one keyword (WHEN, IF-THEN, WHILE), the choice is left to the converter.
+
+## Format examples (generic, to show the syntax only)
+
+"The pump shall keep the pressure below 5 bar."
+"WHEN the start button is pressed the controller shall open the inlet valve."
+"IF the sensor reports a fault, THEN the controller shall raise an alarm."
+"WHILE the system is in standby the controller shall refuse new jobs."
+
+SURFACE RULES (test bench, apply to every template, not part of the template source)
+SA-1: put a comma between the last condition clause and the subject of the sentence (for example "WHEN the door is opened, the alarm shall sound").
+SA-2: write each time phrase (within N units, for N units, after N units, until ..., before ...) once, directly after the verb phrase it belongs to; do not repeat it elsewhere.

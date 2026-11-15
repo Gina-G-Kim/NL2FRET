@@ -1,0 +1,86 @@
+TASK: Translate the natural language requirement given by the user directly into FRETish (NASA FRET structured English).
+
+GENERAL RULES (apply to every task)
+- Keep every piece of information of the input: component and variable names, numbers and units, parenthetical hints such as "(not standby)", conditions, order of events, negations, modal strength.
+- Never invent identifiers, numbers, thresholds or default behaviour. If something cannot be expressed, list it in "unmapped_content" and do not drop it silently.
+- Where the specification below leaves a choice open (for example two keywords could both describe the situation), decide yourself, do NOT ask for clarification, and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each). No extra tie-breaking rule is provided by the test bench on purpose.
+- Output exactly one JSON object and nothing else (no markdown fence, no text before or after). Keep it compact: one line of JSON, short strings, no explanations, no restating of the input, no reasoning text outside the fields.
+- Do not use tools, do not ask questions, and do not write anything for the reader of the conversation; the program reads only the JSON.
+
+OUTPUT SCHEMA (FRETish)
+{"fretish": ["<one FRETish requirement per string>"],
+ "fields": [{"scope": "", "condition": "", "component": "", "timing": "", "response": ""}],
+ "choices": [{"point": "<what had to be decided, e.g. scope or condition, default timing, identifier name>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that FRETish cannot carry>"]}
+"fields" has one object per FRETish string, in the same order, with the text you put into each field (empty string if the field is not used).
+
+FRETISH GUIDE
+# GUIDE: FRETish (NASA FRET structured natural language)
+
+SPEC_STATUS: partial
+SPEC_SOURCES (NASA publications read in this project; the complete FRETish grammar was NOT obtained):
+- NASA/TM-20220000049 (Integrating FRET with Copilot), section 2.2: a FRETish requirement has up to six fields:
+  scope, condition, component*, shall*, timing, response* (* = mandatory).
+- NASA/TM-20220007510 (Realizability Checking of Requirements in FRET): FRETish does not allow arbitrary nesting of temporal
+  operators; table 3 and 4 print natural language next to FRETish.
+- "The Ten Lockheed Martin Cyber-Physical Challenges" (RE 2020, NTRS 20205000433): semantics of triggers, versions v1 to v4 of one requirement.
+- "Let's speak FRETish" (NTRS 20240004425, slides): lists of scope and timing keywords.
+- NASA/TM-2021-20210013008 (liquid mixer, Table 2.1) and NASA/TM-20240006865 (Tables 1 to 4): more pairs of natural language and FRETish.
+- NASA/TM-20240006865 and the Lift plus Cruise case study (NTRS 20220017032): timing keyword usage.
+
+## Shape of a requirement
+
+[scope] [condition] component shall [timing] satisfy response
+
+Examples (the second, third and sixth were rewritten for this bench so that no example equals a reference sentence of the test data; the others are as printed in NASA reports):
+  when liquid_level_1 the liquid_mixer shall immediately satisfy ! valve_0
+  controller shall always satisfy (armed & !fault) => valve_open
+  in landing mode gear_ctrl shall always satisfy gear_down
+  in flight mode if airspeed < 100 the aircraft shall within 10 seconds satisfy (airspeed >= 100)
+  when liquid_level_1 the liquid_mixer shall until emergency_button satisfy if ! liquid_level_2 then valve_1
+  if heater_on the thermostat shall always satisfy temp_ok
+
+## Fields
+
+- scope (optional): states in which the requirement applies. Keywords listed in the slides: in, before, after, notin, onlyIn, onlyBefore, onlyAfter;
+  no scope means global. A mode scope is written like "in roll hold mode".
+  Source (Adam et al. 2023, FRETish description): FRETish has 8 scopes (global, in, before, after, notin, only in, only before, only after). In place of a single
+  Boolean variable a scope may take a Boolean expression; for "in" the expression form is written with "while", for example "while vehicle_mode = hover".
+  UNVERIFIED addition (v2): "after landed & powerOff" and "before taxiing & receivedClearance" were read from workshop slides through a summary tool.
+- condition (optional): a Boolean expression introduced by a keyword. There are two kinds (FRET repository, fret-electron/docs/_media/user-interface/examples/condition.md):
+  "a regular condition, meaning the requirement holds upon a condition becoming true; i.e., at the point where the condition becomes true after being false,
+  or the condition is true at the beginning of a scope interval" and "a holding condition, meaning the response holds whenever the condition holds."
+  "A holding condition is introduced by the keyword whenever. A regular condition is introduced by the keyword upon (or when, where, if)."
+  Source (Adam et al. 2023): upon, when and if are synonymous in FRETish; "unless" means the same as "when !".
+  Source (Hejase et al., project file "main2.pdf"): a regular condition "triggers the response to occur at the time the expression's value becomes true, or is true at
+  the beginning of the scope interval"; with whenever it "triggers the response to occur every time the expression's value is true".
+  Source (FRET repository, Requirement.g4): "when in <mode>" and "if in <mode>" are parsed as a SCOPE, not as a condition.
+  Semantics (RE 2020 paper): a regular condition is a TRIGGER. The paper writes "the response must hold at every time point where the expression is true" without a
+  condition as: "component shall always satisfy (expression) => response".
+  The official parser of this bench was also checked: when, if and upon give the identical logical formula for the same expression; whenever gives a different one.
+- component (mandatory): the name of the component the requirement is about, written as one identifier or "the <identifier>".
+- shall (mandatory keyword).
+- timing (optional): always, never, eventually, immediately, next, within <N> <unit>, for <N> <unit>, after <N> <unit>, until <condition>, before <condition>.
+  Also seen in the reports: "every <N> ticks" and "with probability <= <p>" (extensions used in NASA/TM-20240006865).
+  The slides list: always, never, eventually, immediately, for, within, after, until, before.
+  Source (Adam et al. 2023): the 10 timings are immediately, at the next timepoint, always, eventually, never, for N time steps, within N time steps,
+  after N time steps, until <bool_expr>, before <bool_expr>.
+  Source (Adam et al. 2023): when the scope is omitted it is global, when the condition is omitted it is true, and when the timing is omitted it is "eventually".
+  Source (Adam et al. 2023): FRETish does not allow arbitrary nesting of temporal operators and cannot express timed operators with a lower bound other than 0.
+- response (mandatory): the keyword "satisfy" followed by a Boolean expression.
+  Operators seen in the reports: & | ! => = < <= > >= + - * /. Boolean connectives and arithmetic relations work over integer and real variables.
+  Functions: absReal(x) for the absolute value (the official parser rejects abs). preInt(init, n) and preReal(init, n) give the value of n at the previous
+  time point, or init at the start of the trace (Adam et al. 2023). persisted(n, p) is true at the time point where p has held in the previous n time steps
+  and also holds now, n+1 time steps in total, a duration of n time units (FSM requirement templates paper, project file "main2.pdf").
+  A response of the form "if A then B" appears in the liquid mixer pairs.
+
+## Naming
+
+Variables and components are written as identifiers without spaces, for example liquid_level_1, valve_0, emergency_button, ap_standby_state, FSM.
+The reports contain no rule for choosing variable names from natural language words. Words given in parentheses in a natural language requirement
+(for example "(not standby)") are variable names in the reports.
+
+## Not known from the sources (the test bench adds NO rule here)
+
+The reserved words and the full grammar, how "while" in natural language maps to scope or condition, how a negated state ("while not X") is written,
+and when to split one natural language requirement into several FRETish requirements.

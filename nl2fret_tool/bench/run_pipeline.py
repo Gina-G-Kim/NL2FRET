@@ -92,6 +92,36 @@ def sd_of(ctx, it, a):
     return ctx.sigdict[it["challenge"].split("_")[0]]
 
 
+def reuse_stage_a(ctx, src, items, arms, reps):
+    """Copy ok stage A rows from an earlier run (same item, template, rep) when the stage A prompt hash is identical. Refuses a silent mismatch."""
+    srcf = src / "calls.jsonl" if src.is_dir() else src
+    if not srcf.exists():
+        raise SystemExit(f"--stage-a-from: {srcf} not found")
+    want = {(it["id"], t, r) for it in items for t in {P.akey(a) for a in arms if not P.is_direct(a)} for r in range(reps)}
+    n_new = n_have = n_bad = 0
+    for r in load_jsonl(srcf):
+        if r.get("stage") != "A" or r.get("status") != "ok":
+            continue
+        k = (r["item_id"], r["arm"], int(r["rep"]))
+        if k not in want:
+            continue
+        if r["stage_key"] in ctx.rows:
+            n_have += 1
+            continue
+        cur = ctx.prompts.get(("A", r["arm"]))
+        if cur is None or r.get("prompt_hash") != cur[1]:
+            n_bad += 1
+            continue
+        row = dict(r)
+        row["reused_from"] = str(srcf)
+        append_jsonl(ctx.calls_path, row)
+        ctx.rows[row["stage_key"]] = row
+        n_new += 1
+    log(ctx, f"stage A reuse from {srcf}: copied {n_new}, already present {n_have}, hash mismatch {n_bad}, wanted {len(want)}")
+    if n_bad:
+        raise SystemExit(f"--stage-a-from: {n_bad} stage A rows have a different prompt hash; the stage A prompt changed, reuse would not be a like-for-like comparison")
+
+
 def phase_A(ctx, items, arms, reps, block, rnd):
     tpls = sorted({P.akey(a) for a in arms if not P.is_direct(a)})
     todo = [(it, t, r) for it in items for t in tpls for r in reps]
@@ -129,7 +159,7 @@ def phase_first(ctx, items, arms, reps, block, rnd):
                 reqs = [T.slot_requests(p, P.is_r2(a)) for p in parses]
                 ctx.sent_counts[key] = len(sents)
                 sysp, hs, sp = ctx.prompts[("S2" if P.is_r2(a) else "S", None)]
-                row = call_stage(ctx, it, a, r, "S", block, sysp, P.user_prompt_S(parses, reqs), hs, sp, "S")
+                row = call_stage(ctx, it, a, r, "S", block, sysp, P.user_prompt_S(parses, reqs, sd_of(ctx, it, a)), hs, sp, "S")
             else:
                 sysp, hs, sp = ctx.prompts[("B", a)]
                 row = call_stage(ctx, it, a, r, "B", block, sysp, user_prompt_B(P.base_of(a), sents, raw=it["raw_nl"] if ctx.args.stageb_sees_raw else None, sigdict=sd_of(ctx, it, a)), hs, sp, "B")
@@ -142,9 +172,45 @@ def original_user(ctx, it, a, r, rec):
     if P.is_direct(a):
         return user_prompt_D(it["raw_nl"], sd_of(ctx, it, a))
     sents = rec["A"]["sentences"]
+    if P.is_rule(a) and rec.get("fallback"):
+        return user_prompt_B(P.base_of(a), sents, raw=None, sigdict=sd_of(ctx, it, a))
     if P.is_rule(a):
-        return P.user_prompt_S(rec["parses"], rec["reqs"])
+        return P.user_prompt_S(rec["parses"], rec["reqs"], sd_of(ctx, it, a))
     return user_prompt_B(P.base_of(a), sents, raw=it["raw_nl"] if ctx.args.stageb_sees_raw else None, sigdict=sd_of(ctx, it, a))
+
+
+def phase_fallback(ctx, items, arms, reps, block, rnd):
+    """v9 (no drop): a rule arm whose script layer cannot produce a sentence (template not readable, assembly failure) sends the template sentences through the free
+    path with the rule text (the +G prompt), so that the content still reaches the official FRET parser. The failed rule attempt stays in the record (round 0)."""
+    for _ in range(2):
+        recs = units_state(ctx, items, arms, reps)
+        by_id = {it["id"]: it for it in items}
+        todo = [(k, rec) for k, rec in recs.items() if rec.get("fallback") and rec["pending"] and rec.get("A")]
+        if not todo:
+            return True
+        rnd.shuffle(todo)
+        log(ctx, f"rule layer fallback to the free path: {len(todo)} units")
+        for (iid, a, r), rec in todo:
+            key = U.skey(iid, a, r, "B")
+            if key in ctx.rows and (ctx.rows[key]["status"] == "ok" or not ctx.args.retry_errors):
+                continue
+            it = by_id[iid]
+            sysp, hs, sp = ctx.prompts[("BF", P.base_of(a))]
+            userp = user_prompt_B(P.base_of(a), rec["A"]["sentences"], raw=None, sigdict=sd_of(ctx, it, a))
+            if call_stage(ctx, it, a, r, "B", block, sysp, userp, hs, sp, "B") is None:
+                return False
+    return True
+
+
+def history_of(rec):
+    """the whole FRET feedback log of a unit so far: every attempt, the answer and the verdict per sentence (given to the model in full at every feedback call)"""
+    hist = []
+    for n, rr in enumerate(rec["rounds"], 1):
+        note = ""
+        if rec.get("fallback") and n == 1:
+            note = f"the rule layer could not build a sentence from this input ({rec['fallback']['code']}); this attempt never reached the FRET parser"
+        hist.append({"attempt": n, "stage": rr["stage"], "answer": (rr.get("row") or {}).get("raw_result") or "", "statuses": P.statuses_from_round(rr), "note": note})
+    return hist
 
 
 def phase_rounds(ctx, items, arms, reps, block, rnd):
@@ -155,7 +221,7 @@ def phase_rounds(ctx, items, arms, reps, block, rnd):
         recs = units_state(ctx, items, arms, reps)
         if k == P.MAX_ROUNDS:
             break
-        targets = [(key, rec) for key, rec in recs.items() if len(rec["rounds"]) == k + 1 and U.needs_feedback(rec)]
+        targets = [(key, rec) for key, rec in recs.items() if rec.get("n_feedback", len(rec["rounds"]) - 1) == k and U.needs_feedback(rec)]
         rnd.shuffle(targets)
         log(ctx, f"feedback round {k + 1}: {len(targets)} units")
         for (iid, a, r), rec in targets:
@@ -164,11 +230,12 @@ def phase_rounds(ctx, items, arms, reps, block, rnd):
             if key in ctx.rows and (ctx.rows[key]["status"] == "ok" or not ctx.args.retry_errors):
                 continue
             it = by_id[iid]
-            last = rec["rounds"][-1]
-            statuses = P.statuses_from_round(last)
-            userp = P.user_prompt_feedback(original_user(ctx, it, a, r, rec), (last["row"] or {}).get("raw_result") or "", statuses)
+            userp = P.user_prompt_feedback_log(original_user(ctx, it, a, r, rec), history_of(rec))
             if P.is_direct(a):
                 sysp, hs, sp = ctx.prompts[("D", P.dkey(a))]
+                kind = "B"
+            elif P.is_rule(a) and rec.get("fallback"):
+                sysp, hs, sp = ctx.prompts[("BF", P.base_of(a))]
                 kind = "B"
             elif P.is_rule(a):
                 sysp, hs, sp = ctx.prompts[("S2" if P.is_r2(a) else "S", None)]
@@ -205,7 +272,7 @@ def snapshot(ctx, items):
     info = {"claude_version": cli.cli_version(ctx.args.claude_bin), "model_arg": ctx.args.model, "cli_extra": ctx.args.cli_extra,
             "prompt_hashes": {f"{s}:{t}": v[1] for (s, t), v in ctx.prompts.items()}, "rules_hash": rules_hash, "n_items": len(items), "arms": ctx.args.arms,
             "seed": ctx.args.seed, "reps": ctx.args.reps, "block": ctx.args.block, "parser": ctx.args.parser, "max_rounds": P.MAX_ROUNDS,
-            "stageb_sees_raw": ctx.args.stageb_sees_raw, "python": sys.version.split()[0]}
+            "stageb_sees_raw": ctx.args.stageb_sees_raw, "dict_all": bool(ctx.args.dict_all), "guide_sup": bool(ctx.args.guide_sup), "g_parity": bool(ctx.args.g_parity), "intent_decl": bool(ctx.args.intent_decl), "tm_source_only": bool(ctx.args.tm_source_only), "sourced_rules_only": bool(ctx.args.sourced_rules_only), "stage_a_from": ctx.args.stage_a_from, "python": sys.version.split()[0]}
     (snap / "run_info.json").write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
     return rules_hash
 
@@ -221,8 +288,14 @@ def build_prompts(ctx):
             sp, st = P.build_system_D3(a)
             pr[("D", P.dkey(a))] = (sp, sha(sp), st)
         elif P.is_rule(a):
-            sp = P.SLOT_SYSTEM_R2 if P.is_r2(a) else P.SLOT_SYSTEM
+            sp = P.slot_system_r2() if P.is_r2(a) else P.SLOT_SYSTEM
+            if P.INTENT_DECL and P.is_r2(a):     # v1.4: the script fixes the condition keywords; the intent can only act on the model-answered tm slot
+                sp = sp.rstrip() + "\n\n" + P.intent_declaration() + "\n"
+            if P.is_dict(a):
+                sp = sp.rstrip() + "\n" + P.SLOT_D_RULES + "\n"
             pr[("S2" if P.is_r2(a) else "S", None)] = (sp, sha(sp), {"slots": "bench_rules_v7_timing_slot" if P.is_r2(a) else "bench_rules"})
+            fb, fst = P.build_system_B3(P.base_of(a) + P.GUIDE_SUFFIX)     # fallback of the rule arm: the free path with the rule text
+            pr[("BF", P.base_of(a))] = (fb, sha(fb), dict(fst, fallback_of="rule_assembly"))
         else:
             sp, st = P.build_system_B3(a)
             pr[("B", a)] = (sp, sha(sp), st)
@@ -239,7 +312,7 @@ def main():
     ap.add_argument("--hours", type=float, default=20.0)
     ap.add_argument("--strict-deadline", action="store_true")
     ap.add_argument("--reset-clock", action="store_true")
-    ap.add_argument("--parser", default="docker", choices=["docker", "mock"], help="official FRET parser (docker image fret-lab) or the mock parser (offline test only)")
+    ap.add_argument("--parser", default="docker", choices=["docker", "node", "mock"], help="official FRET parser: docker image fret-lab (the experiment), a local node copy (sandbox tests, see fret_compile.compile_list_node) or the mock parser (offline test only)")
     ap.add_argument("--claude-bin", default=os.environ.get("CLAUDE_BIN", "claude"))
     ap.add_argument("--model", default=os.environ.get("BENCH_MODEL", ""))
     ap.add_argument("--cli-extra", default=os.environ.get("BENCH_CLI_EXTRA", ""))
@@ -254,9 +327,24 @@ def main():
     ap.add_argument("--seed", type=int, default=20261029)
     ap.add_argument("--retry-errors", action="store_true")
     ap.add_argument("--stageb-sees-raw", action="store_true", help="ABLATION, off by default")
+    ap.add_argument("--intent-decl", action="store_true", help="v1.4: append the NASA-sourced intent declaration (prompts/intent_declaration.md) to the FRETish prompts of Direct and the free arms (diagnostic condition)")
+    ap.add_argument("--g-parity", action="store_true", help="v1.4: omit rule R-DEFTIME from the +G rule text (rule parity with +R2, where timing is a model-filled slot)")
+    ap.add_argument("--guide-sup", action="store_true", help="v1.4: add the official FRET semantics supplement (prompts/fretish_guide_supplement.md) and dictionary rule D-5 to the FRETish prompts of Direct and the free arms")
+    ap.add_argument("--dict-all", action="store_true", help="v9: every arm gets the signal dictionary of its challenge at the FRETish stage")
+    ap.add_argument("--tm-source-only", action="store_true", help="v1.4: the +R2 timing slot prompt keeps documentation facts only; the bench-authored selection procedure V-2/V-3 is removed")
+    ap.add_argument("--sourced-rules-only", action="store_true", help="v1.4: the tool maps a template phrase only where the mapping has a source (official document or official parser check); other phrases go to the model (assembly refuses, free path)")
+    ap.add_argument("--stage-a-from", help="v1.4: reuse the stage A (template conversion) rows of an earlier run folder, so that a version comparison differs only in the stages after A. "
+                    "A row is reused only if its prompt hash equals the current stage A prompt hash; reused rows are copied into this run with reused_from set")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
+    P.DICT_ALL = bool(args.dict_all)
+    P.GUIDE_SUP = bool(args.guide_sup)
+    P.G_PARITY = bool(args.g_parity)
+    P.INTENT_DECL = bool(args.intent_decl)
+    P.TM_SOURCE_ONLY = bool(args.tm_source_only)
+    P.SOURCED_ONLY = T.SOURCED_ONLY = bool(args.sourced_rules_only)
+    T.INTENT_COND = bool(args.intent_decl)
     ctx = Ctx()
     ctx.args = args
     ctx.results = Path(args.results) if Path(args.results).is_absolute() else ROOT / args.results
@@ -316,6 +404,8 @@ def main():
     ctx.rows = {}
     for r in load_jsonl(ctx.calls_path):
         ctx.rows[r["stage_key"]] = r
+    if args.stage_a_from:
+        reuse_stage_a(ctx, Path(args.stage_a_from), items, args.arms, args.reps)
 
     def _sig(*_):
         cli.STOP["flag"] = True
@@ -338,7 +428,7 @@ def main():
             blk = b0 // args.block
             rnd = random.Random(args.seed + b0)
             t0, w0 = now(), ctx.state.get("waited_total_s", 0.0)
-            ok = phase_A(ctx, items, args.arms, reps, blk, rnd) and phase_first(ctx, items, args.arms, reps, blk, rnd) and phase_rounds(ctx, items, args.arms, reps, blk, rnd)
+            ok = phase_A(ctx, items, args.arms, reps, blk, rnd) and phase_first(ctx, items, args.arms, reps, blk, rnd) and phase_fallback(ctx, items, args.arms, reps, blk, rnd) and phase_rounds(ctx, items, args.arms, reps, blk, rnd)
             if not ok:
                 exit_status = "stopped_deadline"
                 break

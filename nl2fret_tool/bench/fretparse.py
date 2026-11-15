@@ -37,9 +37,9 @@ def compile_texts(texts, backend="docker", cache_path=None):
     if todo:
         if backend == "mock":
             res = {t: mock_parse(t) for t in todo}
-        elif backend == "docker":
+        elif backend in ("docker", "node"):
             import fret_compile
-            res = {r["fretish"]: {"ok": bool(r["ok"]), "error": (None if r["ok"] else str(r["error"])[:600])} for r in fret_compile.compile_list(todo)}
+            res = {r["fretish"]: {"ok": bool(r["ok"]), "error": (None if r["ok"] else str(r["error"])[:600])} for r in fret_compile.compile_list(todo, backend=backend)}
         else:
             raise SystemExit("unknown parser backend " + backend)
         if cache_path:

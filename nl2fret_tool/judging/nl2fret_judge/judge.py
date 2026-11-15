@@ -3,10 +3,8 @@
 Flow: align vocabulary (align.py) -> boolean abstraction -> three queries (equiv, sound, compl) per chosen alignment -> role.
 A pair is
   judged : all three queries gave a verdict. role = SAME | PROOF | REFUTE | NEITHER
-  UND    : no vocabulary alignment exists (role 'UND', und_reason set). This includes the case that align.candidates finds same-type counterparts but
-           no injective renaming (empty candidate list); v1.0.0 recorded that case as N/M 'other' / 'no candidate'.
-  N/M    : the engine could not decide (nm True; nm_reason one of converter_limit, syntax, timeout, nusmv_output, no_verdict, other).
-           A pair whose candidates all fail in _prepare (window cap, syntax) stays N/M with the reason of the first failure.
+  UND    : no vocabulary alignment exists (role 'UND', und_reason set)
+  N/M    : the engine could not decide (nm True; nm_reason one of converter_limit, syntax, timeout, nusmv_output, no_verdict, other)
 Role mapping (Sound = GT -> Pred holds, Compl = Pred -> GT holds):
   sound & compl -> SAME ; compl only -> PROOF (no MISS, ALARM) ; sound only -> REFUTE (MISS, no ALARM) ; neither -> NEITHER
 Alignment search: for every candidate renaming the sound and compl queries are run; the best candidate (fewest failed queries, as in legacy/judge4.py) is kept and
@@ -19,7 +17,7 @@ import uuid
 from . import abstraction as A
 from . import align
 from .ap_check import ap_check
-from .engines import AUX, QueryResult
+from .engines import AUX, QueryResult, parse_nusmv_trace
 
 def clean_markup(t):
     """FRET marks some reference formulas with <b>/<i> emphasis tags; they are not part of the formula."""
@@ -52,19 +50,10 @@ def _fully_parenthesised(a):
     return "(" + _fully_parenthesised(a[1]) + " " + k + " " + _fully_parenthesised(a[2]) + ")"
 
 
-# Selection rank of a reference part in best_over_references (smaller is better). v1.2.0 makes the two non-role entries explicit: a record the engine could not
-# decide (nm true, role None) ranks 3, a record without a vocabulary alignment (role "UND") ranks 4. v1.1.0 computed the same values inline (RANK.get(role,
-# 3 if role is None else 4)), so the selection did not change.
-RANK = {"SAME": 0, "PROOF": 1, "REFUTE": 1, "NEITHER": 2, "N/M": 3, "UND": 4}
-
-
-def rank_of(rec):
-    """Rank of one judge_pair record: N/M is identified by the nm flag, UND by role == 'UND', every other record by its role."""
-    if rec["nm"]:
-        return RANK["N/M"]
-    if rec["role"] == "UND":
-        return RANK["UND"]
-    return RANK[rec["role"]]
+RANK = {"SAME": 0, "PROOF": 1, "REFUTE": 1, "NEITHER": 2}
+CEX_ROLES = ("NEITHER", "UND", "NM")      # v9: the counterexample of a failed query is always recorded for these roles (NM = engine could not decide); it is recorded for the other roles as well when a query failed
+CEX_MEANING = {"sound": "the reference holds and the generated formula is violated (ALARM)", "compl": "the generated formula holds and the reference is violated (MISS)",
+               "equiv": "the two formulas differ"}
 
 
 def role_of(sound, compl):
@@ -112,7 +101,7 @@ def judge_pair(gen_pt, ref_pt, engine, mode="anchor", cap=128, aux=False, pair_i
            "gt_pt": ref_pt, "pred_pt": gen_pt, "gt_ft": ref_ft, "pred_ft": gen_ft, "atoms_gt": None, "atoms_pred": None, "atoms_union": None,
            "atom_abstraction": None, "ap_dictionary": meta.get("ap_dictionary"), "alignment": {"mode": mode, "mapping": None, "n_candidates": 0, "n_tried": 0, "und": None},
            "equiv": None, "sound": None, "compl": None, "role": None, "nm": False, "nm_reason": None, "nm_detail": None, "und_reason": None,
-           "gen_sat": None, "gen_valid": None, "queries": [], "ap_check": None, "engine": getattr(engine, "name", "?")}
+           "gen_sat": None, "gen_valid": None, "counterexamples": [], "queries": [], "ap_check": None, "engine": getattr(engine, "name", "?")}
     store = []
     t0 = time.time()
     try:
@@ -127,14 +116,6 @@ def judge_pair(gen_pt, ref_pt, engine, mode="anchor", cap=128, aux=False, pair_i
             return _finish(rec, store, t0)
         maps = al["maps"]
         rec["alignment"].update(n_candidates=len(maps), anchored=al.get("anchored"))
-        if not maps:
-            # v1.1.0: an empty candidate list means that no vocabulary alignment exists (for example two generated variables whose only same-type
-            # reference counterpart is the same variable). That is UND, like the 'und' results of align.candidates above; v1.0.0 recorded N/M 'other'.
-            rec["role"] = "UND"
-            rec["und_reason"] = "atomization_mismatch"
-            rec["nm_detail"] = {"message": "no injective renaming candidate"}
-            rec["ap_check"] = ap_check(None, None)
-            return _finish(rec, store, t0)
         best = None
         first_fail = None
         for m in maps:
@@ -163,7 +144,6 @@ def judge_pair(gen_pt, ref_pt, engine, mode="anchor", cap=128, aux=False, pair_i
                 break
         if best is None:
             if first_fail is None:
-                # defensive only: an empty candidate list returns UND above, and every candidate that fails records first_fail
                 first_fail = _Fail("other", {"message": "no candidate"})
             raise first_fail
         _, m, g2, gb, rb, gs, rs, atoms, qs, qc = best
@@ -174,6 +154,8 @@ def judge_pair(gen_pt, ref_pt, engine, mode="anchor", cap=128, aux=False, pair_i
         rec["sound"], rec["compl"] = qs.verdict, qc.verdict
         qe = _run(engine, "equiv", gs, rs, atoms, g2, ref_pt, store)
         rec["equiv"] = qe.verdict
+        rec["counterexamples"] = [{"kind": q.kind, "meaning": CEX_MEANING[q.kind], "smv_sha256": q.smv_sha256, "smv_path": f"smv/{q.smv_sha256}.smv", "spec_text": q.spec_text,
+                                   "trace": parse_nusmv_trace(q.stdout)} for q in (qs, qc, qe) if q.verdict is False]
         if qe.verdict is None:
             raise _Fail(qe.reason or "no_verdict", {"message": f"equiv query: {qe.reason}"})
         rec["role"] = role_of(rec["sound"], rec["compl"])
@@ -193,39 +175,33 @@ def judge_pair(gen_pt, ref_pt, engine, mode="anchor", cap=128, aux=False, pair_i
 
 
 def _finish(rec, store, t0):
+    role = rec["role"] or ("NM" if rec["nm"] else None)
+    cex = rec.get("counterexamples") or []
+    need = role in CEX_ROLES
+    if cex and all(c["trace"] is None for c in cex):
+        rec["counterexample_status"] = "engine_gave_no_trace"          # z3 bounded engine: no trace text exists
+    elif cex:
+        rec["counterexample_status"] = "recorded"
+    elif need:
+        rec["counterexample_status"] = "not_available:" + (rec.get("und_reason") or rec.get("nm_reason") or "no_failed_query")
+    else:
+        rec["counterexample_status"] = "not_needed"
+    rec["counterexample_required"] = need
     rec["queries"] = [q.to_record() for q in store]
     rec["elapsed_sec_total"] = round(time.time() - t0, 3)
     rec["_smv"] = {q.smv_sha256: q.smv_text for q in store if q.smv_sha256}
     return rec
 
 
-def _trial(r):
-    """Summary of one reference-part attempt for reference_trials. The raw query output (stdout, stderr, cmd) stays only in the 'queries' of the kept record."""
-    qs = r["queries"]
-    return {"reference_part": r["reference_part"], "role": r["role"], "nm": r["nm"], "nm_reason": r["nm_reason"], "und_reason": r["und_reason"],
-            "n_queries": len(qs), "smv_sha256": [q["smv_sha256"] for q in qs if q["smv_sha256"]],
-            "queries": [{"kind": q["kind"], "verdict": q["verdict"], "elapsed_sec": q["elapsed_sec"]} for q in qs]}
-
-
 def best_over_references(gen_pt, ref_parts, engine, **kw):
-    """Compare one generated formula with several reference parts (all versions) and keep the best record (SAME < PROOF = REFUTE < NEITHER < N/M, UND last).
-    v1.1.0: the kept record also carries reference_trials (one summary per attempted part, in order; the loop stops at the first SAME) and the SMV files of
-    every attempt (merged into _smv, so that the recorder stores them in smv/). The selection rule is unchanged."""
+    """Compare one generated formula with several reference parts (all versions) and keep the best record (SAME < PROOF = REFUTE < NEITHER < N/M, UND last)."""
     best = None
-    trials, smv = [], {}
     for i, (ref_id, ref_pt, ref_ft) in enumerate(ref_parts):
         r = judge_pair(gen_pt, ref_pt, engine, ref_ft=ref_ft, **kw)
         r["reference_part"] = ref_id
-        trials.append(_trial(r))
-        smv.update(r.get("_smv") or {})
-        rank = rank_of(r)
+        rank = RANK.get(r["role"], 3 if r["role"] is None else 4)
         if best is None or rank < best[0]:
             best = (rank, r)
         if rank == 0:
             break
-    if not best:
-        return None
-    rec = best[1]
-    rec["reference_trials"] = trials
-    rec["_smv"] = smv
-    return rec
+    return best[1] if best else None

@@ -1,4 +1,4 @@
-"""Command line: python -m nl2fret_judge <selfcheck|judge|aggregate|release> ...   (run from the judging/ directory)"""
+"""Command line: python -m nl2fret_judge <selfcheck|judge|aggregate> ...   (run from the judging/ directory)"""
 import argparse
 import json
 import os
@@ -6,7 +6,7 @@ import platform
 import sys
 import time
 
-from . import __version__, aggregate as AG, freeze as FZ, selfcheck as SC, units as U
+from . import __version__, aggregate as AG, dict_align as DA, parts as PT, selfcheck as SC, units as U
 from .ap_check import RULE_ID
 from .engines import NuSMVEngine, Z3Engine
 from .judge import best_over_references
@@ -38,26 +38,7 @@ def cmd_selfcheck(a):
     return 0 if ok else 2
 
 
-def cmd_release(a):
-    """Write JUDGE_FROZEN_MANIFEST.sha256 (hashes of the judging code). Refused when the manifest exists: a released tree is never released again."""
-    try:
-        path, entries, sha = FZ.write_manifest()
-    except FileExistsError:
-        print(f"refused: {FZ.MANIFEST_NAME} already exists; a released tree is not released again", file=sys.stderr)
-        return 2
-    print(f"released: {len(entries)} code files, {path}, manifest sha256 {sha}")
-    return 0
-
-
 def cmd_judge(a):
-    fz = FZ.check_manifest()          # before anything is created: a refused run leaves no files behind
-    if fz["status"] in ("mismatch", "invalid"):
-        if not a.allow_unfrozen:
-            print(f"refused: the judging code does not match {FZ.MANIFEST_NAME} ({FZ.describe(fz)}); pass --allow-unfrozen to run anyway "
-                  "(the run header then records frozen=false)", file=sys.stderr)
-            return 2
-        print(f"warning: --allow-unfrozen, the judging code does not match {FZ.MANIFEST_NAME} ({FZ.describe(fz)}); the run header records frozen=false",
-              file=sys.stderr, flush=True)
     eng = make_engine(a)
     ok, _ = SC.run(eng)
     if not ok and not a.skip_selfcheck:
@@ -67,13 +48,7 @@ def cmd_judge(a):
     units = U.load_units(a.units, a.ltl, a.rlz)
     header = {"tool": "nl2fret_judge", "version": __version__, "engine": eng.name, "engine_version": getattr(eng, "version", lambda: None)(),
               "mode": a.mode, "cap": a.cap, "timeout": a.timeout, "aux": a.aux, "ap_rule": RULE_ID, "python": platform.python_version(),
-              "inputs": {"units": sha256_file(a.units), "ltl": sha256_file(a.ltl), "rlz": sha256_file(a.rlz) if a.rlz else None,
-                         "reference": sha256_file(a.reference)}, "selfcheck_passed": ok}
-    header.update(FZ.provenance())          # v1.2.0: python_version, z3_version, code_sha256, code_tree_sha256, smv_template_id, query_templates
-    header.update({"frozen": fz["status"] == "match" and not a.allow_unfrozen, "frozen_manifest_sha256": fz["manifest_sha256"], "frozen_check": fz["status"],
-                   "allow_unfrozen": a.allow_unfrozen})
-    if fz["diff"]:
-        header["frozen_diff"] = fz["diff"]
+              "inputs": {k: sha256_file(getattr(a, k)) for k in ("units", "ltl", "reference")}, "selfcheck_passed": ok}
     rec = Recorder(a.out, header)
     n = 0
     t0 = time.time()
@@ -93,6 +68,32 @@ def cmd_judge(a):
             if n % 25 == 0:
                 print(f"{n} pairs, {time.time() - t0:.0f}s", flush=True)
     print("judged pairs written:", n)
+    return 0
+
+
+def cmd_judge_parts(a):
+    eng = make_engine(a)
+    ok, _ = SC.run(eng)
+    if not ok and not a.skip_selfcheck:
+        print("self check failed; engine not usable (use --skip-selfcheck only for debugging)")
+        return 2
+    refs = PT.load_reference_parts(a.reference)
+    units = U.load_units(a.units, a.ltl, None)
+    dnames = DA.load_dictionary(a.dictionary)
+    header = {"tool": "nl2fret_judge", "version": __version__, "granularity": "part", "engine": eng.name, "engine_version": getattr(eng, "version", lambda: None)(),
+              "mode": a.mode, "cap": a.cap, "timeout": a.timeout, "aux": a.aux, "python": platform.python_version(), "selfcheck_passed": ok,
+              "inputs": {k: sha256_file(getattr(a, k)) for k in ("units", "ltl", "reference", "dictionary")}}
+    rec = Recorder(a.out, header)
+    cex = os.path.join(a.out, "counterexamples.jsonl")
+    t0 = time.time()
+    n = PT.judge_units(units, refs, dnames, eng, rec, cex, mode=a.mode, cap=a.cap, aux=a.aux, run_id=os.path.basename(os.path.abspath(a.out)),
+                       progress=lambda k: print(f"{k} pairs, {time.time() - t0:.0f}s", flush=True))
+    records = AG.read_records(os.path.join(a.out, "judge_records.jsonl"))
+    rows = PT.assemble(units, refs, records)
+    with open(os.path.join(a.out, "part_results.jsonl"), "w", encoding="utf-8") as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    print("pairs judged now:", n, "| units:", len(rows), "| records:", len(records))
     return 0
 
 
@@ -117,14 +118,16 @@ def main(argv=None):
         j.add_argument("--" + k, required=True)
     j.add_argument("--rlz"); j.add_argument("--reference", default="../data/reference/lm_reference_with_ltl.jsonl")
     j.add_argument("--mode", default="anchor", choices=["anchor", "lex", "strict", "free"]); j.add_argument("--cap", type=int, default=128)
-    j.add_argument("--aux", action="store_true"); j.add_argument("--skip-selfcheck", action="store_true")
-    j.add_argument("--allow-unfrozen", action="store_true", help="run although the judging code differs from JUDGE_FROZEN_MANIFEST.sha256 (header: frozen=false)")
-    j.set_defaults(f=cmd_judge)
+    j.add_argument("--aux", action="store_true"); j.add_argument("--skip-selfcheck", action="store_true"); j.set_defaults(f=cmd_judge)
+    p2 = sp.add_parser("judge-parts"); common(p2)
+    for k in ("units", "ltl", "reference", "dictionary"):
+        p2.add_argument("--" + k, required=True)
+    p2.add_argument("--mode", default="anchor", choices=["anchor", "lex", "strict", "free"]); p2.add_argument("--cap", type=int, default=128)
+    p2.add_argument("--aux", action="store_true"); p2.add_argument("--skip-selfcheck", action="store_true"); p2.set_defaults(f=cmd_judge_parts)
     g = sp.add_parser("aggregate"); common(g)
     for k in ("units", "ltl"):
         g.add_argument("--" + k, required=True)
     g.add_argument("--rlz"); g.set_defaults(f=cmd_aggregate)
-    r = sp.add_parser("release", help="write JUDGE_FROZEN_MANIFEST.sha256 (once)"); r.set_defaults(f=cmd_release)
     a = p.parse_args(argv)
     return a.f(a)
 

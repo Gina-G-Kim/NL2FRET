@@ -1,0 +1,67 @@
+{
+ "C+ID": {
+  "n": 112,
+  "roles": {
+   "SAME": 112
+  },
+  "flag_count": 0,
+  "flag_rate": 0.0,
+  "flag": "false failure (not SAME)"
+ },
+ "C+NN": {
+  "n": 112,
+  "roles": {
+   "SAME": 112
+  },
+  "flag_count": 0,
+  "flag_rate": 0.0,
+  "flag": "false failure (not SAME)"
+ },
+ "C+AND": {
+  "n": 112,
+  "roles": {
+   "SAME": 112
+  },
+  "flag_count": 0,
+  "flag_rate": 0.0,
+  "flag": "false failure (not SAME)"
+ },
+ "C-TAUT": {
+  "n": 112,
+  "roles": {
+   "REFUTE": 112
+  },
+  "flag_count": 0,
+  "flag_rate": 0.0,
+  "flag": "false success (SAME or PROOF)"
+ },
+ "C-CONTR": {
+  "n": 112,
+  "roles": {
+   "PROOF": 112
+  },
+  "flag_count": 112,
+  "flag_rate": 1.0,
+  "flag": "false success (SAME or PROOF)"
+ },
+ "C-NEG": {
+  "n": 112,
+  "roles": {
+   "NEITHER": 112
+  },
+  "flag_count": 0,
+  "flag_rate": 0.0,
+  "flag": "false success (SAME or PROOF)"
+ },
+ "C-SHIFT": {
+  "n": 33,
+  "roles": {
+   "NEITHER": 21,
+   "UND": 6,
+   "SAME": 6
+  },
+  "flag_count": 6,
+  "flag_rate": 0.1818,
+  "flag": "false success (SAME or PROOF)"
+ }
+}

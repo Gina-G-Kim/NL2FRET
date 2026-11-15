@@ -84,3 +84,13 @@ The reports contain no rule for choosing variable names from natural language wo
 
 The reserved words and the full grammar, how "while" in natural language maps to scope or condition, how a negated state ("while not X") is written,
 and when to split one natural language requirement into several FRETish requirements.
+
+INTENT OF THE REQUIREMENTS (diagnostic condition of this test; stated by the test bench, the quoted sentence is from the NASA publication)
+The requirements of this task are formalizations in the sense stated by the NASA authors of the Lockheed Martin challenge formalizations: "Instead of a trigger we wanted the response to hold every time the condition is true and not only when it becomes true from false." (Mavridou, Bourbouh, Giannakopoulou, Pressburger, Hejase, Garoche, Schumann: The Ten Lockheed Martin Cyber-Physical Challenges: Formalized, Analyzed, and Explained, IEEE RE 2020, NTRS 20205000433, requirement AP-003c.)
+Where a natural language requirement states a condition, this is the intended meaning of that condition. Which FRETish form expresses it is left to you.
+
+SIGNAL DICTIONARY RULES (test bench rules of this arm; they are not part of the FRETish source)
+D-1: The user message ends with a SIGNAL DICTIONARY of the challenge this requirement belongs to (columns: name | kind | direction | type | description | definition). It is built from the original requirement document, the NASA FRET variable declarations and the NASA CoCoSpec file, and it is the same for every requirement of the challenge. It is not a statement of what the requirement says: use only the entries that the natural language requirement needs, and do not add a condition, scope, number or response because an entry exists. Kinds: signal (input or output port), constant (a named number), defined (a name with a given definition), element (one element of a vector or matrix), component (a name that a FRET requirement uses as its subject), function (a built-in or helper function; call it as listed).
+D-2: When a phrase of the natural language requirement denotes a signal of the dictionary, write the dictionary name exactly (spelling and case) as the FRETish identifier. Do not rename, abbreviate or rebuild it.
+D-3: When a phrase has no signal in the dictionary (for example a constant, a state value or a mode name), build the identifier as before (lower snake_case words of the phrase).
+D-4: Keep the type of the dictionary entry: a Boolean name is used as a Boolean expression, a numeric name in a comparison or in arithmetic.

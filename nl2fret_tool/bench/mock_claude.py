@@ -60,8 +60,11 @@ def main():
         text = json.dumps([{"id": it["id"], "equivalent": rnd.choice([0.25, 0.5, 0.75, 1.0]), "verdict": rnd.choice(["close", "different", "equivalent"]),
                             "meaning_changed": rnd.random() < 0.5, "issue": "mock"} for it in items])
     elif system.startswith("TASK: A script has split"):
-        body = user.split("ITEMS (JSON):", 1)[1].split("YOUR PREVIOUS ANSWER:")[0].strip()
-        fb = "OFFICIAL FRET PARSER RESULT" in user
+        body = user.split("ITEMS (JSON):", 1)[1]
+        for cut in ("YOUR PREVIOUS ANSWER:", "SIGNAL DICTIONARY", "FRET FEEDBACK LOG"):
+            body = body.split(cut)[0]
+        body = body.strip()
+        fb = "OFFICIAL FRET PARSER RESULT" in user or "FRET FEEDBACK LOG" in user
         items = json.loads(body)
         outs = []
         for it in items:
@@ -113,6 +116,7 @@ def main():
             src = user.split("REWRITTEN SENTENCES:", 1)[1]
         else:
             src = user.split("NATURAL LANGUAGE REQUIREMENT:", 1)[1]
+        src = src.split("SIGNAL DICTIONARY")[0].split("FRET FEEDBACK LOG")[0]
         first = re.sub(r"^\s*\d+\.\s*", "", src.strip().splitlines()[0])
         cond = snake(first, 3)
         resp = snake(first[len(first) // 2:], 3)
@@ -126,8 +130,9 @@ def main():
         else:
             f = f"controller shall always satisfy ({cond}) => {resp}"
             fld = {"scope": "", "condition": "", "component": "controller", "timing": "always", "response": f"({cond}) => {resp}"}
-        fb = "OFFICIAL FRET PARSER RESULT" in user
-        if rnd.random() < (0.08 if fb else 0.3):
+        fb = "OFFICIAL FRET PARSER RESULT" in user or "FRET FEEDBACK LOG" in user
+        stubborn = float(os.environ.get("MOCK_FB_REJECT", "0.08"))     # test knob: probability that a feedback answer is rejected again
+        if rnd.random() < (stubborn if fb else 0.3):
             bad = rnd.choice([f.replace("immediately", "within 5 ms"), f.replace("satisfy ", "satisfy abs(") + ") <= 3", f + ". This is a note.", f.replace("the controller", "the flight control system")])
             f = bad
         text = json.dumps({"fretish": [f], "fields": [fld], "choices": [{"point": "scope or condition", "chosen": "mock", "alternatives": ["x"]}],

@@ -17,7 +17,7 @@
 | S3 | 형식 관문 | FRETish | 공식 FRET 파서. 거부 시 오류를 피드백으로 주고 최대 2회 재변환 | 통과 문장 또는 거부 | 2회 후에도 거부면 실패 |
 | S4 | 현실화 가능성 | 통과 문장 | Kind2 realizability | realizable, unrealizable, unknown, not_run | unrealizable와 unknown은 실패 |
 | S5 | LTL 컴파일 | 통과 문장 | FRET이 과거시제와 미래시제 LTL로 컴파일. 기준 FRETish도 같은 방식 | 생성 LTL, 기준 LTL | 컴파일 실패는 판정불가 |
-| S6 | 어휘 정렬 | 두 LTL | 이름 고정(주): 신호 사전 이름이 같으면 같은 변수. 4절 | 정렬된 식 쌍, AP 기록 | 대응 불가(후보 없음 포함)는 UND |
+| S6 | 어휘 정렬 | 두 LTL | 이름 고정(주): 신호 사전 이름이 같으면 같은 변수. 4절 | 정렬된 식 쌍, AP 기록 | 대응 불가는 N/M |
 | S7 | 판정 | 정렬된 식 쌍 | NuSMV 질의 3개(Equiv, Sound, Compl). 5절 | 역할, N/M, 원시 기록 | 변환기 한도 초과, 시간 초과는 N/M |
 | S8 | 집계 | 판정 기록 | 지표와 분모 규칙. 6절 | RQ별 표 | 해당 없음 |
 
@@ -93,33 +93,15 @@ N/M 사유 코드 [확정]: `converter_limit`(창 경계 128 초과), `syntax`, 
 
 ## 7. 기록 계층 (재현과 사후 감사용)
 
-쌍마다 한 줄씩 `judge_records.jsonl`에 남기며, 모든 집계는 이 파일에서 다시 계산할 수 있어야 한다. 아래 표의 필드 이름은 코드가 실제로 쓰는 키와 같아야 하고, `tests/test_patch_v12.py`가 이를 확인한다. (v1.1.0까지의 이 표는 헤더 항목 일부를 코드에 없는데도 적고 있었다. v1.2.0에서 그 항목을 코드에 만들었다. 부록 A-3.)
+쌍마다 한 줄씩 `judge_records.jsonl`에 남기며, 모든 집계는 이 파일에서 다시 계산할 수 있어야 한다.
 
 | 구분 | 필드 |
 |---|---|
-| 쌍 | `pair_id`, `run_id`, `group`, `mutation`, `sentence`, `engine`, `elapsed_sec_total` |
 | 식 | `gt_pt`, `pred_pt`, `gt_ft`, `pred_ft`, `atoms_gt`, `atoms_pred`, `atoms_union`, `atom_abstraction`, `ap_dictionary` |
-| 판정 | `equiv`, `sound`, `compl`, `role`, `nm`, `nm_reason`, `nm_detail`, `und_reason`, `gen_sat`, `gen_valid` |
-| 정렬과 선택 | `alignment`(`mode`, `mapping`, `n_candidates`, `n_tried`, `und`, `anchored`), `reference_part`, `reference_trials` |
-| 질의 (`queries`의 항목) | `kind`, `spec_text`, `smv_sha256`, `smv_path`, `verdict`, `executed`, `stdout`, `stdout_truncated`, `stderr`, `exit_code`, `elapsed_sec`, `timed_out`, `cmd`, `query_mode`, `reason` |
-| AP 규칙 | `ap_check`(`rule_id`, `level`, `vars_gt`, `vars_pred`, `equal`, `gt_subset_pred`, `pred_subset_gt`, `only_gt`, `only_pred`, `nm_by_kind`, `nm_pair_any`, `nm_pair_all`, `signal_vars_gt`, `signal_vars_pred`) |
-
-`reference_trials`의 항목은 부록 A-2에 있다. 헤더 `run_header.json`은 실행마다 한 번, 처음 시작할 때 쓰며 재개한 실행에서도 처음 값이 남는다.
-
-| 헤더 필드 | 내용 |
-|---|---|
-| `tool`, `version` | 도구 이름과 버전(1.2.0) |
-| `engine`, `engine_version` | `nusmv` 또는 `z3-bounded`, NuSMV 버전 문자열(z3 엔진은 null) |
-| `mode`, `cap`, `timeout`, `aux`, `ap_rule` | 정렬 층, 구간 확장 상한, 질의 시간 제한(초), 보조 질의 여부, AP 규칙 식별자 |
-| `inputs` | 입력 파일의 sha256: `units`, `ltl`, `rlz`(`--rlz`가 없으면 null), `reference` |
-| `selfcheck_passed` | 자기점검 통과 여부 |
-| `python`, `python_version`, `z3_version` | 인터프리터 버전(두 필드의 값은 같다. `python`은 v1.0.0 호환용), 설치된 z3-solver 배포판 버전(없으면 null) |
-| `code_sha256`, `code_tree_sha256` | 판정 코드 전체(`judging/nl2fret_judge/*.py`: 정렬, 변환기 `abstraction.py`와 `ltl_engines.py`, 엔진, 판정, 기록기 포함. 그리고 `judging/legacy/*.py`)의 파일별 sha256(경로 오름차순 목록, 항목은 `file`과 `sha256`)과, 그 목록을 매니페스트 형식 줄(`<sha256>  <경로>`)로 이어 계산한 sha256 하나 |
-| `smv_template_id`, `query_templates` | SMV 파일 구조 식별자 `single_ltlspec_v1`(질의마다 파일 하나, `MODULE main`, `VAR`의 boolean 원자, `LTLSPEC` 한 줄)와 질의식 정의(`equiv`, `sound`, `compl`, `sat`, `valid`, `spec_text`가 만든 문자열 그대로이며 자리표시자 `GS` = 생성식, `RS` = 기준식) |
-| `frozen`, `frozen_manifest_sha256`, `frozen_check`, `allow_unfrozen`, `frozen_diff` | 동결 상태(부록 A-3). `frozen`은 일치하는 매니페스트가 있고 `--allow-unfrozen`을 쓰지 않았을 때만 true. 나머지는 매니페스트 파일의 sha256(없으면 null), 실제 대조 결과(`match`, `mismatch`, `absent`, `invalid`), 우회 옵션 사용 여부, 불일치일 때의 차이(`modified`, `missing`, `extra`) |
-| `started_at` | 처음 시작 시각 |
-
-선택 순위: 한 문장을 여러 참조 부분과 비교할 때 남길 기록은 `judge.RANK`로 고른다. SAME(0) < PROOF = REFUTE(1) < NEITHER(2) < N/M(3, `nm`이 true인 기록) < UND(4, `role`이 UND인 기록)이다. 질의로 판정이 난 부분이 먼저이고, 질의를 실행했으나 판정하지 못한 부분(N/M)이 다음이며, 정렬이 없어서 질의를 실행하지 못한 부분(UND)이 마지막이다. 같은 순위에서는 먼저 시도한 부분을 남기고 첫 SAME에서 시도를 멈춘다. v1.1.0까지는 같은 순서가 코드에 암묵적으로 들어 있었고(`RANK.get(role, 3 if role is None else 4)`), v1.2.0은 동작을 바꾸지 않고 명시했다.
+| 판정 | `equiv`, `sound`, `compl`, `role`, `nm`, `nm_reason`, `nm_detail` |
+| 질의 | `kind`, `spec_text`, `smv_sha256`, `verdict`, `stdout`, `stderr`, `exit_code`, `elapsed_sec`, `timed_out`, `cmd`, `query_mode` |
+| AP 규칙 | `ap_check`(`vars_gt`, `vars_pred`, `equal`, `gt_subset_pred`, `pred_subset_gt`, `nm_by_kind`, `nm_pair_any`, `nm_pair_all`) |
+| 헤더 | NuSMV 버전, 변환기와 판정 코드의 sha256, cap, 시간 제한, SMV 템플릿 식별자, 입력 sha256 |
 
 - `judge_recording` 확인 실행(27쌍, 질의 81개, 14초)에서 판정 불변(R1), 필드 존재(R2), SMV 해시 일치(R3), stdout 비어 있으면 verdict null(R5), 기록 유무에 따른 출력 동일(R6)을 확인했다. R4는 변환식이 같은 9쌍을 제외한 18쌍에 한해 충족한다.
 - 이 기록이 있어야 가능한 사후 분석(지금은 실행하지 않음): 분모 두 가지의 정확도, 유한 trace 열거와 NuSMV 판정의 일치, SMV 템플릿 변형 비교, 창 경계 변경에 따른 N/M 변화, 출력 순서 문제의 감사.
@@ -177,36 +159,3 @@ N/M 사유 코드 [확정]: `converter_limit`(창 경계 128 초과), `syntax`, 
 - 참조식 전처리: FRET의 `<b><i>` 표시 제거, 괄호 없이 우선순위로 출력된 식은 완전 괄호식으로 재출력(judge.clean_markup).
 - 정렬 탐색은 sound/compl 질의로 후보를 비교하고(둘 다 성립 0점, 하나 1점, 둘 다 실패 2점, 0점이면 즉시 종료), 선택된 후보에만 equiv 질의를 실행한다.
 - 단위 결과: success(SAME/PROOF이며 같은 문장이 realizable), partial(REFUTE 또는 비실현), failure(NEITHER, 파서 거부, 문장 없음), unjudged(UND/NM).
-
-## 부록 A-2. 구현 변경 (v1.1.0, 2026-11-10)
-
-판정의 의미(질의 방향, 역할 대응, 불리언 추상화, 정렬 후보 구성 규칙, 선택 규칙)는 바뀌지 않았다. 바뀐 것은 아래 네 가지다.
-
-1. 정렬 후보가 없으면 UND. `align.candidates`가 같은 유형의 대응 변수는 찾았지만 서로 다른 변수로 짝지을 수 없어서 빈 후보 목록(`maps == []`)을 돌려주는 쌍을 v1.0.0은 N/M(`nm_reason="other"`, `nm_detail={"message": "no candidate"}`)로 기록했다. v1.1.0은 `role="UND"`, `und_reason="atomization_mismatch"`, `nm=false`, `nm_detail={"message": "no injective renaming candidate"}`로 기록하고 질의를 실행하지 않는다(`alignment.n_candidates`는 0). 후보가 있었으나 모든 후보에서 변환(`_prepare`)이 실패한 쌍은 이전과 같이 첫 실패의 사유(`converter_limit` 또는 `syntax`)로 N/M이다. N/M `other`는 식이 비어 있는 경우 같은 분류되지 않은 실패에 남고, 정렬 실패로는 생기지 않는다. 여러 참조 부분 중 최선을 고를 때 UND는 N/M보다 뒤(순위 4)이므로, 후보 없음 부분은 이제 다른 N/M 부분보다 뒤에 놓인다(`RANK`와 선택 규칙은 그대로이고 역할만 바뀐 결과).
-2. 헤더. `run_header.json`의 `inputs`에 `rlz`(`--rlz` 파일의 sha256, 없으면 null)가 추가되었다. 키는 `units`, `ltl`, `rlz`, `reference`. `version`은 `1.1.0`.
-3. 참조 부분별 시도 기록. 쌍의 기록에 `reference_trials`(목록)가 추가되었다. 시도한 참조 부분마다 한 항목이며(첫 SAME에서 멈추므로 실제로 시도한 부분만) 시도 순서대로 들어 있다. 항목의 키: `reference_part`, `role`, `nm`, `nm_reason`, `und_reason`, `n_queries`, `smv_sha256`(질의 순서대로 SMV 해시 목록, z3 엔진은 빈 목록), `queries`(질의 요약 목록, 각 항목은 `kind`, `verdict`, `elapsed_sec`). 선택된 시도도 이 목록에 있으며(`reference_part`가 기록의 `reference_part`와 같은 항목) 그 항목의 `role`, `nm`, `nm_reason`, `und_reason`, `n_queries`는 기록의 값과 같다. 질의 원문 출력(`stdout`, `stderr`, `cmd` 등)은 선택된 기록의 `queries`에만 있다. 선택되지 않은 시도의 SMV 파일도 `smv/`에 저장된다.
-4. 재개. 강제 종료로 `judge_records.jsonl`의 마지막 줄이 중간에 끊긴 경우(마지막 개행 뒤의 바이트가 완전한 JSON 기록이 아님) `Recorder`는 시작할 때 그 줄을 파일에서 제거하고 `judge_records.discarded_tail.txt`에 덧붙여 보존하며(시각, 위치, 길이를 적은 주석 줄과 원래 바이트) 해당 쌍을 다시 판정한다. 완전한 JSON인데 개행만 없는 마지막 줄은 개행을 붙여 유지한다. `aggregate`는 같은 끊긴 마지막 줄을 경고하고 건너뛴다(파일은 바꾸지 않는다). 가운데 줄의 손상은 오류로 남는다. v1.0.0에서 끊긴 줄을 모의로 만들어 시험했을 때는 `aggregate`가 JSON 오류로 끝났고, 재개하면 새 기록이 끊긴 줄 뒤에 이어 붙어서 그 쌍의 기록이 읽을 수 없게 되었다.
-
-알려진 한계(v1.1.0 시점): (가) 헤더에 변환기와 판정 코드의 sha256, SMV 템플릿 식별자가 없다(7절 표는 이 둘을 헤더 항목으로 적었다). **v1.2.0에서 해결**: 코드에 만들었다(부록 A-3). (나) SMV 파일을 쓰는 도중에 프로세스가 죽어서 빈 파일이나 끊긴 파일이 해시 이름으로 남는 경우의 복구는 없다(코드를 읽어서 본 것이며 재현하지 않았다). v1.2.0에서도 그대로다.
-
-## 부록 A-3. 구현 변경과 코드 동결 (v1.2.0, 2026-11-11)
-
-판정의 의미(질의 방향, 역할 대응, 불리언 추상화, 정렬 후보 규칙, AP 규칙, 선택 규칙)는 바뀌지 않았다. 같은 입력(v8 예시 252쌍)에서 v1.1.0 기록과 모든 쌍의 모든 필드(시간과 질의 명령줄 제외)가 같다. 바뀐 것은 아래 다섯 가지다.
-
-1. 헤더의 식별 정보. `run_header.json`에 `python_version`, `z3_version`, `code_sha256`, `code_tree_sha256`, `smv_template_id`, `query_templates`가 추가되었다(필드의 뜻은 7절의 헤더 표). 7절 표가 v1.1.0까지 적고 있던 "변환기와 판정 코드의 sha256", "SMV 템플릿 식별자"는 문서에서 지우지 않고 코드에 만들었다.
-   - 코드 파일 집합: `judging/nl2fret_judge/*.py`와 `judging/legacy/*.py`(재귀 없음, 패키지 루트 기준 경로, 오름차순).
-   - `code_tree_sha256`: 매니페스트 형식 텍스트(파일마다 `<sha256>  <경로>` 한 줄, 줄바꿈 LF)의 sha256. 릴리스된 트리에서는 `JUDGE_FROZEN_MANIFEST.sha256` 파일의 sha256과 같다.
-   - `smv_template_id`는 문자열 `single_ltlspec_v1`이다. SMV 파일의 구조를 가리키며(질의마다 파일 하나, `MODULE main`, `VAR`에 원자마다 `<이름> : boolean;`(원자가 없으면 `dummy_ap`), `LTLSPEC` 한 줄), 테스트가 이 구조를 고정한다. 구조를 바꾸면 이 식별자도 바꿔야 한다.
-   - `query_templates`: `engines.spec_text(kind, "GS", "RS")`가 만든 문자열 그대로(`equiv`: `G ((RS) <-> (GS))`, `sound`: `G ((RS) -> (GS))`, `compl`: `G ((GS) -> (RS))`, `sat`: `G (! (GS))`, `valid`: `G (GS)`).
-2. 코드 동결 장치 (`freeze.py`, `cli.py`, `Makefile`).
-   - `make release`(= `python -m nl2fret_judge release`)는 위 코드 파일의 sha256을 패키지 루트의 `JUDGE_FROZEN_MANIFEST.sha256`에 쓴다. 한 번만 쓸 수 있다. 파일이 이미 있으면 쓰지 않고 거부한다(종료 코드 2, 파일은 그대로).
-   - `judge`는 시작할 때(엔진과 출력 폴더를 만들기 전) 현재 코드를 매니페스트와 대조한다. 결과는 `absent`(매니페스트 없음: 릴리스 전, 그대로 진행), `match`(진행), `mismatch`(내용이 바뀐 파일, 없어진 파일, 목록에 없는 새 `.py`가 있음), `invalid`(읽을 수 없음: 빈 파일, 형식이 틀린 줄, 같은 경로가 두 번). `mismatch`와 `invalid`이면 `--allow-unfrozen`이 없을 때 실행을 거부하고(종료 코드 2, 출력 폴더를 만들지 않음) 어느 파일이 다른지 stderr에 적는다.
-   - `--allow-unfrozen`은 우회 옵션이다. 경고를 stderr에 내고 실행하며, 헤더에 `frozen: false`를 기록한다(대조 결과가 `match`여도 같다). `make judge JUDGE_ARGS=--allow-unfrozen`으로 넘길 수 있다.
-   - 헤더: `frozen`(`match`이고 우회 옵션을 쓰지 않았을 때만 true), `frozen_manifest_sha256`(매니페스트 파일의 sha256, 없으면 null), `frozen_check`(`match`, `mismatch`, `absent`, `invalid` 중 실제 대조 결과), `allow_unfrozen`, 그리고 `mismatch`나 `invalid`일 때 `frozen_diff`(`modified`, `missing`, `extra` 목록 또는 `error`).
-   - 독립 확인은 패키지 루트에서 `shasum -a 256 -c JUDGE_FROZEN_MANIFEST.sha256`(Linux는 `sha256sum -c`).
-   - 범위와 한계: 막는 것은 코드가 실수로 바뀐 채 `judge`가 도는 경우다. 변조 방지가 아니다(대조 코드 자체도 코드 파일이다). `selfcheck`와 `aggregate`는 대조하지 않는다. `bench/`는 `make freeze-check`가, `data/`, `Makefile`, 문서, 테스트는 어느 쪽도 대조하지 않는다. 재개한 실행의 헤더는 처음 시작 때의 것이 그대로 남으므로, 코드를 바꾼 뒤 `--allow-unfrozen`으로 같은 `OUT`을 이어 돌린 경우는 헤더만으로는 드러나지 않는다(그렇게 하지 않는다).
-3. 선택 순위의 명시. `judge.RANK`가 `N/M`(3)과 `UND`(4)를 항목으로 갖고, `rank_of(rec)`가 `nm`이 true이면 N/M, `role`이 UND이면 UND로 순위를 매긴다(7절 끝의 "선택 순위"). 값은 v1.1.0과 같다(도달 가능한 여섯 상태에서 같은 값을 내는 것을 테스트가 확인한다).
-4. 환경 고정. `requirements.txt`가 `z3-solver==5.3.3.0`, `pytest==9.2.0`으로 고정되었다. 같은 날(2026-11-10) 설치에서 z3-solver가 5.3.3.0과 5.4.0.0으로 달랐다. 설치 결과의 `pip freeze`는 iniconfig 2.3.1, packaging 26.3, pluggy 1.7.0, Pygments 2.21.0, pytest 9.2.0, z3-solver 5.3.3.0이다(Python 3.12.14).
-5. `Makefile`: `release` 대상과, `make judge`에 `judge` 옵션을 넘기는 `JUDGE_ARGS`(기본값 비어 있음, 비어 있으면 명령줄은 v1.1.0과 같다. 예: `JUDGE_ARGS="--timeout 600"`).
-
-알려진 한계(v1.2.0): (가) SMV 파일을 쓰는 도중에 프로세스가 죽는 경우의 복구가 없다(A-2 (나)와 같다). (나) 위 2번의 범위와 한계. (다) NuSMV 질의 시간 제한은 `judge`의 `--timeout`이 정하고, 컨테이너나 래퍼를 쓸 때 래퍼 안의 제한은 도구의 제한보다 길어야 한다. 가상 머신의 시계가 호스트보다 빠를 수 있으므로 여유를 도구 제한의 2 % 이상으로 둔다(v1.1.0 실행에서 Colima VM의 시계가 호스트보다 약 0.92 % 빨랐다). (라) `data/`의 입력 예시는 v8 예시(18개 항목)뿐이고, 61개 항목의 실제 입력 세 개를 만드는 변환 코드는 패키지에 없다.

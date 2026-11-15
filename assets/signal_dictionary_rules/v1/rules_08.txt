@@ -1,0 +1,14 @@
+LM-01_FSM-N13 ; mode_signal, mode_var, ap_mode, mode_ind, mode_sig, mode_val, mode_report => activeMode ; M
+LM-03_REG-N06 ; lcvdt_cmd_fcs_dps2, angular_roll_acceleration => roll_command_acceleration ; M
+LM-03_REG-N07 ; mcvdt_cmd_fcs_dps2 => pitch_command_acceleration ; M
+LM-03_REG-N08 ; ncvdt_cmd_fcs_dps2, angular_yaw_acceleration, yaw_angular_acceleration => yaw_command_acceleration ; M
+LM-03_REG-N09 ; xcvdt_cmd_fcs_fps2, translational_axial_acceleration => airspeed_command_acceleration ; M
+LM-03_REG-N10 ; hcvdt_cmd_fcs_fps2, translational_height_acceleration => height_command_acceleration ; M
+LM-04_NLG-N6 ; t => T ; M
+LM-05_NN-N1 ; maximum_output_z => z ; M
+LM-05_NN-N2 ; output_z => z ; H
+LM-07_AP-1.4 ; roll, roll_signal => roll_angle ; M
+LM-07_AP-1.10 ; heading => Psi ; M
+LM-08_SWIM-N1 ; muxGet_T_Mux_AircraftGrossWeight_lbs => weight ; H
+LM-08_SWIM-N2 ; E_AI_IMPACT_PRESSURE => vehAirPress ; M
+LM-08_SWIM-N2 ; SWIM_Qcmin_lbspft2 => warningTrigForMinPress ; M

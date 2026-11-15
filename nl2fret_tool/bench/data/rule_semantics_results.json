@@ -1,0 +1,112 @@
+{
+ "engine": "nusmv",
+ "parser": "node",
+ "checks": {
+  "S1a": {
+   "claim": "upon, when, if, where give the same requirement (timing immediately)",
+   "reference_form": "upon p the s shall immediately satisfy q",
+   "reference_ltl_pt": "(H ((p & (Z (! p))) -> q))",
+   "compared": [
+    {
+     "text": "when p the s shall immediately satisfy q",
+     "ltl_pt": "(H ((p & (Z (! p))) -> q))",
+     "identical_ltl": true,
+     "role": "SAME"
+    },
+    {
+     "text": "if p the s shall immediately satisfy q",
+     "ltl_pt": "(H ((p & (Z (! p))) -> q))",
+     "identical_ltl": true,
+     "role": "SAME"
+    },
+    {
+     "text": "where p the s shall immediately satisfy q",
+     "ltl_pt": "(H ((p & (Z (! p))) -> q))",
+     "identical_ltl": true,
+     "role": "SAME"
+    }
+   ],
+   "pass": true
+  },
+  "S1b": {
+   "claim": "upon, when, if, where give the same requirement (timing eventually)",
+   "reference_form": "upon p the s shall eventually satisfy q",
+   "reference_ltl_pt": "((H (! p)) | (! ((! q) S ((! q) & (p & (Z (! p)))))))",
+   "compared": [
+    {
+     "text": "when p the s shall eventually satisfy q",
+     "ltl_pt": "((H (! p)) | (! ((! q) S ((! q) & (p & (Z (! p)))))))",
+     "identical_ltl": true,
+     "role": "SAME"
+    },
+    {
+     "text": "if p the s shall eventually satisfy q",
+     "ltl_pt": "((H (! p)) | (! ((! q) S ((! q) & (p & (Z (! p)))))))",
+     "identical_ltl": true,
+     "role": "SAME"
+    },
+    {
+     "text": "where p the s shall eventually satisfy q",
+     "ltl_pt": "((H (! p)) | (! ((! q) S ((! q) & (p & (Z (! p)))))))",
+     "identical_ltl": true,
+     "role": "SAME"
+    }
+   ],
+   "pass": true
+  },
+  "S1c": {
+   "claim": "upon, when, if, where give the same requirement (timing within)",
+   "reference_form": "upon p the s shall within 3 ticks satisfy q",
+   "reference_ltl_pt": "(H ((O[3,3] ((p & (Z (! p))) & (! q))) -> (O[0,2] ((Z FALSE) | q))))",
+   "compared": [
+    {
+     "text": "when p the s shall within 3 ticks satisfy q",
+     "ltl_pt": "(H ((O[3,3] ((p & (Z (! p))) & (! q))) -> (O[0,2] ((Z FALSE) | q))))",
+     "identical_ltl": true,
+     "role": "SAME"
+    },
+    {
+     "text": "if p the s shall within 3 ticks satisfy q",
+     "ltl_pt": "(H ((O[3,3] ((p & (Z (! p))) & (! q))) -> (O[0,2] ((Z FALSE) | q))))",
+     "identical_ltl": true,
+     "role": "SAME"
+    },
+    {
+     "text": "where p the s shall within 3 ticks satisfy q",
+     "ltl_pt": "(H ((O[3,3] ((p & (Z (! p))) & (! q))) -> (O[0,2] ((Z FALSE) | q))))",
+     "identical_ltl": true,
+     "role": "SAME"
+    }
+   ],
+   "pass": true
+  },
+  "S2": {
+   "claim": "`unless p` is `if !(p)`",
+   "reference_form": "unless p the s shall immediately satisfy q",
+   "reference_ltl_pt": "(H (((! p) & (Z p)) -> q))",
+   "compared": [
+    {
+     "text": "if !(p) the s shall immediately satisfy q",
+     "ltl_pt": "(H (((! p) & (Z p)) -> q))",
+     "identical_ltl": true,
+     "role": "SAME"
+    }
+   ],
+   "pass": true
+  },
+  "S3": {
+   "claim": "`whenever p ... immediately r` is `always satisfy p => r`",
+   "reference_form": "whenever p the s shall immediately satisfy q",
+   "reference_ltl_pt": "(H (p -> q))",
+   "compared": [
+    {
+     "text": "the s shall always satisfy p => q",
+     "ltl_pt": "(H (p -> q))",
+     "identical_ltl": true,
+     "role": "SAME"
+    }
+   ],
+   "pass": true
+  }
+ }
+}

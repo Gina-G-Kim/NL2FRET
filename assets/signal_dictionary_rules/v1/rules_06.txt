@@ -1,0 +1,9 @@
+LM-07_AP-1.10 ; heading_cmd, heading_command => HDGmodeCmd ; M
+LM-07_AP-1.3 ; actual_roll_attitude, actual_roll_angle, actual_roll_attitude_of_aircraft, actual_roll_attitude_of_the_aircraft => roll_angle ; H
+LM-07_AP-1.3 ; roll_reference => roll_hold_reference ; M
+LM-07_AP-1.3 ; turn_knob_command, cockpit_turn_knob_command => TurnKnob ; M
+LM-07_AP-1.4 ; roll_command => roll_cmd ; M
+LM-08_SWIM-N1 ; CAT_I, cat_i => CAT1 ; H
+LM-08_SWIM-N1 ; CAT_III, cat_iii => CAT3 ; H
+LM-08_SWIM-N1 ; Gross_Weight, GrossWeight, gross_weight => weight ; H
+LM-08_SWIM-N1 ; Auto_GCAS_Minimum_Vcas, AutoGCASMinimumVcas, AGCAS_Minimum_Vcas, AGCAS_Minimum_Vcas_knots, AGCAS_Min_Vcas, AGCAS_min_Vcas, auto_gcas_minimum_vcas, SWIM_CalAirspeedmin_kts => CalAirspeedMin ; H

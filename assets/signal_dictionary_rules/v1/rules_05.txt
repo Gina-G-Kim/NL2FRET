@@ -1,0 +1,9 @@
+LM-07_AP-1.2 ; roll_hold_mode_active, roll_hold_mode => roll_hold ; M
+LM-07_AP-1.5 ; re:roll_rate AND NOT tolerance|limit_|^roll_rate$ => roll_rate ; M
+LM-07_AP-1.6 ; maximum_roll_angle_allowed, roll_angle_max, max_roll_angle, max_roll_angle_allowed, maximum_roll_angle, roll_angle_in_calm_air => roll_angle ; M
+LM-07_AP-1.7 ; aileron_command => aileron_cmd ; H
+LM-07_AP-1.8 ; HeadingHold_active, Heading_Hold_active, heading_hold_active, HeadingHold, Heading_Hold, heading_hold => hdg_hold ; M
+LM-08_SWIM-N2 ; low_speed_warning_allowed, LowSpeedWarningAllowed, SWIM_ASWarningAllowed => lowSpeedWarningAllowed ; M
+LM-08_SWIM-N2 ; impact_pressure, vehicle_air_data_impact_pressure => vehAirPress ; M
+LM-08_SWIM-N2 ; re:^(min_impact_pressure|warning_trigger).*(pressure|threshold|trigger) AND NOT set_low|allowed|safe_agcas_evasive_maneuver_can => warningTrigForMinPress ; M
+LM-08_SWIM-N2 ; low_speed_warning, LowSpeedWarning => swimGet_AgcasLowSpeedWarn ; M

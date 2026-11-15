@@ -10,6 +10,7 @@ Feedback (variant F): after the first answer ALL arms get the same kind of messa
 MAX_ROUNDS times. Realizability, the reference FRETish and any score are never fed back.
 """
 import json
+import os
 import re
 
 import tpl_rules as T
@@ -28,6 +29,7 @@ R2_SUFFIX = "+R2"       # v7: rule arm without R-DEFTIME; the timing is a slot a
 ARM_P = "PARA"        # control arm: raw NL -> plain English rewrite (no template) -> FRETish (free)
 ARMS_MAIN = [ARM_D] + TPLS + [t + RULE_SUFFIX for t in TPLS]
 ARMS_G = [t + GUIDE_SUFFIX for t in ("MASTeR", "EARS", "Adv-EARS")]
+ARMS_G5 = [t + GUIDE_SUFFIX for t in TPLS]          # v9: rule text for every template
 ARMS_U = [t + U_SUFFIX for t in TPLS]
 ARMS_U2 = [t + U_SUFFIX for t in ("MASTeR", "EARS")]
 ARMS_V5 = [ARM_D, ARM_P] + TPLS + [t + RULE_SUFFIX for t in TPLS] + ARMS_U2    # the 12 arms of the v5 main run
@@ -37,8 +39,17 @@ ARMS_R2 = [t + R2_SUFFIX for t in TPLS]
 ARMS_VV6 = [ARM_D + V6_SUFFIX] + [t + V6_SUFFIX for t in TPLS]
 ARMS_DEV1 = ARMS_R2 + [ARM_D + V_SUFFIX, "MASTeR" + V_SUFFIX, "EARS" + V_SUFFIX, "Boilerplate" + V_SUFFIX] + [ARM_D + V6_SUFFIX, "MASTeR" + V6_SUFFIX, "EARS" + V6_SUFFIX, "Boilerplate" + V6_SUFFIX]
 ARMS_D8 = [ARM_D, ARM_D + D_SUFFIX, "MASTeR", "MASTeR" + D_SUFFIX, "EARS", "EARS" + D_SUFFIX]    # v8 dictionary smoke: three paired arms
-ARMS3 = list(dict.fromkeys(ARMS_D8 + ARMS_MAIN + [ARM_P] + ARMS_G + ARMS_U + ARMS_V + ARMS_R2 + ARMS_VV6 + ["Boilerplate" + V_SUFFIX]))
-MAX_ROUNDS = 2
+ARMS_FSM = [ARM_D] + ARMS_G5 + ARMS_R2                # v9 FSM test: Direct, rule text (5 templates), rule assembly R2 (5 templates)
+ARMS3 = list(dict.fromkeys(ARMS_D8 + ARMS_G5 + ARMS_MAIN + [ARM_P] + ARMS_G + ARMS_U + ARMS_V + ARMS_R2 + ARMS_VV6 + ["Boilerplate" + V_SUFFIX]))
+# v9: the stop after two rejections is removed. The unit keeps going through the official FRET parser until every sentence is accepted; MAX_ROUNDS is only a guard
+# against an endless loop (recorded as cap_reached when it is hit). Override with the environment variable NL2FRET_MAX_ROUNDS.
+MAX_ROUNDS = int(os.environ.get("NL2FRET_MAX_ROUNDS", "5"))
+SOURCED_ONLY = False    # v1.4: set by run_pipeline (--sourced-rules-only): the +G rule text states only rules with a source (tpl_rules.DISABLED_RULES omitted)
+TM_SOURCE_ONLY = False  # v1.4: set by run_pipeline (--tm-source-only): the +R2 timing slot gets documentation facts only, no bench-authored selection procedure (V-2, V-3)
+INTENT_DECL = False     # v1.4: set by run_pipeline (--intent-decl): NASA-sourced statement of the intended meaning of conditions (diagnostic condition)
+G_PARITY = False        # v1.4: +G rule text omits R-DEFTIME so the +G timing is decided by the model as in R2 (rule parity); off = byte-identical to v1.3
+GUIDE_SUP = False       # v1.4: set by run_pipeline (--guide-sup): official FRET semantics supplement after the FRETish guide (Direct and free arms)
+DICT_ALL = False        # v9: set by run_pipeline (--dict-all): every arm gets the dictionary at its FRETish stage
 
 
 def base_of(arm):
@@ -49,7 +60,7 @@ def base_of(arm):
 
 
 def is_dict(arm):
-    return arm.endswith(D_SUFFIX)
+    return arm.endswith(D_SUFFIX) or DICT_ALL
 
 
 def is_rule(arm):
@@ -121,10 +132,23 @@ V-6: Fact (Adam et al. 2023, FRETish description, and the RE 2020 FRET paper as 
 
 
 D_RULES = """SIGNAL DICTIONARY RULES (test bench rules of this arm; they are not part of the {src} source)
-D-1: The user message ends with a SIGNAL DICTIONARY copied from the requirement document of this requirement. It is a table of signal names with type and description. It is not a statement of what the requirement says: use only the entries that the {inp} needs, and do not add a condition, scope, number or response because an entry exists.
+D-1: The user message ends with a SIGNAL DICTIONARY of the challenge this requirement belongs to (columns: name | kind | direction | type | description | definition). It is built from the original requirement document, the NASA FRET variable declarations and the NASA CoCoSpec file, and it is the same for every requirement of the challenge. It is not a statement of what the requirement says: use only the entries that the {inp} needs, and do not add a condition, scope, number or response because an entry exists. Kinds: signal (input or output port), constant (a named number), defined (a name with a given definition), element (one element of a vector or matrix), component (a name that a FRET requirement uses as its subject), function (a built-in or helper function; call it as listed).
 D-2: When a phrase of the {inp} denotes a signal of the dictionary, write the dictionary name exactly (spelling and case) as the FRETish identifier. Do not rename, abbreviate or rebuild it.
 D-3: When a phrase has no signal in the dictionary (for example a constant, a state value or a mode name), build the identifier as before (lower snake_case words of the phrase).
 D-4: Keep the type of the dictionary entry: a Boolean name is used as a Boolean expression, a numeric name in a comparison or in arithmetic."""
+
+D5_RULE = "D-5: Read the description column. A name whose description says 'prior value' holds a value at the previous time point (compare preInt and preReal in the FRETish guide); the description decides which name denotes the current value and which the previous value."
+
+
+def intent_declaration():
+    from common import read_rel
+    return read_rel("prompts/intent_declaration.md").strip()
+
+
+def guide_supplement():
+    from common import read_rel
+    return read_rel("prompts/fretish_guide_supplement.md").strip()
+
 
 
 TB_OLD = '"unmapped_content": ["<content of the input that FRETish cannot carry>"]}'
@@ -156,7 +180,11 @@ Rules for this template:"""
 def guide_rules_text(base):
     lines = [GUIDE_HEAD]
     for rid, (tpl, desc, status, ev) in T.RULES.items():
-        if tpl in (base, "*") and not rid.startswith("L-"):
+        if tpl in (base, "*") and not rid.startswith("L-") and not rid.startswith("R2-"):   # v9: R2-* rules belong to the +R2 arms only
+            if G_PARITY and rid == "R-DEFTIME":
+                continue
+            if SOURCED_ONLY and rid in T.DISABLED_RULES:
+                continue
             lines.append(f"- {rid}: " + re.sub(r",? failure code recorded", "", re.sub(r"\s*\((?:mechanical, no model|script)\)", "", desc)))
     return "\n".join(lines) + "\n"
 
@@ -164,9 +192,15 @@ def guide_rules_text(base):
 def build_system_B3(arm):
     """FRETish stage of the free arms. +G adds the rule text above to the same system prompt."""
     s, st = build_system("B", base_of(arm))
+    if GUIDE_SUP:
+        s = s.rstrip() + "\n\n" + guide_supplement() + "\n"
+        st = dict(st, guide_supplement="v1.4")
+    if INTENT_DECL:
+        s = s.rstrip() + "\n\n" + intent_declaration() + "\n"
+        st = dict(st, intent_decl="v1.4")
     if is_guide(arm):
         s = s.rstrip() + "\n\n" + guide_rules_text(base_of(arm))
-        st = dict(st, rules="bench_rules")
+        st = dict(st, rules="bench_rules", g_parity=bool(G_PARITY))
     if is_unspec(arm):
         s = s.rstrip() + "\n\n" + U_RULES_B + "\n"
         st = dict(st, rules="no_completion")
@@ -175,6 +209,8 @@ def build_system_B3(arm):
         st = dict(st, rules="timing_state_inference" if is_v6(arm) else "timing_inference")
     if is_dict(arm):
         s = s.rstrip() + "\n\n" + D_RULES.format(src="FRETish", inp="template sentence") + "\n"
+        if GUIDE_SUP:
+            s = s.rstrip() + "\n" + D5_RULE + "\n"
         st = dict(st, rules="signal_dictionary")
     return s, st
 
@@ -182,11 +218,19 @@ def build_system_B3(arm):
 def build_system_D3(arm):
     """FRETish stage of DIRECT and DIRECT+V (raw NL -> FRETish)."""
     s, st = build_system("D")
+    if GUIDE_SUP:
+        s = s.rstrip() + "\n\n" + guide_supplement() + "\n"
+        st = dict(st, guide_supplement="v1.4")
+    if INTENT_DECL:
+        s = s.rstrip() + "\n\n" + intent_declaration() + "\n"
+        st = dict(st, intent_decl="v1.4")
     if is_infer(arm):
         s = with_tb_schema(s).rstrip() + "\n\n" + (V6_RULES_D if is_v6(arm) else V_RULES_D) + "\n"
         st = dict(st, rules="timing_state_inference" if is_v6(arm) else "timing_inference")
     if is_dict(arm):
         s = s.rstrip() + "\n\n" + D_RULES.format(src="FRETish", inp="natural language requirement") + "\n"
+        if GUIDE_SUP:
+            s = s.rstrip() + "\n" + D5_RULE + "\n"
         st = dict(st, rules="signal_dictionary")
     return s, st
 
@@ -239,7 +283,18 @@ V-2: (b) If the item has no trigger and no state clause, and the response states
      (c) If a condition starts an action or a change, decide between immediately and eventually by asking whether the requirement would still forbid the violation it describes when the response happens only at some later time point. If a late response would be a violation, answer immediately; otherwise eventually.
 V-3: Check before you answer: the situation that the requirement forbids must be rejected by the timing you choose.
 For items that do not list tm, give no timing."""
+R2_ADD_MIN = """
+TIMING SLOT (slot name tm, only for items that list it): the template sentence states no timing word, and the script does NOT leave the timing out. Answer one word: always, immediately or eventually.
+Source facts (they state what the words mean; no rule says which word fits): FRET documentation, timing.md: "immediately, initially, at the first timepoint, at the same timepoint (synonyms)". Adam et al. 2023, FRETish description: FRET reads a requirement whose timing is left out as 'eventually', which only asks that the response holds at some time point.
+For items that do not list tm, give no timing."""
 SLOT_SYSTEM_R2 = SLOT_SYSTEM.replace("You do NOT choose scope, condition keywords, timing, component or structure", "You do NOT choose scope, condition keywords, component or structure (the timing only where the item lists a tm slot)") + R2_ADD
+
+
+def slot_system_r2():
+    """v1.3 text unless TM_SOURCE_ONLY (v1.4): documentation facts only for the timing slot."""
+    if not TM_SOURCE_ONLY:
+        return SLOT_SYSTEM_R2
+    return SLOT_SYSTEM.replace("You do NOT choose scope, condition keywords, timing, component or structure", "You do NOT choose scope, condition keywords, component or structure (the timing only where the item lists a tm slot)") + R2_ADD_MIN
 
 
 def slot_payload(parses, reqs):
@@ -249,7 +304,7 @@ def slot_payload(parses, reqs):
         if p["template"] != "SPIDER":
             ctx["subject"] = p["subject"]
             ctx["verb_phrase_is_slot_r"] = True
-        if "tm" in rq:
+        if "tm" in rq and not TM_SOURCE_ONLY:
             ctx["has_trigger"] = any(not c["kind"].startswith("state") for c in p.get("clauses", []))
             ctx["has_state"] = any(c["kind"].startswith("state") for c in p.get("clauses", []))
         items.append({"i": i, "template": p["template"], "context": ctx, "slots": {k: v["phrase"] for k, v in rq.items()},
@@ -257,8 +312,19 @@ def slot_payload(parses, reqs):
     return items
 
 
-def user_prompt_S(parses, reqs):
-    return "ITEMS (JSON):\n" + json.dumps(slot_payload(parses, reqs), ensure_ascii=False, indent=1) + "\n"
+SLOT_D_RULES = """
+SIGNAL DICTIONARY (test bench rules of this arm; they are not part of the template source)
+D-1: The user message ends with a SIGNAL DICTIONARY of the challenge (columns: name | kind | direction | type | description | definition). It is the same for every requirement of the challenge. Use only the entries that a phrase needs; do not add a condition or a response because an entry exists.
+D-2: When a phrase denotes a signal, constant, defined name or function of the dictionary, write the dictionary name exactly (spelling and case) in the expression. This rule replaces rule NM-1 for those phrases.
+D-3: When a phrase has no entry in the dictionary, build the identifier by rule NM-1 as before.
+D-4: Keep the type of the entry: a Boolean name is used as a Boolean expression, a numeric name in a comparison or in arithmetic."""
+
+
+def user_prompt_S(parses, reqs, sigdict=None):
+    body = "ITEMS (JSON):\n" + json.dumps(slot_payload(parses, reqs), ensure_ascii=False, indent=1) + "\n"
+    if sigdict:
+        body += "\nSIGNAL DICTIONARY (columns: name | kind | direction | type | description | definition):\n" + sigdict.strip() + "\n"
+    return body
 
 
 def parse_slot_output(text, n):
@@ -299,6 +365,29 @@ OFFICIAL FRET PARSER RESULT FOR YOUR PREVIOUS ANSWER (only syntax is judged; the
 
 Return the corrected answer in exactly the same JSON schema as before, for ALL items. Keep accepted items unchanged. Change only what is needed to remove the
 rejection, and do not change the meaning, names or numbers of the input. If something truly cannot be expressed, list it in "unmapped_content"."""
+
+
+LOG_HEAD = """FRET FEEDBACK LOG (read every entry before you answer)
+The official FRET parser has rejected {n_rej} of your answers to this input so far. Each entry below is one of your answers followed by the verdict of the parser for each sentence.
+The parser text is the original message of FRET. Do not repeat a sentence or a construct that appears as REJECTED in any entry of this log."""
+
+LOG_TAIL = """
+Return the corrected answer in exactly the same JSON schema as before, for ALL items. Keep accepted sentences unchanged. Change only what is needed to remove the
+rejections, and do not change the meaning, names or numbers of the input. If something truly cannot be expressed, list it in "unmapped_content"."""
+
+
+def user_prompt_feedback_log(original_user, history):
+    """history = [{"attempt": k, "stage": str, "answer": str, "statuses": [...], "note": str}, ...] oldest first. The whole log is given, not only the last answer."""
+    n_rej = sum(1 for h in history if any(st["verdict"] == "rejected" for st in h["statuses"]))
+    out = [original_user.rstrip(), "", LOG_HEAD.format(n_rej=n_rej)]
+    for h in history:
+        out.append(f"\n--- ATTEMPT {h['attempt']} ({h['stage']}) ---")
+        if h.get("note"):
+            out.append("note: " + h["note"])
+        out.append("your answer:\n" + (h["answer"] or "(no answer)").strip())
+        out.append("FRET verdict per sentence:\n" + _status_lines(h["statuses"]))
+    out.append(LOG_TAIL)
+    return "\n".join(out) + "\n"
 
 
 def user_prompt_feedback(original_user, previous_text, statuses):

@@ -1,0 +1,11 @@
+LM-03_REG-N05 ; re:height.*accel|commanded_accel_th AND NOT duration|^command_that|hcvdt|^command_|^commanding_ => hcvdt_cmd_fcs_fps2 ; M
+LM-03_REG-N06 ; re:(change|transient) AND NOT ^command_|commands_|lcvdt => roll_command_acceleration ; M
+LM-03_REG-N07 ; re:(change|transient) AND NOT ^command_|commands_|mcvdt => pitch_command_acceleration ; M
+LM-03_REG-N08 ; re:(change|transient|rate) AND NOT ^command_|commands_|ncvdt => yaw_command_acceleration ; M
+LM-03_REG-N09 ; re:(change|transient|rate) AND NOT ^command_|commands_|xcvdt => airspeed_command_acceleration ; M
+LM-03_REG-N10 ; re:(change|transient|rate) AND NOT ^command_|commands_|hcvdt => height_command_acceleration ; M
+LM-04_NLG-N2p3 ; target_position => Xtarg ; H
+LM-04_NLG-N2p3 ; vehicle => Xv ; M
+LM-04_NLG-N5 ; minimum_standoff_distance => r ; H
+LM-04_NLG-N5 ; UAV_relative_position_to_target, relative_position_to_target, UAV_relative_position, relative_position, uav_relative_position, uav_relative_position_to_target => Xr ; H
+LM-04_NLG-N5 ; nearest_inertial_position, commanded_position, nearest_inertial_position_commanded => yout ; M

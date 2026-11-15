@@ -1,0 +1,13 @@
+LM-04_NLG-N6 ; sample_period, frame_period => T ; M
+LM-04_NLG-N6 ; vehicle_velocity, velocity_vehicle, velocity_of_vehicle => Vv ; H
+LM-04_NLG-N6 ; target_velocity, velocity_target, velocity_of_target => Vt ; H
+LM-05_NN-N3 ; re:^(dz_dxt|delta_z_delta_xt|delta_z_xt|delta_z_over_delta_xt|spatial_derivative_dz_dxt)$ => DeltaZDividedByXt ; M
+LM-05_NN-N3 ; re:^(dz_dyt|delta_z_delta_yt|delta_z_yt|delta_z_over_delta_yt|spatial_derivative_dz_dyt)$ => DeltaZDividedByYt ; M
+LM-05_NN-N4 ; z_truth, zt_truth_data => zt ; H
+LM-05_NN-N4 ; output_z => z ; H
+LM-06_EB-N1 ; re:^check_(\d)_(\d)$ => check_\1\2 ; H
+LM-06_EB-N2 ; re:^check_(\d)_(\d)$ => check_\1\2 ; H
+LM-07_AP-0 ; initial_altitude => altitude_IC ; H
+LM-07_AP-0 ; initial_condition => altitude_IC ; M
+LM-07_AP-1.1 ; roll_actuator_command, roll_actuator_cmd, command_to_roll_actuator, command_to_the_roll_actuator => aileron_cmd ; M
+LM-07_AP-1.1 ; engaged, roll_autopilot_engaged, Roll_Autopilot_engaged, RollAutopilot_engaged => autopilot_engaged ; M

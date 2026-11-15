@@ -61,6 +61,7 @@ RULES = {
     "R-TIME-NEXT": ("*", "at the next time step -> timing `next`", "DEFAULT", "timing keyword next exists in NASA reports"),
     "R-TIME-PROB": ("*", "with probability <= p -> `with probability <= p`", "OBSERVED", "accepted in GT rows (NASA/TM-20240006865)"),
     "R-TIME-EVERY": ("*", "every N <unit> -> NO mapping (parser rejects every), failure code recorded", "OBSERVED", "every rejected 18 of 18"),
+    "R2-COND-INTENT": ("*", "v1.4 only: every trigger-like template clause (when, if, as soon as, unless, SPIDER P) -> condition `whenever <expr>`: the response is required each time the condition holds", "SOURCE", "Mavridou et al. RE 2020 AP-003c: Instead of a trigger we wanted the response to hold every time the condition is true; FRET condition.md Whenever"),
     "R-DEFTIME": ("*", "no timing given: `always` when there is no condition, no timing word when there is a condition", "DEFAULT", "GT timing by condition in the residual pool"),
     "R2-TIME": ("*", "v7 (+R2 arms only): no timing given and not a negation: the timing is a slot answered by the model (always, immediately, eventually); never left out", "FRET", "Adam et al. 2023: omitted timing is read as eventually; compiled output (!LAST) U response"),
     "R-NEG": ("*", "shall not X -> timing `never` + X when no other timing, else `satisfy !(X)`", "DEFAULT", ""),
@@ -457,10 +458,25 @@ def _timing_str(t, slots):
     return k
 
 
+SOURCED_ONLY = False     # v1.4 (--sourced-rules-only): a template phrase whose mapping has no source is NOT mapped by the tool: the assembly refuses it (recorded failure, free path) and the +G rule text omits it
+DISABLED_RULES = frozenset({"R-EARS-WHERE", "R-ADV-WHERE", "R-SP-AFTERUNTIL", "R-SP-RESP", "R-SP-PREC", "R-SP-BRESP", "R-SP-BINV", "R-SP-MINDUR", "R-DEFTIME"})
+INTENT_COND = False   # v1.4 (set by run_pipeline --intent-decl): condition keyword `whenever` (response holds every time the condition is true); off = v1.3 mapping (`when` / `if`)
+
+
+def _ck(default):
+    """Condition keyword. Under INTENT_COND every trigger-like clause becomes `whenever` (R2-COND-INTENT, SOURCE: Mavridou et al., RE 2020, requirement AP-003c;
+    FRET condition.md: Whenever = the response is required each time the condition holds)."""
+    return "whenever" if INTENT_COND else default
+
+
 def assemble(p, slots, r2=False):
     """p = parse (ok True); slots = {name: {"expr": str, "mode": str|None, "violations": [..], "fixes": [..]}} (already linted).
     -> dict(ok, fretish, code, detail, rules) ; codes are recorded failures of the rule layer."""
     rules = list(p["rules"])
+    if SOURCED_ONLY:
+        off = sorted(set(rules) & DISABLED_RULES)
+        if off:
+            return {"ok": False, "code": "rule_no_mapping", "detail": "no_source:" + ",".join(off), "rules": rules}
     if p["nomap"]:
         return {"ok": False, "code": "rule_no_mapping", "detail": ",".join(p["nomap"]), "rules": rules}
     if p["unitprob"]:
@@ -478,11 +494,11 @@ def assemble(p, slots, r2=False):
         if kind.startswith("state"):
             states.append(v)
         elif kind == "trigger":
-            trig.append(("when", v["expr"]))
+            trig.append((_ck("when"), v["expr"]))
         elif kind == "trigger_if":
-            trig.append(("if", v["expr"]))
+            trig.append((_ck("if"), v["expr"]))
         elif kind == "unless":
-            trig.append(("if", "!" + _paren(v["expr"])))
+            trig.append((_ck("if"), "!" + _paren(v["expr"])))
     scope = ""
     if states:
         if len(states) == 1 and states[0].get("mode"):
@@ -494,7 +510,9 @@ def assemble(p, slots, r2=False):
     cond = ""
     if trig:
         kws = {k for k, _ in trig}
-        kw = "when" if "when" in kws else "if"
+        kw = "whenever" if INTENT_COND else ("when" if "when" in kws else "if")
+        if INTENT_COND:
+            rules.append("R2-COND-INTENT")
         cond = kw + " " + _join([e for _, e in trig])
         if len(trig) > 1:
             rules.append("R-MULTI")
@@ -521,6 +539,8 @@ def assemble(p, slots, r2=False):
         rules.append("R2-TIME")
         tstr = slots["tm"]["expr"]
     elif not tstr:
+        if SOURCED_ONLY:
+            return {"ok": False, "code": "rule_no_mapping", "detail": "no_source:R-DEFTIME", "rules": rules}
         rules.append("R-DEFTIME")
         if not cond:
             tstr = "always"
@@ -553,15 +573,17 @@ def _assemble_spider(p, slots, rules):
     elif name == "exist":
         tstr, resp = "eventually", g("p")
     elif name == "resp":
-        cond, tstr, resp = "when " + g("p"), "eventually", g("s")
+        cond, tstr, resp = _ck("when") + " " + g("p"), "eventually", g("s")
     elif name == "prec":
         tstr, resp = "before " + g("p"), g("s")
     elif name == "bresp":
-        cond, tstr, resp = "when " + g("p"), f"within {pt['n']} {pt['unit']}", g("s")
+        cond, tstr, resp = _ck("when") + " " + g("p"), f"within {pt['n']} {pt['unit']}", g("s")
     elif name in ("binv",):
-        cond, tstr, resp = "when " + g("p"), f"for {pt['n']} {pt['unit']}", g("s")
+        cond, tstr, resp = _ck("when") + " " + g("p"), f"for {pt['n']} {pt['unit']}", g("s")
     elif name == "mindur":
-        cond, tstr, resp = "when " + g("p"), f"for {pt['n']} {pt['unit']}", g("p")
+        cond, tstr, resp = _ck("when") + " " + g("p"), f"for {pt['n']} {pt['unit']}", g("p")
+    if INTENT_COND and cond:
+        rules.append("R2-COND-INTENT")
     parts = [x for x in (scope, cond, "system", "shall", tstr, "satisfy", resp) if x]
     return {"ok": True, "fretish": " ".join(parts), "rules": rules, "code": None, "detail": ""}
 

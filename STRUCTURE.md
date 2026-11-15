@@ -11,8 +11,9 @@ nl2semiformal/                  root (name and location unchanged)
   docs/                         paper (in progress, excluded from git), references, analysis-format document, survey notes of this cleanup (refactor_plan, excluded from git)
   prompts/current/              the current prompts as files: model-facing prompts, assembled system prompts, instruction prompts (added 2026-11-11, see section 4c)
   prompts/INDEX.md              index of the current prompts and of the historical prompt and instruction documents (historical originals are inside the experiment folders)
-  nl2fret_tool/                 the final tool, release 1.2.0 (frozen, 75 files; added 2026-11-11, see section 4c)
+  nl2fret_tool/                 the final tool, release 1.4 (113 files; release 1.2.0 is in archive/nl2fret_tool/v1.2.0/; see sections 4c and 4f)
   docker/                       build recipes of the Docker images fret-lab and cst-nusmv (added 2026-11-11, see section 4c)
+  assets/  archive/  VERSIONS.md  versioned copies of the assets of the experiments, older versions after a version-up, and the version index (added 2026-11-13, see section 4d)
   data/INDEX.md                 index of the input data with hashes (originals are inside the experiment folders)
   data/cases/                   organized input cases: nasa_papers/ (183), lockheed_martin/ (49), fsm/ (12; original membership in ORIGIN_MAP.csv). Each folder has a SOURCES.md
   tools/build_cases.py          script that rebuilds data/cases from experiments/
@@ -77,7 +78,7 @@ At the request of the project owner, the final tool and the current prompts are 
 | Change | Detail |
 |---|---|
 | `nl2fret_tool/` added | The unpacked release 1.2.0 of the tool (`nl2fret_tool_v1.2.zip`, sha256 `430ff36588f1559180a75472f7a08b15061c330e67a84f5fa250324bbabb367e`, 75 files). The package layout is kept as released (`bench/`, `judging/`, `data/`, `docs/`, `tests/`, `Makefile`, manifests), because both manifests (`bench/FROZEN_MANIFEST.sha256`, 38 files, sha256 `176b144fe280158e05a4ec4a5aa9c7e912fab067b8e989ccacd12a2f2f16e571`; `JUDGE_FROZEN_MANIFEST.sha256`, 18 files, sha256 `1fda2c1982c14c7ae7363c8c5ced72c11d0019afe9804a5693a35cae15aa154b`) and the relative paths of the code depend on it. A flat `src/nl2fret/` was not built: moving files out of the package layout would change the pinned paths and break both manifest checks. Checked after the copy: `diff -r` against a fresh unpacking of the zip shows no difference, 38 of 38 and 18 of 18 manifest entries are OK, no file of the tool is matched by the root or by the package `.gitignore` |
-| `prompts/current/` added | `fretish_guide.md` and `templates/` (copies from `nl2fret_tool/bench`), `system_prompts/` (the 21 assembled system prompts of the 19 methods of the 61-item main run, rendered by `tools/render_prompts.py` from the project copy of the tool; the 18 prompts of run A are byte-identical to the `snapshot/` of the main run), `instructions/` (four instruction prompts: v8, tool freeze, 61-item inputs, 61-item main run) and `SHA256SUMS` |
+| `prompts/current/` added | `fretish_guide.md` and `templates/` (copies from `nl2fret_tool/bench`), `system_prompts/` (the 21 assembled system prompts of the 19 methods of the 61-item main run, rendered by `tools/render_prompts.py` from the project copy of the tool; the 18 prompts of run A are byte-identical to the `snapshot/` of the main run), `instructions/` (eight instruction prompts: v8, tool freeze, 61-item inputs, 61-item main run, main judging, comparability test, dictionary judging run, FSM test of tool v1.3; the fifth and the sixth were added on 2026-11-12, the seventh and the eighth on 2026-11-13) and `SHA256SUMS` |
 | `prompts/INDEX.md` | Section 1 indexes the current prompts, section 2 is the earlier location table (95 entries) plus the 5 instruction documents of 2026-11-10 and 2026-11-11 |
 | `README.md`, `data/INDEX.md` | New section and rows for the tool and the current prompts; `data/INDEX.md` notes that the tool carries the answer key in `nl2fret_tool/data/reference/` |
 | `.gitignore` | `docs/refactor_plan/` and `unsorted/` added at the project owner's request (the entries `docs/paper/`, `experiments/`, `testnote.md` and `UNVERIFIED.md` were already there). The folders stay on disk. A `.gitignore` entry has no effect on files that git already tracks: by reading the git index and the last commit (without running git), `docs/paper/` (18 files in the last commit, pushed to `origin/main`) and `docs/refactor_plan/` (2 files) are tracked, `unsorted/` is not. They leave the tracking only after `git rm -r --cached docs/paper docs/refactor_plan` and a commit, which the project owner runs; earlier commits keep them |
@@ -86,6 +87,45 @@ At the request of the project owner, the final tool and the current prompts are 
 | Not changed | `experiments/` (including the per-run code copies and the running 61-item generation run), `MOVE_LOG.csv` (nothing was moved; the additions are copies), `UNVERIFIED.md`, the root `Makefile` |
 
 Not in `nl2fret_tool/`: the RQ analysis scripts of the earlier runs (for example `experiments/nl3/analyze3.py`, `experiments/nl2fret/tools_extra/`) and the NuSMV and Spot comparison study (`packages/ltlpack/`, which was already outside `experiments/`). They are not part of release 1.2.0.
+
+## 4d. Later changes (2026-11-13): asset registry, version index and process document
+
+The dictionary judging run (`experiments/022_dict_judge_run/`) came with an instruction to register the assets of the experiments as versions in the main directory and to write a process document for newcomers. The instruction was written without knowledge of this repository; where it conflicted with the repository rules, the rules were followed and every deviation is listed in the run report (`experiments/022_dict_judge_run/REPORT.md`).
+
+| Change | Detail |
+|---|---|
+| `assets/` added | 16 assets with 84 files, stored as copies in `assets/<asset>/v1/` with one `SHA256SUMS` per asset (every copy was compared with its source by sha256): signal dictionary and its rules, dictionary and alias scripts, alias certificates, pre-registration documents, template guides, system prompts, user prompt builders, FRETish guide, signal dictionary of the +D methods, variable policy, examples, reference data, judge inputs (original, and dictionary and alias applied), experiment scripts |
+| `archive/` added | holds older versions as `archive/<asset>/v<N>/` after a version-up |
+| `VERSIONS.md` added | the version-up rule (first line) and one row per asset: current version, path, sha256, reason of the change, experiment that caused it |
+| `docs/PROCESS_LIFECYCLE.md` added | the whole process from the natural-language requirement to the judging tables, as a table and one block per stage with input, process, output and evidence paths |
+| `prompts/` | the instruction of the run was added to `prompts/current/instructions/` and to `prompts/INDEX.md` (104 entries), and `prompts/current/SHA256SUMS` was extended |
+| Not changed | `nl2fret_tool/` (frozen), `experiments/`, the sources of the copies |
+
+## 4e. Later changes (2026-11-14): FSM test of the tool package v1.3
+
+The package `nl2fret_tool_v1.3.zip` (sha256 `9b54c38d5daee934cf4898c8574ae8b5702e055c181d3373e605990d89ffdd74`) came with an instruction written without knowledge of this repository (`NL2FRET_PROMPT_FSM_RUN_v1.md`). Where it left a point open or conflicted with the repository rules, the rules were followed and every deviation is listed in the run report (`experiments/023_fsm_run_v13/REPORT_FSM.md`).
+
+| Change | Detail |
+|---|---|
+| `experiments/023_fsm_run_v13/` added | the FSM test: 13 `01_FSM` items, 11 arms, 3 repetitions (429 units), generation, FRET compile, NuSMV part-level judging with counterexample records and a per-unit trace; the package is unpacked read-only in `bench/pristine/nl2fret_tool_v1.3/` and run from a work copy |
+| `assets/` extended | `dataset`, `dictionary`, `reference` (v1, 8 files, `SHA256SUMS` per asset) from the package `data/` folder; the registry now has 19 assets; the instruction's "current version K" does not exist under these names, so they start at v1 and nothing was moved to `archive/` |
+| `VERSIONS.md` | three rows added (reason as given by the instruction, experiment `023_fsm_run_v13`) |
+| `prompts/` | the instruction was added to `prompts/current/instructions/`, to `prompts/INDEX.md` (105 entries) and to `prompts/current/SHA256SUMS` |
+| Not changed | `nl2fret_tool/` (release 1.2.0, frozen). The judging module of the v1.3 package is of the v1.0.0 line and carries none of the v1.1 and v1.2 changes (report section 7.1) |
+
+## 4f. Later changes (2026-11-15): the final tool is updated to release 1.4
+
+At the request of the project owner the main directory always holds the latest version of the tool; the experiments run that tool and are not the place where the current tool lives. The package `nl2fret_v1.4_FSM_retest_package.zip` (sha256 `af896dde6673a6bb0f41807a2a67de63b3711ae3d2d76fa3fa44e72da1b2e93e`) had been run only from `experiments/024_fsm_v14_retest/`, so the main directory was brought up to date.
+
+| Change | Detail |
+|---|---|
+| `nl2fret_tool/` replaced | release 1.4, 113 files, byte-identical to the unpacked package (the five `.pytest_cache` files of the zip are left out); `make test`: 29 passed, `make freeze-check`: 55 files OK |
+| `archive/nl2fret_tool/v1.2.0/` added | the previous release 1.2.0 moved as it was (75 files; both manifests were checked before and after the move: 38 and 18 files OK). The judging module of release 1.4 is of the v1.0.0 line with the v1.3 features (part-level judging, dictionary alignment, counterexample records); the v1.1 and v1.2 changes of release 1.2.0 (`freeze.py`, `JUDGE_FROZEN_MANIFEST.sha256`, handling of an empty candidate list, recording of a partial last line) are in the archived release |
+| `prompts/current/system_prompts/` | the 17 prompts of release 1.4 (11 approaches), byte-identical to `gen/snapshot/` of the v1.4 FSM test; the 21 prompts of the 61-item main run stay in `assets/llm_system_prompts/v1/` (checked byte-identical before they were replaced) |
+| `tools/render_prompts.py` | sets the switches of release 1.4 like `run_pipeline.main()`, handles the fallback prompts (`BF`), default arms are the 11 approaches; `--run-info` compares the prompt hashes of a run |
+| `prompts/INDEX.md`, `prompts/current/SHA256SUMS`, `README.md`, `VERSIONS.md`, `archive/README.md` | updated for release 1.4 |
+| `docs/TOOL_PROCESS_GUIDE.md` added | process-by-process description of release 1.4 with one worked example; all paths are relative to the main directory |
+| Not changed | `assets/` (the data assets `dataset`, `dictionary` and `reference` v1 are byte-identical to `nl2fret_tool/data/`), `docs/PROCESS_LIFECYCLE.md` (its `nl2fret_tool/` paths describe the layout of release 1.2.0, now in `archive/nl2fret_tool/v1.2.0/`), `experiments/` (each experiment keeps its own copy of the package) |
 
 ## 5. Path repairs (no logic changes)
 

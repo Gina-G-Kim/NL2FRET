@@ -9,9 +9,6 @@ Primary denominator: ALL units (failure and unjudged stay in). Secondary: units 
 primary value and only for comparison with the literature (Danso et al. exclude N/M)."""
 import collections
 import json
-import sys
-
-from .recorder import split_tail
 
 ORDER = {"SAME": 0, "PROOF": 1, "REFUTE": 2, "NEITHER": 3}
 
@@ -74,11 +71,4 @@ def nm_summary(records):
 
 
 def read_records(path):
-    """pair_id -> record. v1.1.0: an incomplete last line (a write interrupted by a forced stop, see recorder.py) is skipped with a warning and the file is not
-    changed; any other unreadable line is still an error."""
-    offset, tail, complete = split_tail(path)
-    with open(path, "rb") as f:
-        data = f.read(offset) if (tail and not complete) else f.read()
-    if tail and not complete:
-        print(f"warning: {path}: ignored an incomplete last line ({len(tail)} bytes, interrupted write); it is not part of this aggregate", file=sys.stderr)
-    return {r["pair_id"]: r for r in (json.loads(l) for l in data.decode("utf-8").split("\n") if l.strip())}
+    return {r["pair_id"]: r for r in (json.loads(l) for l in open(path, encoding="utf-8") if l.strip())}

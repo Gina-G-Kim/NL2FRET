@@ -91,28 +91,49 @@ def derive(rows, item, arm, rep, comp):
         if rule:
             rec["parses"] = cf
             bad = [c for c in cf if not c["ok"]]
-            if bad:
-                rec["pipeline"] = {"code": bad[0]["code"], "detail": bad[0]["detail"]}
+            if bad:                                  # v9: no drop; the free path (rule text) takes the template sentences
+                rec["fallback"] = {"reason": "rule_parse", "code": bad[0]["code"], "detail": bad[0]["detail"]}
                 rec["rounds"] = [{"round": 0, "stage": "rule", "row": None, "sentences": [{"text": None, "pre": {"code": c.get("code") or "ok", "detail": c.get("detail", "")},
                                                                                          "official": None} for c in cf if not c["ok"]]}]
-                return rec
     first = first_stage(arm)
-    if rule:
+    free = (not rule) or bool(rec.get("fallback"))
+    rec["offset"] = 0
+    if not free:
         reqs = [T.slot_requests(p, is_r2(arm)) for p in rec["parses"]]
         rec["reqs"] = reqs
         mk = lambda n, st, row: _slot_round(n, st, row, rec["parses"], reqs, comp, is_r2(arm))
-    else:
+        r0 = mk(0, first, rows.get(skey(iid, arm, rep, first)))
+        rec["rounds"].append(r0)
+        if r0.get("pending"):
+            rec["pending"] = True
+            return rec
+        nonfix = [s for s in r0["sentences"] if s["pre"] is not None and s["pre"]["code"] not in FIXABLE_PRE]
+        if nonfix:                                   # v9: the rule layer cannot produce a sentence; the sentence still goes to FRET through the free path
+            rec["fallback"] = {"reason": "rule_assembly", "code": nonfix[0]["pre"]["code"], "detail": nonfix[0]["pre"]["detail"]}
+            free = True
+    if free and rule:
+        rec["offset"] = 1                            # round 0 = the rule layer attempt (never reached FRET), the free answer is attempt 1 of the FRET loop
+        first = "B"
         mk = lambda n, st, row: _free_round(n, st, row, comp)
-    r0 = mk(0, first, rows.get(skey(iid, arm, rep, first)))
-    rec["rounds"].append(r0)
-    if r0.get("pending"):
-        rec["pending"] = True
-        return rec
+        rb = mk(len(rec["rounds"]), "B", rows.get(skey(iid, arm, rep, "B")))
+        rec["rounds"].append(rb)
+        if rb.get("pending"):
+            rec["pending"] = True
+            return rec
+    elif free:
+        mk = lambda n, st, row: _free_round(n, st, row, comp)
+        r0 = mk(0, first, rows.get(skey(iid, arm, rep, first)))
+        rec["rounds"].append(r0)
+        if r0.get("pending"):
+            rec["pending"] = True
+            return rec
     for k in range(1, MAX_ROUNDS + 1):
         row = rows.get(skey(iid, arm, rep, f"F{k}"))
         if row is None:
             break
-        rec["rounds"].append(mk(k, f"F{k}", row))
+        rec["rounds"].append(mk(len(rec["rounds"]), f"F{k}", row))
+    rec["n_feedback"] = len(rec["rounds"]) - 1 - rec["offset"]
+    rec["cap_reached"] = bool(rec["n_feedback"] >= MAX_ROUNDS and round_failed(rec["rounds"][-1]))
     return rec
 
 
@@ -125,7 +146,7 @@ def needs_feedback(rec):
     if rec["pending"] or rec["pipeline"] or not rec["rounds"]:
         return False
     last = rec["rounds"][-1]
-    if last.get("pending") or len(rec["rounds"]) - 1 >= MAX_ROUNDS:
+    if last.get("pending") or len(rec["rounds"]) - 1 - rec.get("offset", 0) >= MAX_ROUNDS:
         return False
     for s in last["sentences"]:
         if s["pre"] is not None and s["pre"]["code"] not in FIXABLE_PRE:

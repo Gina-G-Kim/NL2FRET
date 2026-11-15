@@ -18,7 +18,30 @@ JS = os.path.join(HERE, "fretjs")
 WORK = os.path.join(os.path.dirname(HERE), "work")
 
 
-def compile_list(texts, chunk=400):
+def compile_list_node(texts, chunk=400):
+    """Offline alternative to the docker image (sandbox tests): runs a local copy of the official FretSemantics.js with node.
+    env NL2FRET_NODE_PARSER = path of a small node script that reads the JSON list (argv[2]) and prints [{fretish, ok, error, ltl_ft, ltl_pt}] (the script of fretjs/fret_parse_full.js with a local require path);
+    env NODE_PATH must contain antlr4 and the other modules of fret-electron/app."""
+    script = os.environ["NL2FRET_NODE_PARSER"]
+    os.makedirs(WORK, exist_ok=True)
+    out = []
+    for i in range(0, len(texts), chunk):
+        part = texts[i:i + chunk]
+        tmp = os.path.join(WORK, f"fcn_in_{os.getpid()}_{i}.json")
+        json.dump(part, open(tmp, "w", encoding="utf-8"), ensure_ascii=False)
+        r = subprocess.run(["node", script, tmp], capture_output=True, text=True, timeout=1800)
+        os.remove(tmp)
+        try:
+            res = json.loads(r.stdout)
+        except json.JSONDecodeError:
+            raise SystemExit(f"node compile failed: rc={r.returncode} stderr={r.stderr[-500:]!r}")
+        out += [{"fretish": x["fretish"], "ok": bool(x.get("ok")), "error": x.get("error"), "ltl_ft": x.get("ltl_ft"), "ltl_pt": x.get("ltl_pt"), "sem": None} for x in res]
+    return out
+
+
+def compile_list(texts, chunk=400, backend="docker"):
+    if backend == "node":
+        return compile_list_node(texts, chunk)
     os.makedirs(WORK, exist_ok=True)
     out = []
     for i in range(0, len(texts), chunk):

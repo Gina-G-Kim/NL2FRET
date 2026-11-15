@@ -15,11 +15,32 @@ import subprocess
 import time
 from dataclasses import dataclass, field
 
+def parse_nusmv_trace(stdout):
+    """NuSMV 2.6 counterexample text -> {"states": [{"state": "1.1", "values": {...full valuation...}}], "loop_start_state": "1.2" | None, "n_states": int} or None.
+    NuSMV prints only the variables that changed after the first state; the valuation of every state is completed here."""
+    if not stdout or "-> State:" not in stdout:
+        return None
+    states, cur, loop_next, loop_at = [], None, False, None
+    for line in stdout.splitlines():
+        m = re.match(r"\s*-> State: (\S+) <-", line)
+        if m:
+            vals = dict(cur["values"]) if cur else {}
+            cur = {"state": m.group(1), "values": vals}
+            states.append(cur)
+            if loop_next:
+                loop_at, loop_next = m.group(1), False
+            continue
+        if "Loop starts here" in line:
+            loop_next = True
+            continue
+        m = re.match(r"\s+([A-Za-z_][A-Za-z0-9_]*) = (\S+)\s*$", line)
+        if m and cur is not None:
+            cur["values"][m.group(1)] = m.group(2)
+    return {"states": states, "loop_start_state": loop_at, "n_states": len(states)} if states else None
+
+
 KINDS = ("equiv", "sound", "compl")
 AUX = ("sat", "valid")
-# v1.2.0: identifier of the structure of the SMV file that smv_file_text() writes (one file per query, one LTLSPEC line); recorded in run_header.json.
-# Change it only together with smv_file_text (a test pins the structure to this identifier).
-SMV_TEMPLATE_ID = "single_ltlspec_v1"
 
 
 def spec_text(kind, gs, rs):
@@ -64,6 +85,7 @@ class QueryResult:
             "verdict": self.verdict, "executed": self.executed, "stdout": so[:limit], "stdout_truncated": trunc, "stderr": se[:limit],
             "exit_code": self.exit_code, "elapsed_sec": round(self.elapsed_sec, 4), "timed_out": self.timed_out, "cmd": self.cmd,
             "query_mode": "single_spec_per_file", "reason": self.reason,
+            "counterexample": parse_nusmv_trace(self.stdout) if self.verdict is False else None,
         }
 
 

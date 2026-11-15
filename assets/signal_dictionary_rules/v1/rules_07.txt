@@ -1,0 +1,4 @@
+LM-09_EUL-N6 ; r1_r1T, r1r1T, r1_dot_r1, dot_r1_r1 => r1xr1Transpose ; M
+LM-09_EUL-N6 ; r1_r2T, r1r2T, r1_dot_r2, dot_r1_r2 => r1xr2Transpose ; M
+LM-09_EUL-N6 ; c1_c1T, c1c1T, c1_dot_c1, dot_c1_c1 => c1xc1Transpose ; M
+LM-09_EUL-N6 ; c1_c2T, c1c2T, c1_dot_c2, dot_c1_c2 => c1xc2Transpose ; M

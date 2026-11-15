@@ -134,7 +134,7 @@ def user_prompt_A(raw):
 def sigdict_block(sigdict):
     if not sigdict:
         return ""
-    return "\nSIGNAL DICTIONARY (copied without selection from the requirement document of this requirement; columns: scope | name | # | type | description):\n" + sigdict.strip() + "\n"
+    return "\nSIGNAL DICTIONARY (the same table for every requirement of the challenge, no selection; columns: name | kind | direction | type | description | definition):\n" + sigdict.strip() + "\n"
 
 
 def user_prompt_B(tpl, sentences, raw=None, sigdict=None):

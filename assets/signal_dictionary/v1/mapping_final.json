@@ -1,0 +1,1670 @@
+{
+ "LM-00_TRIPLEX-RM-001": {
+  "PClimit": [
+   "PCLimit",
+   "H"
+  ],
+  "failure_reported": [
+   "single_fail_reported",
+   "M"
+  ],
+  "mis_compare_reported": [
+   "single_fail_reported",
+   "M"
+  ],
+  "mis_compare_reported_as_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "mis_compare_reported_to_failure_management": [
+   "single_fail_reported",
+   "M"
+  ],
+  "mis_compare_reported_to_failure_management_as_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "no_fail_state": [
+   "no_fail",
+   "H"
+  ],
+  "persistence_limit": [
+   "PCLimit",
+   "H"
+  ],
+  "report_a_miscompare_to_failure_management_as_a_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "report_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "report_mis_compare_as_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "report_mis_compare_to_failure_management_as_a_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "report_miscompare_as_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "reported_as_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "reported_to_failure_management_as_a_failure": [
+   "single_fail_reported",
+   "M"
+  ],
+  "trip_level": [
+   "Tlevel",
+   "M"
+  ]
+ },
+ "LM-00_TRIPLEX-RM-002": {
+  "no_fail_state": [
+   "no_fail",
+   "H"
+  ],
+  "no_fail_state_holds": [
+   "no_fail",
+   "H"
+  ],
+  "selected_value": [
+   "set_val",
+   "H"
+  ],
+  "system_in_no_fail_state": [
+   "no_fail",
+   "H"
+  ]
+ },
+ "LM-00_TRIPLEX-RM-003": {
+  "selected_value": [
+   "set_val",
+   "H"
+  ]
+ },
+ "LM-00_TRIPLEX-RM-004": {
+  "selected_value": [
+   "set_val",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N01": {
+  "autopilot_pullup": [
+   "pullup",
+   "M"
+  ],
+  "autopilot_pullup_latched": [
+   "pullup",
+   "M"
+  ],
+  "exceed_sensor_limits": [
+   "limits",
+   "H"
+  ],
+  "exceeding_sensor_limits": [
+   "limits",
+   "H"
+  ],
+  "exceeding_sensor_limits_occurs": [
+   "limits",
+   "H"
+  ],
+  "latch_a_pullup": [
+   "pullup",
+   "M"
+  ],
+  "latch_an_autopilot_pullup": [
+   "pullup",
+   "M"
+  ],
+  "latch_pullup": [
+   "pullup",
+   "M"
+  ],
+  "pullup_latch": [
+   "pullup",
+   "M"
+  ],
+  "pullup_latched": [
+   "pullup",
+   "M"
+  ],
+  "sensor_limit_exceeded": [
+   "limits",
+   "H"
+  ],
+  "sensor_limits_exceeded": [
+   "limits",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N02": {
+  "STANDBY": [
+   "ap_standby_state",
+   "H"
+  ],
+  "TRANSITION": [
+   "ap_transition_state",
+   "H"
+  ],
+  "pilot_in_control": [
+   "standby",
+   "H"
+  ],
+  "standby_state": [
+   "ap_standby_state",
+   "H"
+  ],
+  "transition_state": [
+   "ap_transition_state",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N03": {
+  "NOMINAL": [
+   "ap_nominal_state",
+   "H"
+  ],
+  "TRANSITION": [
+   "ap_transition_state",
+   "H"
+  ],
+  "nominal": [
+   "ap_nominal_state",
+   "H"
+  ],
+  "sensor_data_good": [
+   "good",
+   "H"
+  ],
+  "system_supported": [
+   "supported",
+   "H"
+  ],
+  "transition": [
+   "ap_transition_state",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N04": {
+  "MANEUVER": [
+   "ap_maneuver_state",
+   "H"
+  ],
+  "NOMINAL": [
+   "ap_nominal_state",
+   "H"
+  ],
+  "sensor_data_good": [
+   "good",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N05": {
+  "NOMINAL": [
+   "ap_nominal_state",
+   "H"
+  ],
+  "STANDBY": [
+   "ap_standby_state",
+   "H"
+  ],
+  "pilot_in_control": [
+   "standby",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N06": {
+  "MANEUVER": [
+   "ap_maneuver_state",
+   "H"
+  ],
+  "STANDBY": [
+   "ap_standby_state",
+   "H"
+  ],
+  "maneuver_state": [
+   "ap_maneuver_state",
+   "H"
+  ],
+  "pilot_in_control": [
+   "standby",
+   "H"
+  ],
+  "pilot_in_control_standby": [
+   "standby",
+   "H"
+  ],
+  "pilot_standby": [
+   "standby",
+   "H"
+  ],
+  "sensor_data_good": [
+   "good",
+   "H"
+  ],
+  "standby_state": [
+   "ap_standby_state",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N07": {
+  "PULLUP": [
+   "ap_maneuver_state",
+   "M"
+  ],
+  "TRANSITION": [
+   "ap_transition_state",
+   "H"
+  ],
+  "good_sensor_data": [
+   "good",
+   "H"
+  ],
+  "sensor_data_good": [
+   "good",
+   "H"
+  ],
+  "system_supported": [
+   "supported",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N08": {
+  "STANDBY": [
+   "ap_standby_state",
+   "H"
+  ],
+  "TRANSITION": [
+   "ap_transition_state",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N09": {
+  "MANEUVER": [
+   "ap_maneuver_state",
+   "H"
+  ],
+  "STANDBY": [
+   "ap_standby_state",
+   "H"
+  ],
+  "apfail_occurred": [
+   "apfail",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N10": {
+  "FAULT": [
+   "sen_fault_state",
+   "H"
+  ],
+  "NOMINAL": [
+   "sen_nominal_state",
+   "H"
+  ],
+  "limits_exceeded": [
+   "limits",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N11": {
+  "NOMINAL": [
+   "sen_nominal_state",
+   "H"
+  ],
+  "TRANSITION": [
+   "sen_transition_state",
+   "H"
+  ],
+  "autopilot_requesting_support": [
+   "request",
+   "M"
+  ],
+  "nominal": [
+   "sen_nominal_state",
+   "H"
+  ],
+  "transition": [
+   "sen_transition_state",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N12": {
+  "FAULT": [
+   "sen_fault_state",
+   "H"
+  ],
+  "TRANSITION": [
+   "sen_transition_state",
+   "H"
+  ],
+  "autopilot_requesting_support": [
+   "request",
+   "M"
+  ],
+  "fault": [
+   "sen_fault_state",
+   "H"
+  ],
+  "limits_exceeded": [
+   "limits",
+   "H"
+  ],
+  "transition": [
+   "sen_transition_state",
+   "H"
+  ]
+ },
+ "LM-01_FSM-N13": {
+  "NOMINAL": [
+   "sen_nominal_state",
+   "H"
+  ],
+  "TRANSITION": [
+   "sen_transition_state",
+   "H"
+  ],
+  "active_mode": [
+   "activeMode",
+   "M"
+  ],
+  "active_mode_correct": [
+   "activeMode",
+   "M"
+  ],
+  "ap_mode": [
+   "activeMode",
+   "M"
+  ],
+  "autopilot_reports_correct_active_mode": [
+   "activeMode",
+   "M"
+  ],
+  "autopilot_reports_the_correct_active_mode": [
+   "activeMode",
+   "M"
+  ],
+  "correctMode": [
+   "activeMode",
+   "M"
+  ],
+  "modeActive": [
+   "activeMode",
+   "M"
+  ],
+  "mode_active": [
+   "activeMode",
+   "M"
+  ],
+  "mode_correct": [
+   "activeMode",
+   "M"
+  ],
+  "mode_ind": [
+   "activeMode",
+   "M"
+  ],
+  "mode_report": [
+   "activeMode",
+   "M"
+  ],
+  "mode_reported": [
+   "activeMode",
+   "M"
+  ],
+  "mode_reported_correctly": [
+   "activeMode",
+   "M"
+  ],
+  "mode_sig": [
+   "activeMode",
+   "M"
+  ],
+  "mode_signal": [
+   "activeMode",
+   "M"
+  ],
+  "mode_val": [
+   "activeMode",
+   "M"
+  ],
+  "mode_var": [
+   "activeMode",
+   "M"
+  ],
+  "nominal": [
+   "sen_nominal_state",
+   "H"
+  ],
+  "report_correct_active_mode": [
+   "activeMode",
+   "M"
+  ],
+  "reports_correct_active_mode": [
+   "activeMode",
+   "M"
+  ],
+  "reports_the_correct_active_mode": [
+   "activeMode",
+   "M"
+  ],
+  "transition": [
+   "sen_transition_state",
+   "H"
+  ]
+ },
+ "LM-02_TUSTIN-N1": {
+  "Reset": [
+   "RESET",
+   "H"
+  ],
+  "ic": [
+   "IC",
+   "H"
+  ],
+  "reset": [
+   "RESET",
+   "H"
+  ]
+ },
+ "LM-02_TUSTIN-N3": {
+  "T_step": [
+   "timeStep",
+   "M"
+  ],
+  "T_var": [
+   "timeStep",
+   "M"
+  ],
+  "Tc": [
+   "timeStep",
+   "M"
+  ],
+  "Tconst": [
+   "timeStep",
+   "M"
+  ],
+  "Tp": [
+   "timeStep",
+   "M"
+  ],
+  "Tperiod": [
+   "timeStep",
+   "M"
+  ],
+  "Tstep": [
+   "timeStep",
+   "M"
+  ],
+  "Tval": [
+   "timeStep",
+   "M"
+  ],
+  "Tvar": [
+   "timeStep",
+   "M"
+  ],
+  "normal_operation": [
+   "normal",
+   "H"
+  ],
+  "output": [
+   "yout",
+   "M"
+  ],
+  "period": [
+   "timeStep",
+   "M"
+  ],
+  "period_T": [
+   "timeStep",
+   "M"
+  ],
+  "time_step": [
+   "timeStep",
+   "M"
+  ]
+ },
+ "LM-03_REG-N01": {
+  "angular_roll_accel": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "angular_roll_acceleration": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "angular_roll_acceleration_command": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "angular_roll_acceleration_commanded": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_angular_roll_acceleration": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_roll_accel": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_roll_acceleration": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_roll_angular_acceleration": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "inner_loop_roll_regulator_commanded_angular_roll_acceleration": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "roll_accel": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "roll_accel_cmd": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "roll_accel_command": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "roll_acceleration": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "roll_acceleration_command": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "roll_angular_acceleration": [
+   "lcvdt_cmd_fcs_dps2",
+   "M"
+  ]
+ },
+ "LM-03_REG-N02": {
+  "angular_pitch_acceleration": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "angular_pitch_acceleration_command": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_angular_pitch_accel": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_angular_pitch_acceleration": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_pitch_accel": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_pitch_acceleration": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "pitch_accel": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "pitch_accel_cmd": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "pitch_acceleration": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "pitch_acceleration_command": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "pitch_angular_acceleration": [
+   "mcvdt_cmd_fcs_dps2",
+   "M"
+  ]
+ },
+ "LM-03_REG-N03": {
+  "angular_yaw_acceleration": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "angular_yaw_acceleration_command": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_angular_yaw_acceleration": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_angular_yaw_accelerations": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_yaw_accel": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "commanded_yaw_acceleration": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "inner_loop_yaw_regulator_commanded_angular_yaw_acceleration": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "yaw_accel": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "yaw_accel_cmd": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "yaw_accel_command": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "yaw_acceleration": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ],
+  "yaw_angular_acceleration": [
+   "ncvdt_cmd_fcs_dps2",
+   "M"
+  ]
+ },
+ "LM-03_REG-N04": {
+  "accel_cmd": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "accel_command": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "acceleration_command": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "axial_acceleration": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "command_accel": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "commanded_accel": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "commanded_axial_accel": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "commanded_axial_acceleration": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "commanded_translational_axial_accel": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "commanded_translational_axial_acceleration": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "translational_axial_acceleration": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "translational_axial_acceleration_command": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "translational_axial_acceleration_commanded": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "translational_axial_accelerations": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "translational_axial_accelerations_commanded_by_the_inner_loop_airspeed_regulator": [
+   "xcvdt_cmd_fcs_fps2",
+   "M"
+  ]
+ },
+ "LM-03_REG-N05": {
+  "commanded_accel_th": [
+   "hcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "commanded_height_acceleration": [
+   "hcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "commanded_translational_height_acceleration": [
+   "hcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "height_acceleration": [
+   "hcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "translational_height_acceleration": [
+   "hcvdt_cmd_fcs_fps2",
+   "M"
+  ],
+  "translational_height_acceleration_command": [
+   "hcvdt_cmd_fcs_fps2",
+   "M"
+  ]
+ },
+ "LM-03_REG-N06": {
+  "angular_roll_acceleration": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "angular_roll_acceleration_change": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "angular_roll_acceleration_transient_change": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "inner_loop_roll_regulator_commanded_transient_change_in_angular_roll_acceleration": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "lcvdt_cmd_fcs_dps2": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "roll_accel_change": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "roll_acceleration_change": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "roll_acceleration_transient_change": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "roll_angular_acceleration_change": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "transient_angular_roll_acceleration": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "transient_angular_roll_acceleration_change": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "transient_change_angular_roll_acceleration": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "transient_changes_in_angular_roll_acceleration": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "transient_roll_accel_change": [
+   "roll_command_acceleration",
+   "M"
+  ],
+  "transient_roll_acceleration_change": [
+   "roll_command_acceleration",
+   "M"
+  ]
+ },
+ "LM-03_REG-N07": {
+  "angular_pitch_acceleration_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "angular_pitch_acceleration_commanded_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "angular_pitch_acceleration_transient": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "angular_pitch_acceleration_transient_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "angular_pitch_acceleration_transient_command": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "commanded_angular_pitch_acceleration_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "mcvdt_cmd_fcs_dps2": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "pitch_accel_transient": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "pitch_acceleration_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "pitch_acceleration_transient": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "pitch_acceleration_transient_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "pitch_acceleration_transient_change_dps2_per_sec": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "pitch_angular_acceleration_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "pitch_angular_acceleration_transient": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "pitch_angular_acceleration_transient_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "transient_angular_pitch_acceleration": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "transient_angular_pitch_acceleration_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "transient_pitch_accel_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "transient_pitch_accel_change_deg_sec2_sec": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "transient_pitch_acceleration_change": [
+   "pitch_command_acceleration",
+   "M"
+  ],
+  "transient_pitch_angular_acceleration_change": [
+   "pitch_command_acceleration",
+   "M"
+  ]
+ },
+ "LM-03_REG-N08": {
+  "angular_yaw_acceleration": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "angular_yaw_acceleration_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "angular_yaw_acceleration_transient": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "angular_yaw_acceleration_transient_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "inner_loop_yaw_regulator_commanded_angular_yaw_acceleration_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "ncvdt_cmd_fcs_dps2": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "transient_change_in_angular_yaw_acceleration": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "transient_yaw_accel_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "transient_yaw_acceleration_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "transient_yaw_angular_acceleration_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_accel_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_accel_change_rate": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_accel_transient_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_acceleration_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_angular_accel_rate": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_angular_acceleration": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_angular_acceleration_change": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_angular_acceleration_rate": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_angular_acceleration_transient": [
+   "yaw_command_acceleration",
+   "M"
+  ],
+  "yaw_angular_acceleration_transient_change": [
+   "yaw_command_acceleration",
+   "M"
+  ]
+ },
+ "LM-03_REG-N09": {
+  "commanded_transient_accel": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "commanded_transient_accel_change_ft_sec2_sec": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "commanded_transient_change_in_translational_axial_acceleration": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "inner_loop_airspeed_regulator_commanded_transient_change_in_translational_axial_acceleration": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "transient_axial_accel_change": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "transient_axial_acceleration": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "transient_axial_acceleration_change": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "transient_change_in_translational_axial_acceleration": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "transient_change_translational_axial_acceleration": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "transient_translational_axial_acceleration": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "transient_translational_axial_acceleration_change": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "translational_axial_acceleration": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "translational_axial_acceleration_change": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "translational_axial_acceleration_rate": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "translational_axial_acceleration_transient": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "translational_axial_acceleration_transient_change": [
+   "airspeed_command_acceleration",
+   "M"
+  ],
+  "xcvdt_cmd_fcs_fps2": [
+   "airspeed_command_acceleration",
+   "M"
+  ]
+ },
+ "LM-03_REG-N10": {
+  "hcvdt_cmd_fcs_fps2": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "height_acceleration_change_rate": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_change_in_translational_height_acceleration": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_change_in_translational_height_acceleration_ft_per_sec2_per_sec": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_change_translational_height_acceleration": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_height_accel_change": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_height_accel_change_requested": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_height_accel_requested": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_height_acceleration": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_height_acceleration_change": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_translational_height_acceleration": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "transient_translational_height_acceleration_change": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "translational_height_acceleration": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "translational_height_acceleration_change": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "translational_height_acceleration_transient": [
+   "height_command_acceleration",
+   "M"
+  ],
+  "translational_height_acceleration_transient_change": [
+   "height_command_acceleration",
+   "M"
+  ]
+ },
+ "LM-04_NLG-N2p3": {
+  "target_position": [
+   "Xtarg",
+   "H"
+  ],
+  "vehicle": [
+   "Xv",
+   "M"
+  ]
+ },
+ "LM-04_NLG-N5": {
+  "UAV_relative_position": [
+   "Xr",
+   "H"
+  ],
+  "UAV_relative_position_to_target": [
+   "Xr",
+   "H"
+  ],
+  "commanded_position": [
+   "yout",
+   "M"
+  ],
+  "minimum_standoff_distance": [
+   "r",
+   "H"
+  ],
+  "nearest_inertial_position": [
+   "yout",
+   "M"
+  ],
+  "relative_position": [
+   "Xr",
+   "H"
+  ],
+  "relative_position_to_target": [
+   "Xr",
+   "H"
+  ],
+  "uav_relative_position": [
+   "Xr",
+   "H"
+  ],
+  "uav_relative_position_to_target": [
+   "Xr",
+   "H"
+  ]
+ },
+ "LM-04_NLG-N6": {
+  "frame_period": [
+   "T",
+   "M"
+  ],
+  "sample_period": [
+   "T",
+   "M"
+  ],
+  "t": [
+   "T",
+   "M"
+  ],
+  "target_velocity": [
+   "Vt",
+   "H"
+  ],
+  "vehicle_velocity": [
+   "Vv",
+   "H"
+  ],
+  "velocity_of_target": [
+   "Vt",
+   "H"
+  ],
+  "velocity_of_vehicle": [
+   "Vv",
+   "H"
+  ],
+  "velocity_target": [
+   "Vt",
+   "H"
+  ],
+  "velocity_vehicle": [
+   "Vv",
+   "H"
+  ]
+ },
+ "LM-05_NN-N1": {
+  "maximum_output_z": [
+   "z",
+   "M"
+  ]
+ },
+ "LM-05_NN-N2": {
+  "output_z": [
+   "z",
+   "H"
+  ]
+ },
+ "LM-05_NN-N3": {
+  "Delta_z_Delta_xt": [
+   "DeltaZDividedByXt",
+   "M"
+  ],
+  "Delta_z_Delta_yt": [
+   "DeltaZDividedByYt",
+   "M"
+  ],
+  "delta_z_delta_xt": [
+   "DeltaZDividedByXt",
+   "M"
+  ],
+  "delta_z_delta_yt": [
+   "DeltaZDividedByYt",
+   "M"
+  ],
+  "delta_z_over_delta_xt": [
+   "DeltaZDividedByXt",
+   "M"
+  ],
+  "delta_z_over_delta_yt": [
+   "DeltaZDividedByYt",
+   "M"
+  ],
+  "delta_z_xt": [
+   "DeltaZDividedByXt",
+   "M"
+  ],
+  "delta_z_yt": [
+   "DeltaZDividedByYt",
+   "M"
+  ],
+  "dz_dxt": [
+   "DeltaZDividedByXt",
+   "M"
+  ],
+  "dz_dyt": [
+   "DeltaZDividedByYt",
+   "M"
+  ],
+  "spatial_derivative_dz_dxt": [
+   "DeltaZDividedByXt",
+   "M"
+  ],
+  "spatial_derivative_dz_dyt": [
+   "DeltaZDividedByYt",
+   "M"
+  ]
+ },
+ "LM-05_NN-N4": {
+  "output_z": [
+   "z",
+   "H"
+  ],
+  "z_truth": [
+   "zt",
+   "H"
+  ],
+  "zt_truth_data": [
+   "zt",
+   "H"
+  ]
+ },
+ "LM-06_EB-N1": {
+  "check_1_1": [
+   "check_11",
+   "H"
+  ],
+  "check_1_2": [
+   "check_12",
+   "H"
+  ],
+  "check_1_3": [
+   "check_13",
+   "H"
+  ],
+  "check_2_1": [
+   "check_21",
+   "H"
+  ],
+  "check_2_2": [
+   "check_22",
+   "H"
+  ],
+  "check_2_3": [
+   "check_23",
+   "H"
+  ],
+  "check_3_1": [
+   "check_31",
+   "H"
+  ],
+  "check_3_2": [
+   "check_32",
+   "H"
+  ],
+  "check_3_3": [
+   "check_33",
+   "H"
+  ]
+ },
+ "LM-07_AP-0": {
+  "initial_altitude": [
+   "altitude_IC",
+   "H"
+  ],
+  "initial_condition": [
+   "altitude_IC",
+   "M"
+  ]
+ },
+ "LM-07_AP-1.1": {
+  "RollAutopilot_engaged": [
+   "autopilot_engaged",
+   "M"
+  ],
+  "Roll_Autopilot_engaged": [
+   "autopilot_engaged",
+   "M"
+  ],
+  "command_to_roll_actuator": [
+   "aileron_cmd",
+   "M"
+  ],
+  "command_to_the_roll_actuator": [
+   "aileron_cmd",
+   "M"
+  ],
+  "engaged": [
+   "autopilot_engaged",
+   "M"
+  ],
+  "roll_actuator_cmd": [
+   "aileron_cmd",
+   "M"
+  ],
+  "roll_actuator_command": [
+   "aileron_cmd",
+   "M"
+  ],
+  "roll_autopilot_engaged": [
+   "autopilot_engaged",
+   "M"
+  ]
+ },
+ "LM-07_AP-1.10": {
+  "heading": [
+   "Psi",
+   "M"
+  ],
+  "heading_cmd": [
+   "HDGmodeCmd",
+   "M"
+  ],
+  "heading_command": [
+   "HDGmodeCmd",
+   "M"
+  ]
+ },
+ "LM-07_AP-1.2": {
+  "roll_hold_mode_active": [
+   "roll_hold",
+   "M"
+  ]
+ },
+ "LM-07_AP-1.3": {
+  "actual_roll_angle": [
+   "roll_angle",
+   "H"
+  ],
+  "actual_roll_attitude": [
+   "roll_angle",
+   "H"
+  ],
+  "actual_roll_attitude_of_aircraft": [
+   "roll_angle",
+   "H"
+  ],
+  "actual_roll_attitude_of_the_aircraft": [
+   "roll_angle",
+   "H"
+  ],
+  "cockpit_turn_knob_command": [
+   "TurnKnob",
+   "M"
+  ],
+  "roll_reference": [
+   "roll_hold_reference",
+   "M"
+  ],
+  "turn_knob_command": [
+   "TurnKnob",
+   "M"
+  ]
+ },
+ "LM-07_AP-1.4": {
+  "roll": [
+   "roll_angle",
+   "M"
+  ],
+  "roll_command": [
+   "roll_cmd",
+   "M"
+  ],
+  "roll_signal": [
+   "roll_angle",
+   "M"
+  ]
+ },
+ "LM-07_AP-1.5": {
+  "roll_rate_for_large_commands": [
+   "roll_rate",
+   "M"
+  ],
+  "roll_rate_large_commands": [
+   "roll_rate",
+   "M"
+  ]
+ },
+ "LM-07_AP-1.6": {
+  "roll_angle_in_calm_air": [
+   "roll_angle",
+   "M"
+  ]
+ },
+ "LM-07_AP-1.7": {
+  "aileron_command": [
+   "aileron_cmd",
+   "H"
+  ]
+ },
+ "LM-07_AP-1.8": {
+  "HeadingHold_active": [
+   "hdg_hold",
+   "M"
+  ],
+  "Heading_Hold_active": [
+   "hdg_hold",
+   "M"
+  ],
+  "heading_hold": [
+   "hdg_hold",
+   "M"
+  ],
+  "heading_hold_active": [
+   "hdg_hold",
+   "M"
+  ]
+ },
+ "LM-08_SWIM-N1": {
+  "AGCAS_Min_Vcas": [
+   "CalAirspeedMin",
+   "H"
+  ],
+  "AGCAS_Minimum_Vcas": [
+   "CalAirspeedMin",
+   "H"
+  ],
+  "AGCAS_Minimum_Vcas_knots": [
+   "CalAirspeedMin",
+   "H"
+  ],
+  "AGCAS_min_Vcas": [
+   "CalAirspeedMin",
+   "H"
+  ],
+  "AutoGCASMinimumVcas": [
+   "CalAirspeedMin",
+   "H"
+  ],
+  "Auto_GCAS_Minimum_Vcas": [
+   "CalAirspeedMin",
+   "H"
+  ],
+  "GrossWeight": [
+   "weight",
+   "H"
+  ],
+  "Gross_Weight": [
+   "weight",
+   "H"
+  ],
+  "SWIM_CalAirspeedmin_kts": [
+   "CalAirspeedMin",
+   "H"
+  ],
+  "auto_gcas_minimum_vcas": [
+   "CalAirspeedMin",
+   "H"
+  ],
+  "gross_weight": [
+   "weight",
+   "H"
+  ],
+  "muxGet_T_Mux_AircraftGrossWeight_lbs": [
+   "weight",
+   "H"
+  ]
+ },
+ "LM-08_SWIM-N2": {
+  "E_AI_IMPACT_PRESSURE": [
+   "vehAirPress",
+   "M"
+  ],
+  "SWIM_Qcmin_lbspft2": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "impact_pressure": [
+   "vehAirPress",
+   "M"
+  ],
+  "min_impact_pressure_threshold": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "min_impact_pressure_warning_trigger": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "vehicle_air_data_impact_pressure": [
+   "vehAirPress",
+   "M"
+  ],
+  "warning_trigger_for_minimum_impact_pressure": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "warning_trigger_for_minimum_impact_pressure_enabling_safe_AGCAS_evasive_maneuver": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "warning_trigger_for_minimum_impact_pressure_safe_AGCAS_evasive_maneuver": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "warning_trigger_min_impact_pressure": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "warning_trigger_min_impact_pressure_agcas": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "warning_trigger_min_impact_pressure_for_safe_AGCAS_evasive_maneuver": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "warning_trigger_min_impact_pressure_safe_AGCAS_evasive_maneuver": [
+   "warningTrigForMinPress",
+   "M"
+  ],
+  "warning_trigger_minimum_impact_pressure": [
+   "warningTrigForMinPress",
+   "M"
+  ]
+ },
+ "LM-09_EUL-N6": {
+  "c1_c1T": [
+   "c1xc1Transpose",
+   "M"
+  ],
+  "c1_c2T": [
+   "c1xc2Transpose",
+   "M"
+  ],
+  "c1_dot_c1": [
+   "c1xc1Transpose",
+   "M"
+  ],
+  "c1_dot_c2": [
+   "c1xc2Transpose",
+   "M"
+  ],
+  "c1c1T": [
+   "c1xc1Transpose",
+   "M"
+  ],
+  "c1c2T": [
+   "c1xc2Transpose",
+   "M"
+  ],
+  "dot_c1_c1": [
+   "c1xc1Transpose",
+   "M"
+  ],
+  "dot_c1_c2": [
+   "c1xc2Transpose",
+   "M"
+  ],
+  "dot_r1_r1": [
+   "r1xr1Transpose",
+   "M"
+  ],
+  "dot_r1_r2": [
+   "r1xr2Transpose",
+   "M"
+  ],
+  "r1_dot_r1": [
+   "r1xr1Transpose",
+   "M"
+  ],
+  "r1_dot_r2": [
+   "r1xr2Transpose",
+   "M"
+  ],
+  "r1_r1T": [
+   "r1xr1Transpose",
+   "M"
+  ],
+  "r1_r2T": [
+   "r1xr2Transpose",
+   "M"
+  ],
+  "r1r1T": [
+   "r1xr1Transpose",
+   "M"
+  ],
+  "r1r2T": [
+   "r1xr2Transpose",
+   "M"
+  ]
+ }
+}

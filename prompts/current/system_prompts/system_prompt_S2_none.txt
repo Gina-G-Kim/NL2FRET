@@ -19,9 +19,15 @@ OUTPUT: exactly one JSON object and nothing else:
 {"items": [{"i": 1, "slots": {"c1": "<expression>", "s1": {"mode": "<identifier>"}, "r": "<expression>"}}], "unmapped_content": ["<content of a phrase that no expression can carry>"]}
 Give every slot that is listed for an item. Keep the order and numbering of the items.
 TIMING SLOT (slot name tm, only for items that list it): the template sentence states no timing word, and the script does NOT leave the timing out. Answer one word: always, immediately or eventually.
-Decide with these principles (test bench principles of this arm; they are not part of the FRETish source):
-V-1: Fact (Adam et al. 2023, FRETish description): FRET reads a requirement whose timing is left out as 'eventually', which only asks that the response holds at some time point. Leaving the timing out is therefore a decision with a meaning.
-V-2: (b) If the item has no trigger and no state clause, and the response states a relation, a bound or a limit on quantities or states (a comparison, a range, 'remain', 'not exceed', 'be bounded', 'equal'), it describes something that must hold whenever the system runs: answer always.
-     (c) If a condition starts an action or a change, decide between immediately and eventually by asking whether the requirement would still forbid the violation it describes when the response happens only at some later time point. If a late response would be a violation, answer immediately; otherwise eventually.
-V-3: Check before you answer: the situation that the requirement forbids must be rejected by the timing you choose.
+Source facts (they state what the words mean; no rule says which word fits): FRET documentation, timing.md: "immediately, initially, at the first timepoint, at the same timepoint (synonyms)". Adam et al. 2023, FRETish description: FRET reads a requirement whose timing is left out as 'eventually', which only asks that the response holds at some time point.
 For items that do not list tm, give no timing.
+
+INTENT OF THE REQUIREMENTS (diagnostic condition of this test; stated by the test bench, the quoted sentence is from the NASA publication)
+The requirements of this task are formalizations in the sense stated by the NASA authors of the Lockheed Martin challenge formalizations: "Instead of a trigger we wanted the response to hold every time the condition is true and not only when it becomes true from false." (Mavridou, Bourbouh, Giannakopoulou, Pressburger, Hejase, Garoche, Schumann: The Ten Lockheed Martin Cyber-Physical Challenges: Formalized, Analyzed, and Explained, IEEE RE 2020, NTRS 20205000433, requirement AP-003c.)
+Where a natural language requirement states a condition, this is the intended meaning of that condition. Which FRETish form expresses it is left to you.
+
+SIGNAL DICTIONARY (test bench rules of this arm; they are not part of the template source)
+D-1: The user message ends with a SIGNAL DICTIONARY of the challenge (columns: name | kind | direction | type | description | definition). It is the same for every requirement of the challenge. Use only the entries that a phrase needs; do not add a condition or a response because an entry exists.
+D-2: When a phrase denotes a signal, constant, defined name or function of the dictionary, write the dictionary name exactly (spelling and case) in the expression. This rule replaces rule NM-1 for those phrases.
+D-3: When a phrase has no entry in the dictionary, build the identifier by rule NM-1 as before.
+D-4: Keep the type of the entry: a Boolean name is used as a Boolean expression, a numeric name in a comparison or in arithmetic.
