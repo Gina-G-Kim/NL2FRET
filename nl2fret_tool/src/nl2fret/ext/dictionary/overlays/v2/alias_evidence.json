@@ -1,0 +1,246 @@
+{
+ "candidate_pairs": 42,
+ "with_evidence": 9,
+ "without_evidence": 33,
+ "evidence": [
+  {
+   "challenge": "06_EB",
+   "alias": "check_1_1",
+   "current": "check_11",
+   "requirements": [
+    "EB-001"
+   ]
+  },
+  {
+   "challenge": "06_EB",
+   "alias": "check_1_2",
+   "current": "check_12",
+   "requirements": [
+    "EB-001"
+   ]
+  },
+  {
+   "challenge": "06_EB",
+   "alias": "check_1_3",
+   "current": "check_13",
+   "requirements": [
+    "EB-001"
+   ]
+  },
+  {
+   "challenge": "06_EB",
+   "alias": "check_2_1",
+   "current": "check_21",
+   "requirements": [
+    "EB-001"
+   ]
+  },
+  {
+   "challenge": "06_EB",
+   "alias": "check_2_2",
+   "current": "check_22",
+   "requirements": [
+    "EB-001"
+   ]
+  },
+  {
+   "challenge": "06_EB",
+   "alias": "check_2_3",
+   "current": "check_23",
+   "requirements": [
+    "EB-001"
+   ]
+  },
+  {
+   "challenge": "06_EB",
+   "alias": "check_3_1",
+   "current": "check_31",
+   "requirements": [
+    "EB-001"
+   ]
+  },
+  {
+   "challenge": "06_EB",
+   "alias": "check_3_2",
+   "current": "check_32",
+   "requirements": [
+    "EB-001"
+   ]
+  },
+  {
+   "challenge": "06_EB",
+   "alias": "check_3_3",
+   "current": "check_33",
+   "requirements": [
+    "EB-001"
+   ]
+  }
+ ],
+ "unknown": [
+  {
+   "challenge": "06_EB",
+   "name": "B_1_1",
+   "current": "B_11"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_1_2",
+   "current": "B_12"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_1_3",
+   "current": "B_13"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_1_4",
+   "current": "B_14"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_1_5",
+   "current": "B_15"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_2_1",
+   "current": "B_21"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_2_2",
+   "current": "B_22"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_2_3",
+   "current": "B_23"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_2_4",
+   "current": "B_24"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_2_5",
+   "current": "B_25"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_3_1",
+   "current": "B_31"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_3_2",
+   "current": "B_32"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_3_3",
+   "current": "B_33"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_3_4",
+   "current": "B_34"
+  },
+  {
+   "challenge": "06_EB",
+   "name": "B_3_5",
+   "current": "B_35"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_1_1",
+   "current": "DCM321_11"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_1_2",
+   "current": "DCM321_12"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_1_3",
+   "current": "DCM321_13"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_2_1",
+   "current": "DCM321_21"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_2_2",
+   "current": "DCM321_22"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_2_3",
+   "current": "DCM321_23"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_3_1",
+   "current": "DCM321_31"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_3_2",
+   "current": "DCM321_32"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCM321_3_3",
+   "current": "DCM321_33"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_1_1",
+   "current": "DCMxDCMTranspose_11"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_1_2",
+   "current": "DCMxDCMTranspose_12"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_1_3",
+   "current": "DCMxDCMTranspose_13"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_2_1",
+   "current": "DCMxDCMTranspose_21"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_2_2",
+   "current": "DCMxDCMTranspose_22"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_2_3",
+   "current": "DCMxDCMTranspose_23"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_3_1",
+   "current": "DCMxDCMTranspose_31"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_3_2",
+   "current": "DCMxDCMTranspose_32"
+  },
+  {
+   "challenge": "09_EUL",
+   "name": "DCMxDCMTranspose_3_3",
+   "current": "DCMxDCMTranspose_33"
+  }
+ ]
+}

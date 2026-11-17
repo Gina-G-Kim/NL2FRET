@@ -1,6 +1,5 @@
-"""Sandbox tests (z3 engine; no NuSMV needed). Run from judging/: python -m pytest ../tests -q"""
+"""Sandbox tests (z3 engine; no NuSMV needed). Run from the project root after `pip install -e ".[test]"`: python -m pytest tests -q"""
 import json, os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "judging"))
 from nl2fret_judge import selfcheck, ap_check
 from nl2fret_judge.engines import Z3Engine, spec_text
 from nl2fret_judge.judge import judge_pair, clean_markup

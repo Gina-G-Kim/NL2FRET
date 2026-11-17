@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nl2fret"
+dynamic = ["version"]
+description = "NL2FRET: natural-language requirements to FRETish through semi-formal templates, judged against NASA FRETish with NuSMV"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["z3-solver"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+nl2fret-batch = "nl2fret.batch_pipeline:main"
+nl2fret-run = "nl2fret.run_pipeline:main"
+nl2fret-judge = "nl2fret_judge.cli:main"
+
+[tool.setuptools.dynamic]
+version = { file = ["VERSION"] }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+nl2fret = [
+  "*.md",
+  "data/*", "prompts/*", "templates/*", "templates_v15/*",
+  "fret_check/variable_policy.md", "fret_check/tools/*.js", "fret_check/tools/fretjs/**", "tools/*.js",
+  "ext/dictionary/README.md", "ext/dictionary/versions/**", "ext/dictionary/overlays/**",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"

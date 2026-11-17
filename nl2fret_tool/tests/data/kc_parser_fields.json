@@ -1,0 +1,297 @@
+{
+ "_note": "fields of the official FRET parser output (docker image fret-lab, 2026-11-17) for the sentences of tests/test_v20_kc.py; null = the parser rejected the sentence",
+ "sentences": {
+  "whenever intruder the alarm shall immediately satisfy sound": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "holding",
+   "qualifier": "whenever",
+   "timing": "immediately",
+   "timing_range": [
+    34,
+    44
+   ]
+  },
+  "In landing mode the system shall eventually satisfy decrease_speed": {
+   "scope": "in",
+   "scope_range": [
+    0,
+    14
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "eventually",
+   "timing_range": [
+    33,
+    42
+   ]
+  },
+  "the system shall always satisfy count >= 0": null,
+  "When errorCondition, the system shall, for 4 seconds, satisfy alarmOn": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "regular",
+   "qualifier": "when",
+   "timing": "for",
+   "timing_range": [
+    37,
+    52
+   ]
+  },
+  "The system shall satisfy x": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "null",
+   "qualifier": null,
+   "timing": "null",
+   "timing_range": null
+  },
+  "The system shall, until Count = 0, satisfy Count > 0": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "null",
+   "qualifier": null,
+   "timing": "until",
+   "timing_range": [
+    16,
+    33
+   ]
+  },
+  "Upon powered_on the component shall immediately satisfy bootup": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "regular",
+   "qualifier": "upon",
+   "timing": "immediately",
+   "timing_range": [
+    36,
+    46
+   ]
+  },
+  "unless p the system shall always satisfy q": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "regular",
+   "qualifier": "unless",
+   "timing": "always",
+   "timing_range": [
+    26,
+    31
+   ]
+  },
+  "After boot mode the system shall immediately satisfy prompt_for_password": {
+   "scope": "after",
+   "scope_range": [
+    0,
+    14
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "immediately",
+   "timing_range": [
+    33,
+    43
+   ]
+  },
+  "Only after arming mode shall the system eventually satisfy fired": {
+   "scope": "onlyAfter",
+   "scope_range": [
+    0,
+    21
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "eventually",
+   "timing_range": [
+    40,
+    49
+   ]
+  },
+  "When not in initialization mode the system shall always satisfy commands_accepted": {
+   "scope": "notin",
+   "scope_range": [
+    0,
+    30
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "always",
+   "timing_range": [
+    49,
+    54
+   ]
+  },
+  "Only in landing mode shall the system eventually satisfy landing_gear_down": {
+   "scope": "onlyIn",
+   "scope_range": [
+    0,
+    19
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "eventually",
+   "timing_range": [
+    38,
+    47
+   ]
+  },
+  "During landing mode the system shall always satisfy q": {
+   "scope": "in",
+   "scope_range": [
+    0,
+    18
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "always",
+   "timing_range": [
+    37,
+    42
+   ]
+  },
+  "Before energized mode the system shall always satisfy energized_indicator_off": {
+   "scope": "before",
+   "scope_range": [
+    0,
+    20
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "always",
+   "timing_range": [
+    39,
+    44
+   ]
+  },
+  "Only before energized mode shall the system eventually satisfy manually_touchable": {
+   "scope": "onlyBefore",
+   "scope_range": [
+    0,
+    25
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "eventually",
+   "timing_range": [
+    44,
+    53
+   ]
+  },
+  "When currentOverload the circuitBreaker shall, at the next timepoint, satisfy shutoff": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "regular",
+   "qualifier": "when",
+   "timing": "next",
+   "timing_range": [
+    45,
+    68
+   ]
+  },
+  "In flight mode, the vehicle shall finally satisfy landingMode_initiated": {
+   "scope": "in",
+   "scope_range": [
+    0,
+    14
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "finally",
+   "timing_range": [
+    34,
+    40
+   ]
+  },
+  "The system shall, before TakeOff, satisfy CheckListTasksCompleted": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "null",
+   "qualifier": null,
+   "timing": "before",
+   "timing_range": [
+    16,
+    32
+   ]
+  },
+  "The system shall within 2 seconds satisfy y": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "null",
+   "qualifier": null,
+   "timing": "within",
+   "timing_range": [
+    17,
+    32
+   ]
+  },
+  "The system shall, after 10 ticks, satisfy output=10": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "null",
+   "qualifier": null,
+   "timing": "after",
+   "timing_range": [
+    16,
+    32
+   ]
+  },
+  "The system shall never satisfy x": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "null",
+   "qualifier": null,
+   "timing": "never",
+   "timing_range": [
+    17,
+    21
+   ]
+  },
+  "if p the system shall always satisfy q": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "regular",
+   "qualifier": "if",
+   "timing": "always",
+   "timing_range": [
+    22,
+    27
+   ]
+  },
+  "where p the system shall always satisfy q": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "regular",
+   "qualifier": "where",
+   "timing": "always",
+   "timing_range": [
+    25,
+    30
+   ]
+  },
+  "The system shall initially satisfy z": {
+   "scope": "null",
+   "scope_range": null,
+   "condition": "null",
+   "qualifier": null,
+   "timing": "immediately",
+   "timing_range": [
+    17,
+    25
+   ]
+  },
+  "While mode_a the watch shall always satisfy alarm_icon_on": {
+   "scope": "in",
+   "scope_range": [
+    0,
+    11
+   ],
+   "condition": "null",
+   "qualifier": null,
+   "timing": "always",
+   "timing_range": [
+    29,
+    34
+   ]
+  }
+ }
+}

@@ -5,8 +5,6 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "judging"))
-sys.path.insert(0, os.path.join(HERE, "..", "bench"))
 
 from nl2fret_judge import dict_align as DA, parts as PT  # noqa: E402
 from nl2fret_judge.engines import QueryResult, parse_nusmv_trace, spec_text, smv_file_text  # noqa: E402
@@ -85,7 +83,7 @@ def test_no_sentence_part_fails():
 
 
 def test_rule_arm_falls_back_instead_of_dropping():
-    import units3 as U
+    from nl2fret import units3 as U
     item = {"id": "X", "challenge": "01_FSM", "raw_nl": "x"}
     rows = {U.skey("X", "MASTeR+R2", 0, "A"): {"status": "ok", "parsed": {"sentences": ["this is not a template sentence at all"]}, "total_tokens": 0}}
     rec = U.derive(rows, item, "MASTeR+R2", 0, {})
@@ -96,7 +94,7 @@ def test_rule_arm_falls_back_instead_of_dropping():
 
 
 def test_feedback_log_is_cumulative():
-    import prompts3 as P
+    from nl2fret import prompts3 as P
     h = [{"attempt": 1, "stage": "D", "answer": "ANSWER ONE", "statuses": [{"verdict": "rejected", "text": "bad one", "message": "MSG ONE", "hints": ["HINT"]}], "note": ""},
          {"attempt": 2, "stage": "F1", "answer": "ANSWER TWO", "statuses": [{"verdict": "rejected", "text": "bad two", "message": "MSG TWO", "hints": []}], "note": ""}]
     s = P.user_prompt_feedback_log("ORIGINAL", h)
@@ -105,7 +103,7 @@ def test_feedback_log_is_cumulative():
 
 
 def test_g_rule_text_has_no_r2_rule():
-    import prompts3 as P
+    from nl2fret import prompts3 as P
     for t in P.TPLS:
         assert "R2-" not in P.guide_rules_text(t)
 
@@ -118,7 +116,7 @@ if __name__ == "__main__":
 
 
 def test_guide_supplement_flag_only_in_free_and_direct_prompts():
-    import prompts3 as P
+    from nl2fret import prompts3 as P
     P.DICT_ALL = True
     try:
         P.GUIDE_SUP = False
@@ -137,7 +135,7 @@ def test_guide_supplement_flag_only_in_free_and_direct_prompts():
 
 
 def test_g_parity_removes_only_deftime_and_default_is_v13():
-    import prompts3 as P
+    from nl2fret import prompts3 as P
     assert P.G_PARITY is False
     for t in P.TPLS:
         off = P.guide_rules_text(t)
@@ -152,7 +150,7 @@ def test_g_parity_removes_only_deftime_and_default_is_v13():
 
 
 def test_supplement_has_no_tool_observation_and_no_selection_rule():
-    import prompts3 as P
+    from nl2fret import prompts3 as P
     s = P.guide_supplement().lower()
     for w in ("parser compiled", "observation of the official parser", "not a documentation quote", "you should", "choose", "use whenever"):
         assert w not in s, w
@@ -160,14 +158,13 @@ def test_supplement_has_no_tool_observation_and_no_selection_rule():
 
 def test_prompt_lint_p3_p6_pass():
     import sys, os
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "bench", "tools"))
-    import prompt_lint as L
+    from nl2fret.tools import prompt_lint as L
     assert L.p3()["ok"] and L.p6(os.path.join(os.path.dirname(__file__), "..", "data/reference/lm_reference_with_ltl.jsonl"))["ok"] and L.p1()["ok"] and L.p2()["ok"]
 
 
 def test_default_prompts_equal_v13_hashes():
     """Flags off: the free-arm and Direct prompts must be byte-identical to the v1.3 FSM run (hashes from its run_info.json)."""
-    import hashlib, prompts3 as P
+    import hashlib; from nl2fret import prompts3 as P
     P.DICT_ALL = True
     try:
         P.GUIDE_SUP = False
@@ -181,7 +178,7 @@ def test_default_prompts_equal_v13_hashes():
 
 
 def test_intent_decl_only_appended_and_default_unchanged():
-    import hashlib, prompts3 as P
+    import hashlib; from nl2fret import prompts3 as P
     P.DICT_ALL = True
     try:
         for build, arg in ((P.build_system_D3, "DIRECT"), (P.build_system_B3, "MASTeR+G")):
@@ -201,8 +198,8 @@ def test_intent_decl_only_appended_and_default_unchanged():
 
 
 def test_runner_has_exactly_the_11_approaches_and_no_condition_branches():
-    import os, re, prompts3 as P
-    sh = open(os.path.join(os.path.dirname(__file__), "..", "exp/fsm/run_intent.sh"), encoding="utf-8").read()
+    import os; import re; from nl2fret import prompts3 as P
+    sh = open(os.path.join(os.path.dirname(__file__), "..", "scripts/run_intent.sh"), encoding="utf-8").read()
     arms = re.search(r"^ARMS=\((.*)\)$", sh, re.M).group(1).split()
     assert arms == P.ARMS_FSM and len(arms) == 11
     assert "A0" not in sh and "A1" not in sh and "A2" not in sh
@@ -210,9 +207,8 @@ def test_runner_has_exactly_the_11_approaches_and_no_condition_branches():
 
 def test_intent_cond_maps_every_trigger_to_whenever_and_default_is_v13():
     import sys, os
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "bench", "tools"))
-    import selftest as S
-    import tpl_rules as T
+    from nl2fret.tools import selftest as S
+    from nl2fret import tpl_rules as T
     assert T.INTENT_COND is False
     S.run()                                    # v1.3 mapping unchanged: golden outputs with when / if
     T.INTENT_COND = True
@@ -237,8 +233,7 @@ def test_intent_cond_maps_every_trigger_to_whenever_and_default_is_v13():
 def test_stage_a_reuse_copies_only_matching_hash_and_refuses_mismatch(tmp_path):
     import json as _j
     import types
-    sys.path.insert(0, os.path.join(HERE, "..", "bench"))
-    import run_pipeline as RP
+    from nl2fret import run_pipeline as RP
     src = tmp_path / "src"
     src.mkdir()
     row = {"stage_key": "I1|MASTeR|0|A", "stage": "A", "item_id": "I1", "arm": "MASTeR", "rep": 0, "status": "ok", "prompt_hash": "H1", "raw_result": "x"}
@@ -256,17 +251,17 @@ def test_stage_a_reuse_copies_only_matching_hash_and_refuses_mismatch(tmp_path):
 
 
 def _tools():
-    sys.path.insert(0, os.path.join(HERE, "..", "bench", "tools"))
+    return None
 
 
 def test_decision_points_reading_classes_follow_fret_semantics():
     _tools()
-    from decision_points import decision_points as dp
+    from nl2fret.tools.decision_points import decision_points as dp
     a = dp("whenever c the sys shall immediately satisfy r")
     b = dp("the sys shall always satisfy c => r")
-    assert a["reading"] == b["reading"] == "EVERY_TIME" and a["ntiming"] == b["ntiming"] == "now"      # same LTL, official parser check (H(c -> r))
+    assert a["reading"] == b["reading"] == "EVERY_TIME" and a["ntiming"] == b["ntiming"]      # same LTL, official parser check (H(c -> r)); the class comes from data/timing_semantics.json
     e = dp("when c the sys shall immediately satisfy r")
-    assert e["reading"] == "EDGE" and e["ntiming"] == "immediately"
+    assert e["reading"] == "EDGE" and e["timing"] == "immediately" and e["ntiming"] != a["ntiming"]
     assert dp("the sys shall always satisfy x > 0")["reading"] == "UNCOND"
     s = dp("In landing mode, when c, the sys shall eventually satisfy r")
     assert s["scope"] == "scoped" and s["reading"] == "EDGE" and s["timing"] == "eventually"
@@ -275,13 +270,13 @@ def test_decision_points_reading_classes_follow_fret_semantics():
 
 def test_sign_test_threshold_13_items():
     _tools()
-    from compare_runs import sign_p
+    from nl2fret.tools.compare_runs import sign_p
     assert sign_p(10, 3) < 0.05 and sign_p(9, 4) > 0.05 and sign_p(0, 0) == 1.0
 
 
 def test_ownership_table_classifies_every_rule_and_quotes_exist_in_rule_sources():
     import subprocess
-    r = subprocess.run([sys.executable, os.path.join(HERE, "..", "bench", "tools", "ownership_table.py")], capture_output=True, text=True)
+    r = subprocess.run([sys.executable, "-m", "nl2fret.tools.ownership_table"], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "unclassified rules (must be 0): 0" in r.stdout
 
@@ -296,7 +291,7 @@ def test_controls_unsatisfiable_formula_is_scored_proof_by_the_judge_and_strict_
 
 
 def test_tm_source_only_removes_selection_procedure_and_default_is_v13():
-    import prompts3 as P
+    from nl2fret import prompts3 as P
     base = P.slot_system_r2()
     assert base == P.SLOT_SYSTEM_R2 and "V-2" in base and "test bench principles" in base
     P.TM_SOURCE_ONLY = True
@@ -312,8 +307,8 @@ def test_tm_source_only_removes_selection_procedure_and_default_is_v13():
 
 
 def test_sourced_rules_only_refuses_unsourced_mappings_and_omits_them_from_g_text():
-    import prompts3 as P
-    import tpl_rules as T
+    from nl2fret import prompts3 as P
+    from nl2fret import tpl_rules as T
     base = P.guide_rules_text("EARS")
     assert "R-EARS-WHERE" in base
     P.SOURCED_ONLY = T.SOURCED_ONLY = True

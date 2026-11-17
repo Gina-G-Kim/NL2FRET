@@ -1,0 +1,32 @@
+{
+ "version": "v1",
+ "rows": 564,
+ "rows_per_challenge": {
+  "00_TRIPLEX": 38,
+  "01_FSM": 45,
+  "02_TUSTIN": 31,
+  "03_REG": 48,
+  "04_NLG": 32,
+  "05_NN": 23,
+  "06_EB": 153,
+  "07_AP": 72,
+  "08_SWIM": 39,
+  "09_EUL": 83
+ },
+ "columns": [
+  "challenge",
+  "name",
+  "direction",
+  "type",
+  "dims",
+  "description",
+  "sources",
+  "components",
+  "kind",
+  "definition",
+  "model_signal"
+ ],
+ "generator": {
+  "file": "data/dictionary/build_dict.py"
+ }
+}
