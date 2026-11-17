@@ -1,0 +1,3 @@
+Source: Mavridou, Bourbouh, Giannakopoulou, Pressburger, Hejase, Garoche, Schumann, "The Ten Lockheed Martin Cyber-Physical Challenges: Formalized, Analyzed, and Explained", IEEE RE 2020, p. 303-304 (AP-003c). Passage copied from the project copy of the paper. Use ONLY if pdftotext -raw of the full paper is not available.
+
+[AP-003c-v1] did not capture our intentions. Instead of a trigger we wanted the response to hold every time the condition is true and not only when it becomes true from false. Thus, we rewrote the requirement as follows:

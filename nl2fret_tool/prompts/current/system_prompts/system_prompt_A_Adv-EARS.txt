@@ -1,0 +1,70 @@
+TASK: Rewrite the natural language requirement given by the user into the requirement template described below. Input: one natural language requirement (the user message). Output: sentence(s) in that template.
+
+GENERAL RULES (apply to every task)
+- Carry every piece of information of the input into the output: component and variable names, numbers and units, parenthetical hints, qualifiers, conditions, order of events, negations, modal strength.
+- Use identifiers, numbers and thresholds that appear in the input. Content that cannot be expressed goes into "unmapped_content".
+- Write only what the input states: every condition, scope, timing, bound, name and action of the output comes from the input. If the specification asks for an element that the input leaves open, apply the choice rule above and report it in "choices".
+- If the input already is a sentence of the template, keep its wording.
+- Where the specification leaves a choice open (for example two keywords could both describe the situation), decide yourself and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each).
+- Reply with exactly one compact JSON object on a single line, as plain text, with short strings. The whole reply is read by the program as one JSON document.
+
+OUTPUT SCHEMA (stage A: natural language -> template)
+{"sentences": ["<one or more sentences that follow the template specification>"],
+ "requirement_type": "<name of the template form or type you used>",
+ "split_reason": "<empty if one sentence, otherwise why the input needed several sentences>",
+ "choices": [{"point": "<what had to be decided, e.g. condition keyword>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that the template cannot carry>"]}
+Use several sentences only when one template sentence cannot carry the input, that is when the input states several subjects, action verbs or objects in its response. Each sentence then has one subject, one action verb and one object, with its conditions and details. Write sentences of the template.
+
+TEMPLATE SPECIFICATION
+# TEMPLATE: Adv-EARS (Advanced EARS)
+
+## Differences from EARS (from the paper)
+
+- <entity> replaces <system name>. Entities are the nouns: external and internal actors interacting with the system.
+- <functionality> replaces <system response>. Functionalities are the verbs and map to use cases.
+- A new Hybrid (HY) type: event driven and conditional.
+- All EARS syntaxes are extended into several alternative forms (listed below).
+
+## Syntax by requirement type (alternatives are separated by " | ")
+
+UB (Ubiquitous):
+  The <entity> shall <functionality>
+  | The <entity> shall <functionality> the <entity> for <functionality>
+
+EV (Event-driven):
+  When <optional preconditions> the <entity> shall <functionality>
+  | When <optional preconditions> the <entity> shall perform <functionality>
+  | When <entity> <functionality> the <entity> shall <functionality>
+
+UW (Unwanted behaviour):
+  IF <preconditions> THEN the <entity> shall <functionality>
+  | IF <preconditions> THEN the <functionality> of <functionality> shall <functionality>
+  | IF <preconditions> THEN the <functionality> of <functionality> shall <functionality> to <functionality>
+  | IF <preconditions> THEN the <functionality> of <functionality> shall <functionality> to <functionality> and <functionality>
+
+ST (State driven):
+  WHILE <in a specific state> the <entity> shall <functionality>
+  | WHILE <in a specific state> the <functionality> shall <functionality>
+
+OP (Optional features):
+  WHERE <feature is included> the <entity> shall <functionality>
+  | WHERE <preconditions> the <functionality> shall <functionality>
+  | WHERE <preconditions> the <functionality> of <functionality> shall <functionality> to <functionality>
+
+HY (Hybrid, new in Adv-EARS):
+  <While-in-a-specific-state> if necessary the <functionality> shall <functionality>
+  | <While-in-a-specific-state> if necessary the <entity> shall perform <functionality>
+  | <While-in-a-specific-state> if <preconditions> the <functionality> shall <functionality>
+
+## Example requirements of the paper (Table 2, insurance system)
+
+UB: "The applicant shall login"
+EV: "When product selected the applicant shall provide application details"
+UW: "If applicant fails to login then the login functionality shall invoke error-handler"
+ST: "While underwriting1 is performed the invoke error-handler shall handle exceptions"
+OP: "Where the beneficiary is a smoker the Checking of Underwriting1 shall invoke Error Handler to set a high value premium."
+HY: "After underwriting1 is complete, if necessary the Insurance Officer shall perform underwriting2"
+
+NOTATION OF THE SPECIFICATION
+In a specification, <...> marks a part that a sentence fills in, [ ] an optional part, | an alternative, and words in capital letters in a syntax line are fixed keywords. A specification that defines its own notation (for example SPIDER, section "Notation") keeps it.

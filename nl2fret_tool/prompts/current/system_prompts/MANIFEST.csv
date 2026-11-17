@@ -1,0 +1,13 @@
+file,stage,key,used_by_arms,bytes,sha256
+system_prompt_A_Adv-EARS.txt,A,Adv-EARS,Adv-EARS+G; Adv-EARS+R2,4988,a9cf54f239e2dea1d7167ae8722541bc95c10dec8bd0fcf13c7fbfec816b7d47
+system_prompt_A_Boilerplate.txt,A,Boilerplate,Boilerplate+G; Boilerplate+R2,5747,72b47477c5e5cf74ce2b237fa64264708baaba1646d3d97407ff5312585a16a7
+system_prompt_A_EARS.txt,A,EARS,EARS+G; EARS+R2,7320,601a3828d57fd8122deffeb3b9cf6a2ab67867f03d1a853eb006357eb10db287
+system_prompt_A_MASTeR.txt,A,MASTeR,MASTeR+G; MASTeR+R2,7769,66b7ad6d5d496c601fee01c09d646cf9f0fb4e58b96cf4db6eb30ecc3baefe87
+system_prompt_A_SPIDER.txt,A,SPIDER,SPIDER+G; SPIDER+R2,7324,1350383d3ffe2140443482981c5bce555ef5640e9b975c2b4d67cd2c5bc38bb2
+system_prompt_B_Adv-EARS+G.txt,B,Adv-EARS+G,Adv-EARS+G; fallback of Adv-EARS+R2,41556,f523a01330206bb63af6a38d649018edef70e56334b77099f2a216f5951a0cd0
+system_prompt_B_Boilerplate+G.txt,B,Boilerplate+G,Boilerplate+G; fallback of Boilerplate+R2,42315,0f932cd1fea7941b8d6bcd4748bb32ade44ae0c218310be4dbf580253e23d6f8
+system_prompt_B_EARS+G.txt,B,EARS+G,EARS+G; fallback of EARS+R2,43888,d0d41acd755725da823b87333d029ae6dae1a263e550248277c11360922f5eba
+system_prompt_B_MASTeR+G.txt,B,MASTeR+G,MASTeR+G; fallback of MASTeR+R2,44337,04db04d01d1247526ef88bca8130832e3057ee3be9bacfa624203d0b78537689
+system_prompt_B_SPIDER+G.txt,B,SPIDER+G,SPIDER+G; fallback of SPIDER+R2,43892,b50a129972f361a158c039dad4b9b270ac135096822522bf8beb4ab1ed423637
+system_prompt_D_none.txt,D,,DIRECT,38624,6c1c12ba2787d55d5f4a25e4dd143fda4e33f38f73088b16b8ebd83d655d6640
+system_prompt_S2_none.txt,S2,,MASTeR+R2; EARS+R2; Adv-EARS+R2; SPIDER+R2; Boilerplate+R2,29856,de6f9f38cf08f757d686634a032aae6f2193c1c0ef2775d401662cec02b6dcbe

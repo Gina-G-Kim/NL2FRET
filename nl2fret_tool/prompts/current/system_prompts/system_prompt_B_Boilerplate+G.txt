@@ -1,0 +1,859 @@
+TASK: The user message contains one or more sentences written in the requirement template named below. Convert them into FRETish. Read the input with the template specification.
+
+GENERAL RULES (apply to every task)
+- Carry every piece of information of the input into the output: component and variable names, numbers and units, parenthetical hints, qualifiers, conditions, order of events, negations, modal strength.
+- Use identifiers, numbers and thresholds that appear in the input. Content that cannot be expressed goes into "unmapped_content".
+- Write only what the input states: every condition, scope, timing, bound, name and action of the output comes from the input. If the specification asks for an element that the input leaves open, apply the choice rule above and report it in "choices".
+- Where the specification leaves a choice open (for example two keywords could both describe the situation), decide yourself and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each).
+- Reply with exactly one compact JSON object on a single line, as plain text, with short strings. The whole reply is read by the program as one JSON document.
+
+OUTPUT SCHEMA (FRETish)
+{"fretish": ["<one FRETish requirement per string>"],
+ "fields": [{"scope": "", "condition": "", "component": "", "timing": "", "response": ""}],
+ "choices": [{"point": "<what had to be decided, e.g. scope or condition, default timing, identifier name>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that FRETish cannot carry>"]}
+"fields" has one object per FRETish string, in the same order, with the text you put into each field (an unused field is an empty string).
+
+FRETISH GUIDE
+# FRETISH FIELD DOCUMENTATION
+
+
+## Writing requirements [writingReqs.md]
+
+A FRET requirement is a "FRETish" sentence, which is an English sentence containing standard boolean expressions. The FRET requirement can contain up to seven fields: *scope*, *condition*, *component*, *shall*, *probability*, *timing* and *response*. Three fields are mandatory: component, shall, response.
+
+Here is an example requirement:
+**"In flight mode the battery shall always satisfy voltage > 9"** 
+
+FRET supports two modes for writing requirements: (1) Classic FRET and (2) Probabilistic FRET. Probabilistic FRET contains the *probability* field.
+
+Here is an example requirement:
+**"In auto-taxi mode SensorSelection shall with probability > 0.95 always satisfy accurate"** 
+
+### Mandatory fields
+
+The following fields are mandatory in both Classic and Probabilistic FRET.
+
+1. Component. Specifies the *component* that the requirement refers to.
+
+2. Shall. The word *shall* expresses that the component's behavior must conform to the requirement. This is typical in requirements documents.
+
+3. Response. Specifies the *response*, which is the required component behavior. It must be a boolean condition that the component's behavior must satisfy.
+
+### Optional fields
+
+Classic FRET contains the following three optional fields:
+
+1. Scope. The optional *scope* field specifies the period where the requirement holds. If omitted, the requirement is deemed to hold universally, subject to condition, below. The scope is specified relative to system *modes*. The scope can specify system behavior *before* a specified mode occurs, or *after* a specified mode ends, or when the system is *in* a specified mode. In the latter case, there may be many intervals in which the requirement holds. The mode is specified by giving its mode name.
+
+2. Condition. The optional *condition* field is a boolean expression that further constrains when the requirement response is to occur.
+
+3. Timing. The optional *timing* field specifies when the response shall happen, relative to the scope and condition.  Timing can be *immediately* (synonyms: *initially*, *at the first timepoint*, *at the same timepoint*), *at the next timepoint*, *finally* (synonym: *at the last timepoint*), *eventually*, *always*, *never*, *within N time units*,  *for N time units*, *after N time units*, *until* stop_condition, or *before* stop_condition. The timing *after* means that the response happens _N_ time units from the beginning of the requirement's period, and does not happen before that; i.e., does not happen for *N-1* time units after the beginning of the period.
+
+> __Note:__ The Boolean operators allowed in the boolean expression *while* scope, condition, *until* and *before* timings, and response fields are: `!` (negation), `&` (conjunction), `|` (disjunction), `xor` (exclusive or),  `->` or `=>` (implication), `<->` or `<=>` (equivalence). An alternative phrasing for implication is `if p then q`. There are nine predefined temporal predicates: , `preBool`, `preInt`, `preReal`, `persisted`, `occurred`, `persists`, `occurs`, `prevOcc` and `nextOcc`.
+The arithmetic comparison operators are `=, !=, <, >, <=, >=`. The arithmetic operators are `+, -, *, /, mod`, and `^` (exponentiation). Arithmetic terms and predicates are in standard form; e.g., `f(x,y)`,  `p(x,y,z)`.
+
+> __Note:__ Currently FRET supports a set of built-in functions, such as `absReal`, `maxReal`, `minReal`. This set of functions can be further extended as needed. These functions return the absolute, maximum, and minimum values of real numbers, respectively. 
+
+> __Reserved Words:__ The following cannot be used as variables in Boolean and arithmetic expressions:  
+`A, ABF, ABG, AF, AG, ASSIGN, AX, BU, COMPASSION, COMPUTE, COMPWFF,
+CONSTANTS, CONSTRAINT, CTLSPEC, CTLWFF, DEFINE, E, EBF, EBG, EF, EG, EX, F,
+FAIRNESS, FROZENVAR, G, H, IN, INIT, INVAR, INVARSPEC, ISA, IVAR, JUSTICE,
+LTLSPEC, LTLWFF, MAX, MDEFINE, MIN, MIRROR, MODULE, NAME, O, PRED,
+PREDICATES, PSLSPEC, PSLWFF, S, SIMPWFF, SPEC, T, TRANS, U, V, VAR, X, Y, Z`  
+`abs, array, bool, boolean, case, count, esac, extend, in, init, integer,
+max, min, mod, next, of, process, real, resize, self, signed, sizeof,
+swconst, union, unsigned, uwconst, word, word1, xnor, xor`.
+
+### Optional Probabilistic FRET fields
+
+Probabilistic FRET contains the aforementioned *scope*, *condition*, and *timing* fields, along with an optional fourth field: *probability*.
+
+1. Probability. The optional *probability* field specifies the probability assigned to the timed response (i.e., the combination of the timing and response fields). The probability field can be left empty, i.e., the requirement is not probabilistic, or can be instantiated with the following phrase *with probability RELATIONAL_OP prob_num*, where *RELATIONAL_OP* is a numeric comparison operator (e.g., `>=`, `<=`) and *prob_num* is a number between 0 and 1 (inclusive).
+
+
+## FRETish grammar [Requirement.g4]
+
+```antlr
+grammar Requirement ;
+
+reqt_body : (nasa | freeform) ('.')?
+          ;
+
+freeform :
+         STRING
+         ;
+
+nasa
+        : (scope)? (reqt_condition)?
+          (component SHALL | SHALL component)
+          (probability)?
+          (timing)? response
+        ;
+// Note: "while" was introduced because we can't have
+// "when/if/unless scope_condition" because when/if/unless
+// introduce a precondition (see qualifier_word, qualified_condition1).
+scope : (
+    (ONLY ( ((DURING | ((WHEN | IF)? IN)) scope_mode) |
+            (WHILE scope_condition) |
+            ((AFTER | BEFORE) (scope_mode | scope_condition)))) |
+    (EXCEPT (((DURING | ((WHEN | IF)? IN)) scope_mode) |
+             (WHILE scope_condition))) |
+    ((WHEN | IF) NOT? IN scope_mode) |
+    ((IN | DURING) scope_mode) |
+    (UNLESS IN scope_mode) |
+    (WHILE scope_condition) |
+    ((AFTER | BEFORE) (scope_mode | scope_condition))
+    )
+    (',')? ;
+
+reqt_condition
+        : (AND)? (regular_condition) ;
+
+regular_condition
+       :   qualified_condition1
+           ((',')? qualified_condition2)* (',')?
+       ;
+
+qualifier_word
+	: (UPON | WHENEVER | WHEN | UNLESS | WHERE | IF )
+        ;
+
+qualified_condition1
+        : qualifier_word pre_condition (IS (TRUE | FALSE))?
+        ;
+
+qualified_condition2
+        : (AND | OR)? qualifier_word pre_condition
+	  (IS (TRUE | FALSE))?
+	;
+
+scope_condition : bool_expr ;
+
+scope_mode : (MODE mode_name) | (mode_name MODE) | mode_name;
+
+pre_condition
+	: bool_expr
+	;
+
+stop_condition
+	: bool_expr
+	;
+
+component
+          : THE? component_name
+          ;
+
+response : satisfaction;
+
+satisfaction : SATISFY post_condition ;
+
+probability : (',')? WITH probability_aux (',')? ;
+
+probability_aux :
+     PROB RELATIONAL_OP prob_num ;
+
+prob_num : NUMBER ;
+
+timing
+         : (',')? timing_aux (',')?
+         ;
+
+timing_aux :
+           WITHIN duration_upper
+	 | FOR duration_upper
+         | AFTER duration_lower
+	 | UNTIL stop_condition
+ 	 | BEFORE stop_condition
+	 | AT THE (FIRST | SAME | NEXT | LAST) TIMEPOINT
+         | (IMMEDIATELY | INITIALLY)
+	 | FINALLY
+         | EVENTUALLY
+         | ALWAYS
+         | NEVER
+	 ;
+
+duration_upper : duration ;
+duration_lower : duration ;
+
+component_name : ID ;
+
+mode_name    : ID ;
+
+duration
+         : NUMBER timeunit ;
+
+timeunit : TICK | MICROSECOND | MILLISECOND | SECOND | MINUTE | HOUR ;
+
+post_condition : bool_expr ;
+
+bool_expr :  ('!' | '~') bool_expr
+          | bool_expr '&' bool_expr
+          | bool_expr ('|'|XOR) bool_expr
+          | bool_expr ('->' | '=>'| '<->' | '<=>') bool_expr
+	  | IF bool_expr THEN bool_expr
+	  | AT THE (PREVIOUS | NEXT) OCCURRENCE OF bool_expr ',' bool_expr
+          | '(' bool_expr ')'
+          | numeric_expr RELATIONAL_OP numeric_expr
+          |  ID ('(' ( (bool_expr | numeric_expr) (',' (bool_expr | numeric_expr))*)? ')')?
+          | 'true'
+          | 'false'
+          ;
+
+numeric_expr :
+               numeric_expr '^' numeric_expr
+             |  '-' numeric_expr
+             | numeric_expr ('*' | '/' | MOD) numeric_expr
+             | numeric_expr ('+' | '-') numeric_expr
+             | NUMBER
+             | ID ( '(' ( (bool_expr | numeric_expr) (',' (bool_expr | numeric_expr))*)? ')')?
+             | '(' numeric_expr ')'
+             ;
+
+AFTER : A F T E R;
+ALWAYS : A L W A Y S;
+AND : A N D;
+AT : A T;
+BEFORE : B E F O R E;
+DURING : D U R I N G;
+EVENTUALLY : E V E N T U A L L Y;
+EXCEPT : E X C E P T;
+FALSE : F A L S E;
+FINALLY : F I N A L L Y;
+FIRST : F I R S T;
+FOR : F O R;
+HOUR : H O U R S?;
+IF : I F;
+IMMEDIATELY : I M M E D I A T E L Y;
+IN : I N;
+INITIALLY : I N I T I A L L Y;
+IS : I S;
+LAST : L A S T;
+MICROSECOND : M I C R O S E C (O N D)? S?;
+MILLISECOND : M I L L I S E C (O N D)? S?;
+MINUTE : M I N U T E S?;
+MOD : M O D;
+MODE : M O D E;
+NEVER : N E V E R;
+NEXT : N E X T;
+NOT : N O T;
+OCCURRENCE : O C C U R R E N C E;
+OF : O F;
+ONLY : O N L Y;
+OR : O R;
+PREVIOUS : P R E V I O U S;
+PROB : P R O B A B I L I T Y;
+SAME : S A M E;
+SATISFY : S A T I S F Y;
+SECOND : S E C (O N D)? S?;
+SHALL : S H A L L;
+THE : T H E;
+THEN : T H E N;
+TICK : T I C K S?;
+TIMEPOINT : T I M E P O I N T;
+TRUE : T R U E;
+UNLESS : U N L E S S;
+UNTIL : U N T I L;
+UPON : U P O N;
+WHAT : W H A T;
+WHEN : W H E N;
+WHENEVER : W H E N E V E R;
+WHERE : W H E R E;
+WHILE : W H I L E;
+WITH : W I T H;
+WITHIN : W I T H I N;
+XOR : X O R;
+
+ID     :    ((('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'.'|'%')*)
+	    | STRING ) ;
+
+STRING: '"' (ESC|.)*? '"' ;
+
+RELATIONAL_OP     : '<' | '<=' | '>' | '>=' | '=' | '!='    ;
+
+NUMBER :
+         '-'? INT '.' [0-9]+ EXP?
+       | '-'? INT EXP
+       | '-'? INT
+       ;
+
+fragment EXP :
+         [Ee] [+\-]? INT ;
+
+fragment INT : '0' | [1-9][0-9]* ;
+
+WS  :   ( ' '
+        | '\t'
+        | '\r'
+        | '\n'
+        ) -> channel(HIDDEN)
+    ;
+
+fragment ESC : '\\"' | '\\\\' ; // \" or \\
+
+fragment A : [aA];
+fragment B : [bB];
+fragment C : [cC];
+fragment D : [dD];
+fragment E : [eE];
+fragment F : [fF];
+fragment G : [gG];
+fragment H : [hH];
+fragment I : [iI];
+fragment J : [jJ];
+fragment K : [kK];
+fragment L : [lL];
+fragment M : [mM];
+fragment N : [nN];
+fragment O : [oO];
+fragment P : [pP];
+fragment Q : [qQ];
+fragment R : [rR];
+fragment S : [sS];
+fragment T : [tT];
+fragment U : [uU];
+fragment V : [vV];
+fragment W : [wW];
+fragment X : [xX];
+fragment Y : [yY];
+fragment Z : [zZ];
+```
+
+
+## Scope [scope.md]
+
+### Scope (optional)
+
+specifies where the requirement must hold: in intervals defined with respect to a MODE, e.g.,
+
+* **before** MODE, **only before** MODE
+* **in** MODE, **when/if not in** MODE,  **only in** MODE
+* **after** MODE, **only after** MODE
+
+or if not specified as above, then globally, i.e., throughout the entire execution.
+
+MODE is a string identifier starting with an upper- or lower-case letter, followed by letters, digits or underscores ‘_’.
+
+The **only** modes mean that when the system is not in the specified relationship to the mode
+(i.e., the system is not **in**/**after**/**before** the mode) the response
+must not occur.
+
+#### EXAMPLES
+
+* _(global)_ The system shall always satisfy count >= 0
+* **After** boot mode the system shall immediately satisfy prompt_for_password
+* **Only after** arming mode shall the system eventually satisfy fired
+* **In** landing mode the system shall eventually satisfy decrease_speed
+* When **not in** initialization mode the system shall always satisfy commands_accepted
+* **Only in** landing mode shall the system eventually satisfy landing_gear_down
+* **Before** energized mode the system shall always satisfy energized_indicator_off
+* **Only before** energized mode shall the system eventually satisfy
+manually_touchable
+
+It has been found to be useful to allow more general boolean expressions
+in place of simple mode variables. The keyword **While** for boolean
+expressions has a meaning like **In** for mode variables. Here are some
+examples:
+
+* **While** mode = 4 the watch shall always satisfy alarm_icon_on
+* **While** persisted(4,high_temperature) the monitor shall until shutoff satisfy alarm_on
+* **Before** taxiing & receivedClearance the plane shall always satisfy !takeoff
+* **After** landed & powerOff the doors shall within 3 seconds satisfy unlocked
+
+#### RESTRICTIONS
+
+The list of reserved words that cannot be used as variables in
+Boolean and arithmetic expressions appears in the user manual in the section
+"Writing requirements". In particular, the following are not allowed:
+A, E, F, G, H, O, R, S, T, U, V, X, Y, Z, init.
+
+
+## Condition [condition.md]
+
+### Condition (optional)
+
+specifies the condition after which the response shall hold,
+taking into account scope and timing. A condition can be either:
+
+* a _regular_ condition, meaning the requirement holds **_upon_** a condition becoming true; i.e., at the point
+where the condition becomes true after being false, or the
+condition is true at the beginning of a scope interval;
+
+* a _holding_ condition, meaning the response holds **_whenever_** the condition holds.
+
+A holding condition is introduced by the keyword **whenever**.
+A regular condition is introduced by the keyword **upon** (or **when**,
+**where**, **if**).
+The condition can be a sequence of Boolean expressions, optionally connected
+by the keywords *and* and *or*.
+
+Validity of each Boolean Expression _BEXP_ can be optionally stated by writing
+"_BEXP_ is **true**" (same as _BEXP_) or "_BEXP_ is **false**" (same as !
+_BEXP_).
+
+A Boolean Expression can be a Boolean variable (see variable name
+restrictions below), a proposition (e.g., "light_on"), an atomic formula (e.g.,
+"brightness(lamp2, 0.7)"), a numerical comparison between two numerical
+expressions (e.g., "level(tank1) > 0.8 * content"), or a formula constructed
+using the operators
+
+* **!** (not)
+* **&** (and)
+* **|** (or)
+* **=>** or **->** (implies)
+* **<=>** or **<->** (equivalence, biconditional)
+* **xor** (exclusive OR)
+
+Boolean or numerical variables correspond to signals or variables in the
+component.
+
+The mapping between requirement variables and model signals is specified
+when exporting requirements for verification. Check the user manual under
+"Exporting for Analysis" for more details.
+
+Parentheses **(** **)** are used as usual. Please use parentheses as much as
+possible to avoid mistakes and misunderstandings.  
+
+#### EXAMPLES
+
+* **Upon** powered_on the component shall immediately satisfy bootup
+* **Whenever** intruder the alarm shall immediately satisfy sound
+
+The contrast between regular and holding conditions is shown in the following two
+examples, in the case where at some point p holds forever:
+
+* Upon p the software shall eventually satisfy q
+* Whenever p the software shall eventually satisfy q
+
+In the first, q must be satisfied at least once.
+In the second, q must be satisfied infinitely often.
+
+#### RESTRICTIONS
+
+The list of reserved words that cannot be used as variables in
+Boolean and arithmetic expressions appears in the user manual in the section
+"Writing requirements". In particular, the following are not allowed:
+A, E, F, G, H, O, R, S, T, U, V, X, Y, Z, init.
+
+
+## Component [component.md]
+
+### Component (mandatory)
+
+Specifies the component of the system that the requirement applies to. ID is an identifier starting with an upper- or lower-case letter, followed by letters, digits or underscores ‘_’.
+
+#### Examples
+* FMS_CMD_INPUT
+* fuel_pump_99
+* BackupGenerator1
+
+
+## Timing [timing.md]
+
+### Timing (optional)
+
+specifies the time points or time intervals, where a response has to occur once scope and condition(s) are satisfied. Supported options are
+
+* **immediately**, **initially**, **at the first timepoint**, **at the same timepoint** (synonyms)
+* **at the next timepoint**
+* **finally**, **at the last timepoint** (synonyms)
+* **eventually**
+* **always**
+* **never**
+* **within** DURATION
+* **for** DURATION
+* **after** DURATION
+* **until** STOP_CONDITION
+* **before** STOP_CONDITION
+
+DURATION is a positive integer optionally followed by a time-unit,
+for example 12 seconds or 5 minutes. Time units can be one of the following:
+* **tick** or **ticks**
+* **microsecond** or **microseconds**
+* **millisecond** or **milliseconds**
+* **second** or **seconds** or **sec** or **secs**
+* **minute** or **minutes**
+* **hour** or **hours**
+
+**NOTE: Time units are currently ignored**: they are not checked, converted
+or reasoned about by FRET. To FRET, all the units mean "time points" (or
+"time steps"); e.g., 3 ticks means the same as 3 seconds, which means the
+same as 3 microseconds. FRET exports verification code to analysis tools,
+which are in charge of interpreting the time units. Check the user manual
+under "Exporting for Analysis" for more details.
+
+STOP_CONDITION is a Boolean expression (see help for the Condition
+field). The timing **before** means that the response must happen at least
+once strictly before the STOP_CONDITION holds. The timing **until** means
+that the response must hold at least until strictly before the
+STOP_Condition holds.
+
+#### EXAMPLES
+* **immediately:** **In** roll_hold **mode** RollAutopilot **shall immediately satisfy if** (roll_angle
+  < 6.0 & roll_angle > -6.0) **then** roll_hold_reference = 0.0
+* **next:** **When** currentOverload **the** circuitBreaker **shall,
+  at the next timepoint, satisfy** shutoff
+* **finally:** **In** flight **mode**, **the** vehicle **shall finally
+  satisfy** landingMode_initiated
+* **eventually:** **In** landingMode **the** system **shall eventually satisfy**
+  LandingGearLowered
+* **always:** **The** autopilot **shall always satisfy if** allGood **then**
+  state = nominal
+* **never:** **In** drivingMode **the** system **shall never satisfy**
+  cellPhoneOn & !cellPhoneHandsFree
+* **for:** **When** errorCondition, **the** system **shall, for** 4 **seconds, satisfy** alarmOn
+* **within:** **In** landing **mode, the** the system **shall within** 2 **seconds satisfy** is_stable
+* **after:** **When** input = 1, **the** integrator **shall, after** 10
+  **ticks, satisfy** output=10
+* **until:** **In** CountdownMode **the** system **shall, until** Count = 0, **satisfy** Count > 0
+* **before:** **The** system **shall, before** TakeOff, **satisfy** CheckListTasksCompleted
+
+#### RESTRICTIONS
+
+The list of reserved words that cannot be used as variables in
+Boolean and arithmetic expressions appears in the user manual in the section
+"Writing requirements". In particular, the following are not allowed:
+A, E, F, G, H, O, R, S, T, U, V, X, Y, Z, init.
+
+
+## Probability [probability.md]
+
+### Probability (optional)
+
+Specifies the probability assigned to the timed response. The probability field can be left empty; i.e., the requirement is not probabilistic, or can be instantiated with the following phrase "**with probability** _RELATIONAL_OP_ _prob_num_", where:
+
+* _RELATIONAL_OP_ is a numeric comparison operator;
+* _prob_num_ is a number between 0 and 1 inclusive.
+
+
+#### EXAMPLES
+
+* The software shall **with probability > 0.9999** for 1000 seconds satisfy !error
+* Whenever error, the rover shall **with probability > 0.98** always satisfy ! collision
+* The rover shall **with probability < 0.01** eventually satisfy battery_depleted
+
+
+## Response [response.md]
+
+### Response (mandatory)
+
+Specifies the response that the component must provide to fulfill the requirement.
+The current version of FRET supports the form:
+
+**satisfy** BEXP (Boolean Expression, see the help for the Condition field).
+
+#### RESTRICTIONS
+
+The list of reserved words that cannot be used as variables in
+Boolean and arithmetic expressions appears in the user manual in the section
+"Writing requirements". In particular, the following are not allowed:
+A, E, F, G, H, O, R, S, T, U, V, X, Y, Z, init.
+
+
+## Built-in functions [builtin_functions_explanations.md]
+
+Built-In Functions Documentation
+--------------------------------
+
+This document describes built-in functions that return the absolute value, maximum, or minimum of real numbers and integers. 
+
+### absReal(x)
+
+Absolute value for reals. The input `x` is a real number. The function returns `x` if `x` is greater than or equal to 0.0 and returns `-x` otherwise.
+
+### absInt(x)
+
+Absolute value for integers. The input `x` is an integer. The function returns `x` if `x` is greater than or equal to 0 and returns `-x` otherwise.
+
+### maxReal(a, b)
+
+Maximum value between two reals. The inputs `a` and `b` are real numbers. The function returns `a` if `a` is greater than or equal to `b` and returns `b` otherwise.
+
+### maxInt(a, b)
+
+Maximum value between two integers. The inputs `a` and `b` are integers. The function returns `a` if `a` is greater than or equal to `b` and returns `b` otherwise.
+
+### minReal(a, b)
+
+Minimum value between two reals. The inputs `a` and `b` are real numbers. The function returns `a` if `a` is less than or equal to `b` and returns `b` otherwise.
+
+### minInt(a, b)
+
+Minimum value between two integers. The inputs `a` and `b` are integers. The function returns `a` if `a` is less than or equal to `b` and returns `b` otherwise.
+
+
+## Temporal conditions [temporal_condition_explanations.md]
+
+Temporal Condition Documentation
+--------------------------------
+
+> The list of reserved words that cannot be used as variables in Boolean and
+> arithmetic expressions appears in the user manual in the section "Writing
+> requirements". In particular, the following are not allowed: A, E, F, G,
+> H, O, R, S, T, U, V, X, Y, Z, init.
+
+This document describes temporal operators about values at previous time
+points, persistence or occurrence of conditions, and conditions holding at
+the next or previous occurrences of conditions.
+
+### Previous
+
+There are three operators that return the value of an expression at the
+previous time point. FRET only formalizes them in past-time. The operators
+are `preBool(initBool,p)`, `preInt(initInt,n)` and
+`preReal(initReal,x)`. Here `p`, `n`, and `x` are expressions of type
+boolean, integer, and real, respectively. These operators return the value
+of `p`, `n`, and `x`, respectively, at the previous time point. If the
+operator is evaluated at the start of the trace, where there is no previous
+time point, the value of the first argument is returned; i.e., `initBool`,
+`initInt` and `initReal`, which are expressions of type boolean, integer and
+real, respectively.
+
+### Persistence and Occurrence
+
+There are four special predicates about persistence and occurrence of
+conditions that can be used in boolean expressions. FRET can formalize two
+of the predicates only in past-time metric temporal logic, and two only in
+future-time metric temporal logic. The past-time predicates appear
+unformalized in the future-time formalization of the requirement; similarly,
+the future-time predicates appear unformalized in the past-time
+formalization of the requirement.
+
+In what follows, the variable `n` must be an integer literal (i.e., 1, 2);
+not, e.g., a variable name.
+
+The past-time predicates are `persisted(n,p)` and `occurred(n,p)`. Here `p`
+is any boolean expression, which may include temporal predicates itself. The
+predicate `persisted` means that `p` has held true for the previous `n` time
+points, as well as the current time point, in the current scope interval. So
+*persisted(2,temp > high)* means that *temp* has been greater than *high* at
+the current time point, and at the previous time point, and at the time
+point previous to that, for a total of 3 time points within the current
+scope. If this is evaluated too close to the beginning of the scope; for
+example, at the second time point of the scope, *persisted* cannot be
+satisfied because there aren't two preceding time points where the
+proposition could hold.)
+
+The predicate `occurred(n,p)` means that the proposition `p` held at least
+once in the previous `n` time points, or at the current time point. So
+*occurred(2,p)* means that `p` either holds at the current time point, or at
+the previous time point, or at the time point previous to that. The
+combination *occurred(4,p) & persisted(3,!p)* holds if *p* was true 4 time
+points previously and not since then.
+
+One subtlety: for the requirement *when occurred(7,p), the sw shall
+immediately satisfy r*, *r* will be required to be true when *p* occurs for
+the first time, because that is the first time that *occurred(7,p)* becomes
+true from false. To say that something shall occur for 7 seconds, use
+`occurred` in the response, e.g., *the sw shall always satisfy if
+occurred(7,temp > high) then alarm*, or a holding condition, e.g.,
+*whenever occurred(7,temp > high) the sw shall satisfy alarm*. The Simulator
+is a big help in understanding the semantics.
+
+The future-time predicates are `persists(n,p)` and `occurs(n,p)`. The
+predicate `persists(n,p)` means that the proposition `p` holds for the next
+`n` time points, as well as the current time point.  So *persists(2, temp >
+high)* means that *temp* is greater than *high* at the current time point,
+the next time point, and the time point after that, for a total of 3 time
+points.  If *persists* is evaluated too close to the end of the scope (for
+example, at the time point before the end of the scope), *persists* cannot
+be satisfied because there aren't two subsequent time points where the
+proposition could hold. Another example: consider the requirement *when
+persists(2,temp > high) the device within 3 ticks shall satisfy alarm*, and
+suppose *temp* is greater than *high* at time points 3, 4, and 5. In this
+case, *alarm* must occur within three time points of time point 3; i.e., at
+3, 4, 5 and/or 6.
+
+The predicate `occurs(n,p)` means that the proposition `p` holds at least
+once in the following `n` time points, or at the current time point. So
+*occurs(2,p)* means that *p* holds either at the current time point, or at
+the next time point, or at the time point after that.
+
+Another subtlety: The `persists` predicate never holds over an entire finite
+interval. For example, the requirement *Before mode m the software shall
+always satisfy persists(3, p)* is never satisfied because the `persists`
+predicate can't be satisfied within 2 time points of the right end of the
+scope interval. Similarly, the `occurs` predicate may be false near the end
+of the trace if `p` doesn't occur.
+
+### Next and Previous Occurrences
+
+There are two predicates that specify a condition on the next or previous
+occurrence of a condition. The formula `nextOcc(p,q)` means that the next
+time the Boolean expression `p` holds in the scope, the Boolean expression
+`q` holds at that time as well. Analogously, `prevOcc(p,q)` means that at
+the previous occurrence of `p` in the scope, `q` holds. If `p` doesn't hold
+in the scope, the predicates are satisfied vacuously.  As with
+persists/persisted, nextOcc is only formalized in future-time temporal logic
+and prevOcc is only formalized in past-time temporal logic.
+
+There are also ways to specify these predicates in FRETish in a more natural
+language: `at the next occurrence of p, q` and `at the previous occurrence
+of p, q`.
+
+
+## Semantics of the fields [FRET parser output]
+
+Each entry: a FRETish sentence, the description FRET gives for it, and its future-time formula. p and r are conditions, s is a Boolean expression, m is a mode, q is the response.
+
+### Scope
+
+* `in m mode the system shall always satisfy q`
+  * Scope: in every interval where m holds.
+  * Formula (infinite traces): (G (m -> q))
+* `while s the system shall always satisfy q`
+  * Scope: in every interval where (s) holds.
+  * Formula (infinite traces): (G (s -> q))
+* `before m mode the system shall always satisfy q`
+  * Scope: in the interval (if defined) from the start of the execution to (and exclusive of) the first point where m holds. In the interval defined by the entire execution, if m never holds. If m holds initially, the requirement is vacuously satisfied.
+  * Formula (infinite traces): ((((! m) & (X m)) V q) | m)
+* `after m mode the system shall always satisfy q`
+  * Scope: in the interval (if defined) starting strictly after the first m interval and spanning to the end of the execution.
+  * Formula (infinite traces): (((! (m & (X (! m)))) U ((m & (X (! m))) & (X (G q)))) | (G (! (m & (X (! m))))))
+* `when not in m mode the system shall always satisfy q`
+  * Scope: in every interval where m does NOT hold.
+  * Formula (infinite traces): (G ((! m) -> q))
+* `the system shall always satisfy q`
+  * Scope: in the interval defined by the entire execution.
+  * Formula (infinite traces): (G q)
+
+### Condition
+
+* `upon p the system shall always satisfy q`
+  * Trigger: first point in the interval if (p) is true and any point in the interval where (p) becomes true (from false).
+  * Formula (infinite traces): ((G (((! p) & (X p)) -> (X (G q)))) & (p -> (G q)))
+* `whenever p the system shall always satisfy q`
+  * Trigger: every point in the interval where (p) is true.
+  * Formula (infinite traces): (G (p -> (G q)))
+* `unless p the system shall always satisfy q`
+  * Trigger: first point in the interval if (! (p)) is true and any point in the interval where (! (p)) becomes true (from false).
+  * Formula (infinite traces): ((G ((p & (X (! p))) -> (X (G q)))) & ((! p) -> (G q)))
+* `the system shall always satisfy q`
+  * Trigger: first point in the interval.
+
+### Timing
+
+* `the system shall satisfy q`
+  * Required behavior: for every trigger, (q) must hold at some time point between (and including) the trigger and the end of the interval.
+  * Formula (infinite traces): (F q)
+  * Formula (finite traces): ((! LAST) U q)
+* `the system shall immediately satisfy q`
+  * Required behavior: for every trigger, if trigger holds then (q) also holds at the same time point.
+  * Formula (infinite traces): q
+  * Formula (finite traces): q
+* `the system shall at the next timepoint satisfy q`
+  * Required behavior: for every trigger, (q) must hold at the next time step.
+  * Formula (infinite traces): (X q)
+  * Formula (finite traces): (LAST | (X q))
+* `the system shall finally satisfy q`
+  * Required behavior: for every trigger, if trigger holds, then (q) holds at the end of the interval.
+  * Formula (infinite traces): TRUE
+  * Formula (finite traces): (LAST V (LAST -> q))
+* `the system shall eventually satisfy q`
+  * Required behavior: for every trigger, (q) must hold at some time point between (and including) the trigger and the end of the interval.
+  * Formula (infinite traces): (F q)
+  * Formula (finite traces): ((! LAST) U q)
+* `the system shall always satisfy q`
+  * Required behavior: for every trigger, (q) must hold at all time points between (and including) the trigger and the end of the interval.
+  * Formula (infinite traces): (G q)
+  * Formula (finite traces): (LAST V q)
+* `the system shall never satisfy q`
+  * Required behavior: for every trigger, (q) must be false at all time points between (and including) the trigger and the end of the interval.
+  * Formula (infinite traces): (G (! q))
+  * Formula (finite traces): (LAST V (! q))
+* `the system shall within 3 ticks satisfy q`
+  * Required behavior: for every trigger, (q) must hold at some point with distance 3 from the trigger (i.e., at trigger, trigger+1, ..., or trigger+3). If the interval ends sooner than trigger+3, then (q) need not hold.
+  * Formula (infinite traces): (F[0,3] q)
+  * Formula (finite traces): ((F[0,3] q) | (F[0,2] LAST))
+* `the system shall for 3 ticks satisfy q`
+  * Required behavior: for every trigger, (q) must hold at the trigger and remain true for 3 time points past the trigger (i.e., trigger, trigger+1, ..., and trigger+3), or to the end of the interval if the interval ends sooner than trigger+3.
+  * Formula (infinite traces): ((G[0,3] q) | (G q))
+  * Formula (finite traces): ((G[0,3] q) | (LAST V q))
+* `the system shall after 3 ticks satisfy q`
+  * Required behavior: for every trigger, (q) must be false at all time points with distance 3 from the trigger (i.e., trigger, trigger+1, ..., and trigger+3). Moreover, (q) must hold at the point that is at distance 3+1 from the trigger, that is, trigger+3+1, except if the end of the interval occurs earlier.
+  * Formula (infinite traces): (((G[0,3] (! q)) | (G (! q))) & (F[0,4] q))
+  * Formula (finite traces): (((G[0,3] (! q)) | (LAST V (! q))) & ((F[0,4] q) | (F[0,3] LAST)))
+* `the system shall until r satisfy q`
+  * Required behavior: for every trigger, (q) must remain true until (but not necessarily including) the point where the stop condition holds, or to the end of the interval. If the stop condition never occurs, (q) must hold until the end of the scope, or forever. If the stop condition holds at the trigger, the requirement is satisfied.
+  * Formula (infinite traces): (r V (q | r))
+  * Formula (finite traces): ((r V (q | r)) | (LAST V q))
+* `the system shall before r satisfy q`
+  * Required behavior: for every trigger, (q) must hold at least once strictly before the state where the stop condition holds. If the stop condition never occurs in the interval, (q) does not need to hold. If the stop condition holds at the trigger, the requirement is not satisfied.
+  * Formula (infinite traces): (q V (! r))
+  * Formula (finite traces): ((q | LAST) V (! r))
+
+### Condition and timing
+
+* `upon p the system shall satisfy q`: ((G (((! p) & (X p)) -> (X (F q)))) & (p -> (F q)))
+* `upon p the system shall immediately satisfy q`: ((G (((! p) & (X p)) -> (X q))) & (p -> q))
+* `upon p the system shall at the next timepoint satisfy q`: ((G (((! p) & (X p)) -> (X (X q)))) & (p -> (X q)))
+* `upon p the system shall eventually satisfy q`: ((G (((! p) & (X p)) -> (X (F q)))) & (p -> (F q)))
+* `upon p the system shall always satisfy q`: ((G (((! p) & (X p)) -> (X (G q)))) & (p -> (G q)))
+* `upon p the system shall never satisfy q`: ((G (((! p) & (X p)) -> (X (G (! q))))) & (p -> (G (! q))))
+* `upon p the system shall within 3 ticks satisfy q`: ((G (((! p) & (X p)) -> (X (F[0,3] q)))) & (p -> (F[0,3] q)))
+* `upon p the system shall for 3 ticks satisfy q`: ((G (((! p) & (X p)) -> (X ((G[0,3] q) | (G q))))) & (p -> ((G[0,3] q) | (G q))))
+* `upon p the system shall after 3 ticks satisfy q`: ((G (((! p) & (X p)) -> (X (((G[0,3] (! q)) | (G (! q))) & (F[0,4] q))))) & (p -> (((G[0,3] (! q)) | (G (! q))) & (F[0,4] q))))
+* `upon p the system shall until r satisfy q`: ((G (((! p) & (X p)) -> (X (r V (q | r))))) & (p -> (r V (q | r))))
+* `upon p the system shall before r satisfy q`: ((G (((! p) & (X p)) -> (X (q V (! r))))) & (p -> (q V (! r))))
+* `whenever p the system shall satisfy q`: (G (p -> (F q)))
+* `whenever p the system shall immediately satisfy q`: (G (p -> q))
+* `whenever p the system shall at the next timepoint satisfy q`: (G (p -> (X q)))
+* `whenever p the system shall eventually satisfy q`: (G (p -> (F q)))
+* `whenever p the system shall always satisfy q`: (G (p -> (G q)))
+* `whenever p the system shall never satisfy q`: (G (p -> (G (! q))))
+* `whenever p the system shall within 3 ticks satisfy q`: (G (p -> (F[0,3] q)))
+* `whenever p the system shall for 3 ticks satisfy q`: (G (p -> ((G[0,3] q) | (G q))))
+* `whenever p the system shall after 3 ticks satisfy q`: (G (p -> (((G[0,3] (! q)) | (G (! q))) & (F[0,4] q))))
+* `whenever p the system shall until r satisfy q`: (G (p -> (r V (q | r))))
+* `whenever p the system shall before r satisfy q`: (G (p -> (q V (! r))))
+
+NOTATION OF THE FRETISH GUIDE
+The grammar is written in ANTLR. A rule has the form name : alternatives ; where | separates alternatives, ( ) groups, ? marks an optional part, * a part that repeats zero or more times, + a part that repeats one or more times, and a quoted string is a literal. A name in capital letters is a keyword, matched in upper and lower case; a rule such as EVENTUALLY : E V E N T U A L L Y; spells the keyword letter by letter. A name in small letters is another rule. In the field documentation, a word between asterisks names a field or a keyword, and the word shall separates the component from the response.
+
+TEMPLATE SPECIFICATION
+# TEMPLATE: Boilerplates (Hull, Jackson and Dick; DODT)
+
+## Base boilerplates (Hull, Jackson, Dick, Requirements Engineering, Sect. 4.8 The Language of Requirements)
+
+"Requirement Expression = Boilerplate + Placeholder values" (Sect. 4.9). "shall" is the key word that indicates the presence of a requirement; some approaches use "shall", "should" and "may" for different priorities.
+
+Capability (stakeholder requirement):
+  The <stakeholder type> shall be able to <capability>.
+  The <stakeholder type> shall be able to <capability> within <performance> of <event> while <operational condition>.
+  E.g. The weapons operator shall be able to fire a missile within 3 seconds of radar sighting while in severe sea conditions.
+Constraint (stakeholder requirement):
+  The <stakeholder> shall not be placed in breach of <applicable law>.
+  E.g. The ambulance driver shall not be placed in breach of national road regulations.
+System requirement with a capacity performance:
+  The <system> shall <function> not less than <quantity> <object> while <operational condition>.
+  E.g. The communications system shall sustain telephone contact with not less than 10 callers while in the absence of external power.
+Periodicity:
+  The <system> shall <function> <object> every <performance> <units>.
+  E.g. The coffee machine shall produce a hot drink every 10 seconds.
+
+## Example boilerplates for constraint requirements (Hull, Jackson, Dick, Table 4.4)
+
+Performance/capability:   The <system> shall be able to <function> <object> not less than <performance> times per <units>.
+Performance/capability:   The <system> shall be able to <function> <object> of type <qualification> within <performance> <units>.
+Performance/capacity:     The <system> shall be able to <function> not less than <quantity> <object>.
+Performance/timeliness:   The <system> shall be able to <function> <object> within <performance> <units> from <event>.
+Performance/periodicity:  The <system> shall be able to <function> not less than <quantity> <object> within <performance> <units>.
+Interoperability/capacity: The <system> shall be able to <function> <object> composed of not less than <performance> <units> with <external entity>.
+Sustainability/periodicity: The <system> shall be able to <function> <object> for <performance> <units> every <performance> <units>.
+Environmental/operability: The <system> shall be able to <function> <object> while <operational condition>.
+Note that there may be several ways of expressing similarly classified constraints, and that constraints may have a compound classification.
+
+## DODT (Farfeleder, Moser, Krall, Stalhane, Zojer, Panis, IEEE DDECS 2011)
+
+A boilerplate consists of a sequence of attributes and fixed syntax elements (FSEs). Example: "<system> shall <action>" (attributes <system>, <action>; FSE "shall"). Another example: "<user> shall be able to <action>".
+It is possible to combine several boilerplates by means of simple concatenation. This allows keeping the number of required boilerplates low while at the same time having a high flexibility.
+Example of a DODT requirement (Grosser et al. 2023, Table I): "While in Imaging Mode, the AOCS-GNC shall have Absolute Measurement Error (AME) of at most 100 urad (3s)." with the structure "While <state>, <system> shall have <parameter> of at most <quantity> <unit>."
+
+NOTATION OF THE SPECIFICATION
+In a specification, <...> marks a part that a sentence fills in, [ ] an optional part, | an alternative, and words in capital letters in a syntax line are fixed keywords. A specification that defines its own notation (for example SPIDER, section "Notation") keeps it.
+
+SIGNAL DICTIONARY
+D-1: The user message ends with a SIGNAL DICTIONARY of the challenge this requirement belongs to (columns: name | kind | direction | type | description | definition). It is built from the original requirement document, the NASA FRET variable declarations and the NASA CoCoSpec file, and it is the same for every requirement of the challenge. Use the entries that the template sentence needs. Kinds: signal (input or output port), constant (a named number), defined (a name with a given definition), element (one element of a vector or matrix), component (a name that a FRET requirement uses as its subject), function (a built-in or helper function; call it as listed).
+D-2: When a phrase of the template sentence denotes a signal of the dictionary, write the dictionary name exactly (spelling and case) as the FRETish identifier.
+D-3: When a phrase denotes something outside the dictionary (for example a constant, a state value or a mode name), choose the identifier yourself.
+D-4: Keep the type of the dictionary entry: a Boolean name is used as a Boolean expression, a numeric name in a comparison or in arithmetic.

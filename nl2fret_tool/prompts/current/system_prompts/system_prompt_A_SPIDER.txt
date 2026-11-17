@@ -1,0 +1,74 @@
+TASK: Rewrite the natural language requirement given by the user into the requirement template described below. Input: one natural language requirement (the user message). Output: sentence(s) in that template.
+
+GENERAL RULES (apply to every task)
+- Carry every piece of information of the input into the output: component and variable names, numbers and units, parenthetical hints, qualifiers, conditions, order of events, negations, modal strength.
+- Use identifiers, numbers and thresholds that appear in the input. Content that cannot be expressed goes into "unmapped_content".
+- Write only what the input states: every condition, scope, timing, bound, name and action of the output comes from the input. If the specification asks for an element that the input leaves open, apply the choice rule above and report it in "choices".
+- If the input already is a sentence of the template, keep its wording.
+- Where the specification leaves a choice open (for example two keywords could both describe the situation), decide yourself and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each).
+- Reply with exactly one compact JSON object on a single line, as plain text, with short strings. The whole reply is read by the program as one JSON document.
+
+OUTPUT SCHEMA (stage A: natural language -> template)
+{"sentences": ["<one or more sentences that follow the template specification>"],
+ "requirement_type": "<name of the template form or type you used>",
+ "split_reason": "<empty if one sentence, otherwise why the input needed several sentences>",
+ "choices": [{"point": "<what had to be decided, e.g. condition keyword>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that the template cannot carry>"]}
+Use several sentences only when one template sentence cannot carry the input, that is when the input states several subjects, action verbs or objects in its response. Each sentence then has one subject, one action verb and one object, with its conditions and details. Write sentences of the template.
+
+TEMPLATE SPECIFICATION
+# TEMPLATE: SPIDER structured English grammar (Autili, Grunske, Lumpe, Pelliccione, Tang)
+
+## Notation (section 4.1)
+
+Terminal strings are in bold in the paper; non-terminals are in typewriter font. [ ] marks an optional symbol, for example "[holds]" means the verb "holds" can be omitted
+"if the resulting sentence is closer to natural language". Curly brackets { } separate the description of an event/state from the enclosing pattern structure; {P} denotes the occurrence of an event/state P.
+Q, P, R, S, T, Z are events/states. t_l^P and t_u^P are the lower and upper time bounds associated with P. p is a probability bound in [0,1]. n is an integer.
+Time(P) is the time bound associated with P, Constraint(P) the constraint associated with P. For chains the index i runs over 1 <= i <= N-1; the elements T_i are separated by commas.
+"The start symbol of the grammar is Property."
+
+## Grammar (Table 2)
+
+Property            ::= Scope, Pattern.
+Scope               ::= Globally | Before {R} | After {Q} | Between {Q} and {R} | After {Q} until {R}
+Pattern             ::= Occurrence | Order
+Occurrence          ::= Universality | Absence | Existence | BoundedExistence | TransientState | SteadyState | MinimumDuration | MaximumDuration | Recurrence
+Universality        ::= it is always the case that {P} [holds] [Time(P)] [Probability]
+Absence             ::= it is never the case that {P} [holds] [Time(P)] [Probability]
+Existence           ::= {P} [holds] eventually [Time(P)] [Probability]
+BoundedExistence    ::= {P} [holds] at most n times [Time(P)] [Probability]
+TransientState      ::= {P} [holds] after t_u^P TimeUnits [Probability]
+SteadyState         ::= {P} [holds] in the long run [Probability]
+MinimumDuration     ::= once {P} [becomes satisfied] it remains so for at least t_u^P TimeUnits [Probability]
+MaximumDuration     ::= once {P} [becomes satisfied] it remains so for less than t_u^P TimeUnits [Probability]
+Recurrence          ::= {P} [holds] repeatedly [every t_u^P TimeUnits] [Probability]
+Order               ::= Precedence | PrecedenceChain_1N | PrecedenceChain_N1 | Until | Response | ResponseChain_1N | ResponseChain_N1 | ResponseInvariance
+Precedence          ::= if {P} [holds] then it must have been the case that {S} [has occurred] [Interval(P)] before {P} [holds] [Probability]
+PrecedenceChain_1N  ::= if {S} [has occurred] and afterwards ({T_i} [UpperTimeBound(T_i)] [Constraint(T_i)])^(1<=i<=N-1; ",") [hold] then it must have been the case that {P} [has occurred] [Interval(S)] before {S} [holds] [Constraint(S)] [Probability]
+PrecedenceChain_N1  ::= if {P} [holds] then it must have been the case that {S} and afterwards ({T_i} [UpperTimeBound(T_i)] [Constraint(T_i)])^(1<=i<=N-1; ",") [have occurred] [Interval(P)] [Constraint(P)] before {P} [holds] [Probability]
+Until               ::= {P} [holds] without interruption until {S} [holds] [Time(P)] [Probability]
+Response            ::= if {P} [has occurred] then in response {S} [eventually holds] [Time(S)] [Constraint(S)] [Probability]
+ResponseChain_1N    ::= if {P} [has occurred] then in response {S} [eventually holds] [Time(S)] [Constraint(S)] followed by ({T_i} [Time(T_i)] [Constraint(T_i)])^(1<=i<=N-1; ",") [eventually hold] [Probability]
+ResponseChain_N1    ::= if {S} followed by ({T_i} [Time(T_i)] [Constraint(T_i)])^(1<=i<=N-1; ",") [have occurred] then in response {P} [eventually holds] [Time(P)] [Constraint(P)] [Probability]
+ResponseInvariance  ::= if {P} [has occurred] then in response {S} [holds] continually [Time(S)] [Probability]
+Constraint(P)       ::= without {Z^P} [holding] in between
+Time(P)             ::= UpperTimeBound(P) | LowerTimeBound(P) | Interval(P)
+UpperTimeBound(P)   ::= within t_u^P TimeUnits
+LowerTimeBound(P)   ::= after t_l^P TimeUnits
+Interval(P)         ::= between t_l^P and t_u^P TimeUnits
+TimeUnits           ::= any denomination of time (e.g., seconds, minutes, hours, days, or years)
+Probability         ::= with a probability (lower than p | lower or equal than p | greater than p | greater or equal than p)
+
+## Example sentences printed in the paper (section 4.1)
+
+"Globally, if {a sensor detects that a train is less than 800 m from a level-crossing and the boomgate is up} then in response {a red warning light flashes} within 2 seconds followed by {the boomgate is being lowered} within 5 seconds."
+"After a write operation, the memory location should retain the data for the next 3 years with a probability of 99.9 percent."
+
+## Notes from the paper
+
+- The grammar follows the format of Konrad and Cheng and of Grunske, with the difference that it is an attribute grammar.
+- Section 3: Universality is also known as Globally, Henceforth or Always; Absence is also known as Never; Existence is also known as Eventually or Future; Response is also known as Follows or Leads-to.
+- Probabilistic patterns have no explicit scope; their scope is Globally by default.
+
+NOTATION OF THE SPECIFICATION
+In a specification, <...> marks a part that a sentence fills in, [ ] an optional part, | an alternative, and words in capital letters in a syntax line are fixed keywords. A specification that defines its own notation (for example SPIDER, section "Notation") keeps it.
