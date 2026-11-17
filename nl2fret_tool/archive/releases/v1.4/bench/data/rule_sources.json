@@ -1,0 +1,193 @@
+{
+ "_comment": "Official-document evidence for tool rules. file = FRET repository docs (NASA-SW-VnV/fret, commit cf0f913, fret-electron/docs/_media/user-interface/examples). 'documents' says what the quote establishes: CONSTRUCT = the FRETish construct exists and what it means; it never says WHICH construct fits a given natural language sentence. A rule that picks one documented alternative for a template phrase stays a CHOICE and is listed as unsourced in ownership.md.",
+ "R-EARS-WHEN": {
+  "file": "condition.md",
+  "quote": "A regular condition is introduced by the keyword upon (or when, where, if).",
+  "documents": "CONSTRUCT; upon, when, if, where give the same requirement by the official parser (S1a), so the keyword choice among them is immaterial",
+  "parser_check": "S1a"
+ },
+ "R-EARS-IF": {
+  "file": "condition.md",
+  "quote": "A regular condition is introduced by the keyword upon (or when, where, if).",
+  "documents": "CONSTRUCT; upon, when, if, where give the same requirement by the official parser (S1a), so the keyword choice among them is immaterial",
+  "parser_check": "S1a"
+ },
+ "R-ADV-WHEN": {
+  "file": "condition.md",
+  "quote": "A regular condition is introduced by the keyword upon (or when, where, if).",
+  "documents": "CONSTRUCT; upon, when, if, where give the same requirement by the official parser (S1a), so the keyword choice among them is immaterial",
+  "parser_check": "S1a"
+ },
+ "R-ADV-IF": {
+  "file": "condition.md",
+  "quote": "A regular condition is introduced by the keyword upon (or when, where, if).",
+  "documents": "CONSTRUCT; upon, when, if, where give the same requirement by the official parser (S1a), so the keyword choice among them is immaterial",
+  "parser_check": "S1a"
+ },
+ "R-MAS-IF": {
+  "file": "condition.md",
+  "quote": "A regular condition is introduced by the keyword upon (or when, where, if).",
+  "documents": "CONSTRUCT; upon, when, if, where give the same requirement by the official parser (S1a), so the keyword choice among them is immaterial",
+  "parser_check": "S1a"
+ },
+ "R-MAS-SOON": {
+  "file": "condition.md",
+  "quote": "A regular condition is introduced by the keyword upon (or when, where, if).",
+  "documents": "CONSTRUCT; upon, when, if, where give the same requirement by the official parser (S1a), so the keyword choice among them is immaterial",
+  "parser_check": "S1a"
+ },
+ "R-BP-IF": {
+  "file": "condition.md",
+  "quote": "A regular condition is introduced by the keyword upon (or when, where, if).",
+  "documents": "CONSTRUCT; upon, when, if, where give the same requirement by the official parser (S1a), so the keyword choice among them is immaterial",
+  "parser_check": "S1a"
+ },
+ "R2-COND-INTENT": {
+  "file": "condition.md",
+  "quote": "A holding condition is introduced by the keyword whenever.",
+  "documents": "CONSTRUCT",
+  "parser_check": "S3"
+ },
+ "R-EARS-WHILE": {
+  "file": "scope.md",
+  "quote": "The keyword While for boolean expressions has a meaning like In for mode variables.",
+  "documents": "CONSTRUCT"
+ },
+ "R-ADV-WHILE": {
+  "file": "scope.md",
+  "quote": "The keyword While for boolean expressions has a meaning like In for mode variables.",
+  "documents": "CONSTRUCT"
+ },
+ "R-MAS-LONG": {
+  "file": "scope.md",
+  "quote": "The keyword While for boolean expressions has a meaning like In for mode variables.",
+  "documents": "CONSTRUCT"
+ },
+ "R-BP-WHILE": {
+  "file": "scope.md",
+  "quote": "The keyword While for boolean expressions has a meaning like In for mode variables.",
+  "documents": "CONSTRUCT"
+ },
+ "R-SP-BEFORE": {
+  "file": "scope.md",
+  "quote": "Before taxiing & receivedClearance the plane shall always satisfy !takeoff",
+  "documents": "CONSTRUCT"
+ },
+ "R-SP-AFTER": {
+  "file": "scope.md",
+  "quote": "After landed & powerOff the doors shall within 3 seconds satisfy unlocked",
+  "documents": "CONSTRUCT"
+ },
+ "R-TIME-UNTIL": {
+  "file": "timing.md",
+  "quote": "The timing until means that the response must hold at least until strictly before the STOP_Condition holds.",
+  "documents": "CONSTRUCT"
+ },
+ "R-TIME-BEFORE": {
+  "file": "timing.md",
+  "quote": "The timing before means that the response must happen at least once strictly before the STOP_CONDITION holds.",
+  "documents": "CONSTRUCT"
+ },
+ "R-TIME-NEXT": {
+  "file": "timing.md",
+  "quote": "When currentOverload the circuitBreaker shall, at the next timepoint, satisfy shutoff",
+  "documents": "CONSTRUCT"
+ },
+ "R-TIME-WITHIN": {
+  "file": "timing.md",
+  "quote": "In landing mode, the the system shall within 2 seconds satisfy is_stable",
+  "documents": "CONSTRUCT"
+ },
+ "R-TIME-FOR": {
+  "file": "timing.md",
+  "quote": "When errorCondition, the system shall, for 4 seconds, satisfy alarmOn",
+  "documents": "CONSTRUCT"
+ },
+ "R-TIME-AFTER": {
+  "file": "timing.md",
+  "quote": "When input = 1, the integrator shall, after 10 ticks, satisfy output=10",
+  "documents": "CONSTRUCT"
+ },
+ "R-SP-UNIV": {
+  "file": "timing.md",
+  "quote": "The autopilot shall always satisfy if allGood then state = nominal",
+  "documents": "CONSTRUCT"
+ },
+ "R-SP-ABS": {
+  "file": "timing.md",
+  "quote": "In drivingMode the system shall never satisfy cellPhoneOn & !cellPhoneHandsFree",
+  "documents": "CONSTRUCT"
+ },
+ "R-SP-EXIST": {
+  "file": "timing.md",
+  "quote": "In landingMode the system shall eventually satisfy LandingGearLowered",
+  "documents": "CONSTRUCT"
+ },
+ "R-NEG": {
+  "file": "timing.md",
+  "quote": "In drivingMode the system shall never satisfy cellPhoneOn & !cellPhoneHandsFree",
+  "documents": "CONSTRUCT"
+ },
+ "R2-TM-SLOT": {
+  "file": "timing.md",
+  "quote": "immediately, initially, at the first timepoint, at the same timepoint (synonyms)",
+  "documents": "CONSTRUCT"
+ },
+ "R-MULTI": {
+  "file": "condition.md",
+  "quote": "The condition can be a sequence of Boolean expressions, optionally connected by the keywords and and or.",
+  "documents": "CONSTRUCT"
+ },
+ "R-ADV-HY": {
+  "file": "scope.md",
+  "quote": "The keyword While for boolean expressions has a meaning like In for mode variables.",
+  "also": [
+   {
+    "file": "condition.md",
+    "quote": "A regular condition is introduced by the keyword upon (or when, where, if)."
+   }
+  ],
+  "documents": "CONSTRUCT (scope and condition are independent fields)"
+ },
+ "R-BP-SUFFIX": {
+  "file": "timing.md",
+  "quote": "In landing mode, the the system shall within 2 seconds satisfy is_stable",
+  "documents": "CONSTRUCT (routes to the R-TIME rules)"
+ },
+ "R-BP-UNLESS": {
+  "file": "condition.md",
+  "quote": "A regular condition is introduced by the keyword upon (or when, where, if).",
+  "parser_check": "S2",
+  "documents": "CONSTRUCT; `unless p` is `if !(p)` by the official parser (S2)"
+ },
+ "R-MAS-ABLE": {
+  "file": "response.md",
+  "quote": "The current version of FRET supports the form: satisfy BEXP (Boolean Expression, see the help for the Condition field).",
+  "documents": "FORCED BY THE TARGET FORM: FRETish has one response form (satisfy BEXP), so template wrapper words have no slot; the loss is recorded (unmapped_content)"
+ },
+ "R-MAS-PROVIDE": {
+  "file": "response.md",
+  "quote": "The current version of FRET supports the form: satisfy BEXP (Boolean Expression, see the help for the Condition field).",
+  "documents": "FORCED BY THE TARGET FORM: FRETish has one response form (satisfy BEXP), so template wrapper words have no slot; the loss is recorded (unmapped_content)"
+ },
+ "R-ADV-PERFORM": {
+  "file": "response.md",
+  "quote": "The current version of FRET supports the form: satisfy BEXP (Boolean Expression, see the help for the Condition field).",
+  "documents": "FORCED BY THE TARGET FORM: FRETish has one response form (satisfy BEXP), so template wrapper words have no slot; the loss is recorded (unmapped_content)"
+ },
+ "R-COMP": {
+  "file": "component.md",
+  "quote": "ID is an identifier starting with an upper- or lower-case letter, followed by letters, digits or underscores",
+  "documents": "CONSTRUCT (identifier shape); snake_case of the subject words is mechanical"
+ },
+ "R-SP-COMP": {
+  "file": "component.md",
+  "quote": "Component (mandatory)",
+  "documents": "FORCED BY THE TARGET FORM: the component field is mandatory and SPIDER has no subject, so a content-free identifier is required"
+ },
+ "R-SP-NOMAP": {
+  "file": "timing.md",
+  "quote": "Supported options are",
+  "documents": "REFUSAL: no FRETish construct is documented for chain, bounded existence, maximum duration, periodic recurrence; the tool produces no sentence (failure recorded, free path)"
+ }
+}

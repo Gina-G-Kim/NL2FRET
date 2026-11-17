@@ -1,0 +1,77 @@
+TASK: Rewrite the natural language requirement given by the user into the requirement template described below. Input: one natural language requirement (the user message). Output: sentence(s) in that template.
+
+GENERAL RULES (apply to every task)
+- Carry every piece of information of the input into the output: component and variable names, numbers and units, parenthetical hints, qualifiers, conditions, order of events, negations, modal strength.
+- Use identifiers, numbers and thresholds that appear in the input. Content that cannot be expressed goes into "unmapped_content".
+- Where the specification leaves a choice open (for example two keywords could both describe the situation), decide yourself and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each).
+- Reply with exactly one compact JSON object on a single line, as plain text, with short strings. The whole reply is read by the program as one JSON document.
+
+OUTPUT SCHEMA (stage A: natural language -> template)
+{"sentences": ["<one or more sentences that follow the template specification>"],
+ "requirement_type": "<name of the template form or type you used>",
+ "split_reason": "<empty if one sentence, otherwise why the input needed several sentences>",
+ "choices": [{"point": "<what had to be decided, e.g. condition keyword>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that the template cannot carry>"]}
+Use several sentences only when one template sentence cannot carry the input. Write sentences of the template.
+
+TEMPLATE SPECIFICATION
+# TEMPLATE: MASTeR (SOPHIST requirement templates)
+
+## Liability words (brochure 2.1, English figure 2.9)
+
+SHALL, SHOULD, WILL (German MUSS, SOLLTE, WIRD).
+- MUSS: mandatory in implementation.
+- SOLLTE: a wish of stakeholders, not mandatory.
+- WIRD: the intention of stakeholders, a preparation for a function to be integrated in the future.
+
+## FunctionalMASTER (2.1, 2.3)
+
+Positions: <subject matter>, liability word, one of three kinds of functionality, <verb>, <object>.
+The three kinds of functionality:
+- independent system activity: SHALL <verb> <object>
+- user interaction: SHALL PROVIDE <whom?|what?> WITH THE ABILITY TO <verb> <object>
+- interface requirement: SHALL BE ABLE TO <verb> <object>
+"The FunctionalMASTER can optionally start with a condition. If the requirement is not tied to a condition, the subject matter is in the first position." In English the verb stands before the object.
+English examples from the brochure:
+  "The system shall design postcards."
+  "The system should provide the user with the ability to search items."
+  "The system will provide the user with the ability to print selected colored photos at the network printer."
+German condition examples (2.1): "Sobald das Ereignis Geburtstag eintritt, muss das System dem Benutzer einen Kalendereintrag anzeigen." and "Falls der Benutzer einen Termin eingibt, muss das System dem Benutzer die Moeglichkeit bieten, den Termin zu speichern."
+Condition position (2.1): the condition, as a subordinate clause, opens the sentence; then, in German, after a comma comes the liability word and then the subject matter.
+
+## Detailed FunctionalMASTER (2.2, English figure 2.10)
+
+Not a separate template. It adds optional detail to the last positions:
+- detailed definition of the object: [<what?>] [<whose?>] [<which?>] before or after <object>
+- details on the verb, before the verb: [<when?>] [<where to/from?>] [<to whom/what/which?>] [<from whom/what/which?>]
+"When? specifies the point in time at which a process is started or is to be available." The question word "how" is deliberately not included because it would add non-functional parts.
+
+## Non-functional templates (3.3 to 3.6, English figures 3.5 to 3.7)
+
+- PropertyMASTER (EigenschaftsMASTER), English figure 3.5: [<condition>] <subject matter> SHALL|SHOULD|WILL <verb> <property> [<comparison operator>] <value>.
+  The value is mandatory, the comparison operator is optional. In German the sentence ends with a verb that does not describe a function (figure 3.2).
+  Example (German): "Das Gewicht des Smartphone muss kleiner gleich 100g sein."
+- EnvironmentMASTER (UmgebungsMASTER), English figure 3.6: [<condition>] <subject matter> SHALL|SHOULD|WILL <verb (group)> <environmental effect> [<comparison expression>] <value>.
+  In German (figure 3.3) the condition is inserted in the middle of the sentence.
+- ProcessMASTER (ProzessMASTER), English figure 3.7: [<condition>] <actor> SHALL|SHOULD|WILL <verb> <object>. In German (figure 3.4): [<condition>] liability word <actor> <object> <verb>.
+  Example (German): "Der Auftragnehmer muss ein Betriebshandbuch fuer den MP3-Player erstellen."
+Text of 3.6: "On the first position of the PropertyMASTER and the ProcessMASTER a condition can optionally stand." The text also says that the second position (the first without a condition) of the three templates holds different language material, in contrast to the FunctionalMASTER.
+
+## ConditionMASTER (chapter 4, English figure 4.5)
+
+"Instead of one ambiguous conjunction the ConditionMASTER uses three different conjunctions." The German conjunction WENN has five meanings according to Duden, which is why three keywords are used.
+  <event>          AS SOON AS   (EreignisMASTER, German SOBALD)
+  <logical expression>  IF      (LogikMASTER, German FALLS)
+  <time period>    AS LONG AS   (ZeitraumMASTER, German SOLANGE)
+followed by the requirements main clause.
+Meaning of the three keywords (4.2):
+- IF introduces a logical statement. Recommended tense: present. The statement cannot be in the past.
+- AS SOON AS puts the point in time at which an event occurs in the foreground. Condition and main clause are not simultaneous: "Only when the condition has ended does the behaviour of the main clause begin or hold." Recommended tense for the full verb: perfect.
+- AS LONG AS refers to a time period. Condition and main clause run at the same time and both end at the same time.
+Paths of the subordinate clause (English figures 4.6 to 4.8):
+- IF: <subject matter | actor | compared object> <qualifying expression> IS <value>; or IF <actor> <verb> <object>; or IF <subject matter|actor> <verb> THE FUNCTION <function>.
+- AS SOON AS: THE EVENT <event> HAPPENS; or <actor|subject matter> <process verb> <object>; or <actor|subject matter> <verb> THE FUNCTION <function>.
+- AS LONG AS: <subject matter|actor|object> IS IN THE STATE <state>; or <actor|subject matter> <process verb> <object>; or THE FUNCTION <function> IS <process verb>.
+"All slots can be the same and the condition differs only in the conjunction."
+The ConditionMASTER is an optional extension of the functional and non-functional templates.
+Examples (German, 4.3): "Falls das Bibliothekssystem das Leihobjekt nicht identifiziert, ..."; "Sobald das Ereignis Einschalten eintritt, ..."; "Solange sich das Smartphone im Zustand Inaktiv befindet, ...".

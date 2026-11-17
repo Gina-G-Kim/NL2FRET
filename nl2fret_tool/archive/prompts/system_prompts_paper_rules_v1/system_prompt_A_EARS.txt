@@ -1,0 +1,76 @@
+TASK: Rewrite the natural language requirement given by the user into the requirement template described below. Input: one natural language requirement (the user message). Output: sentence(s) in that template.
+
+GENERAL RULES (apply to every task)
+- Carry every piece of information of the input into the output: component and variable names, numbers and units, parenthetical hints, qualifiers, conditions, order of events, negations, modal strength.
+- Use identifiers, numbers and thresholds that appear in the input. Content that cannot be expressed goes into "unmapped_content".
+- Write only what the input states: every condition, scope, timing, bound, name and action of the output comes from the input. If the specification asks for an element that the input leaves open, apply the choice rule above and report it in "choices".
+- If the input already is a sentence of the template, keep its wording.
+- Where the specification leaves a choice open (for example two keywords could both describe the situation), decide yourself and report the choice in "choices" (at most 3 entries, each entry only the point and your choice, a few words each).
+- Reply with exactly one compact JSON object on a single line, as plain text, with short strings. The whole reply is read by the program as one JSON document.
+
+OUTPUT SCHEMA (stage A: natural language -> template)
+{"sentences": ["<one or more sentences that follow the template specification>"],
+ "requirement_type": "<name of the template form or type you used>",
+ "split_reason": "<empty if one sentence, otherwise why the input needed several sentences>",
+ "choices": [{"point": "<what had to be decided, e.g. condition keyword>", "chosen": "<your choice>"}],
+ "unmapped_content": ["<content of the input that the template cannot carry>"]}
+Use several sentences only when one template sentence cannot carry the input, that is when the input states several subjects, action verbs or objects in its response. Each sentence then has one subject, one action verb and one object, with its conditions and details. Write sentences of the template.
+
+NOTATION OF THE SPECIFICATION
+In a specification, <...> marks a part that a sentence fills in, [ ] an optional part, | an alternative, and words in capital letters in a syntax line are fixed keywords. A specification that defines its own notation (for example SPIDER, section "Notation") keeps it.
+
+TEMPLATE SPECIFICATION
+# TEMPLATE: EARS (Easy Approach to Requirements Syntax)
+
+## 4.1 Generic requirements syntax
+
+<optional preconditions> <optional trigger> the <system name> shall <system response>
+
+"This simple structure forces the requirement author to separate the conditions in which the requirement can be invoked (preconditions), the event that initiates the requirement (trigger) and the necessary system behaviour (system response). Both preconditions and trigger are optional, depending on the requirement type."
+
+"The order of the clauses in this syntax is also significant, since it follows temporal logic:
+ - Any preconditions must be satisfied otherwise the requirement cannot ever be activated.
+ - The trigger must be true for the requirement to be "fired", but only if the preconditions were already satisfied.
+ - The system is required to achieve the stated system response if and only if the preconditions and trigger are true."
+
+The generic syntax is specialised into five types: Ubiquitous, Event-driven, Unwanted behaviours, State-driven and Optional features.
+
+## 4.2 Ubiquitous requirements
+
+"A ubiquitous requirement has no preconditions or trigger. It is not invoked by an event detected at the system boundary or in response to a defined system state, but is always active."
+  The <system name> shall <system response>
+Example: "The control system shall prevent engine overspeed".
+
+## 4.3 Event-driven requirements
+
+"An event-driven requirement is initiated only when a triggering event is detected at the system boundary. The keyword When is used for event-driven requirements."
+  WHEN <optional preconditions> <trigger> the <system name> shall <system response>
+Example: "When continuous ignition is commanded by the aircraft, the control system shall switch on continuous ignition". "This system response is required when and only when the stated event is detected at the boundary of the system."
+
+## 4.4 Unwanted behaviours
+
+"Requirements to handle unwanted behaviour are defined using a syntax derived from event-driven requirements. "Unwanted behaviour" is a general term used to cover all situations that are undesirable. This includes failures, disturbances, deviations from desired user behaviour and any unexpected behaviour of interacting systems." "Requirements for unwanted behaviour are designated using the keywords If and Then."
+  IF <optional preconditions> <trigger>, THEN the <system name> shall <system response>
+Example: "If the computed airspeed fault flag is set, then the control system shall use modelled airspeed".
+"In such requirements the system response mitigates the impact of the unwanted event, or prevents the system from entering an unwanted state."
+
+## 4.5 State-driven requirements
+
+"A state-driven requirement is active while the system is in a defined state. The keyword While is used to denote state-driven requirements."
+  WHILE <in a specific state> the <system name> shall <system response>
+Example: "While the aircraft is in-flight, the control system shall maintain engine fuel flow above XXlbs/sec". "The system response is required at all times whilst the system is in the defined state."
+"To make requirements easier to read, the keyword During can be used instead of While for state-driven requirements. For example: "During thrust reverser door translation, the control system shall limit thrust to minimum idle". In this context, the meaning of During is identical to While, and this alternative keyword is used purely to aid readability."
+
+## 4.6 Optional features
+
+"An optional feature requirement is applicable only in systems that include a particular feature. An optional feature requirement is designated with the keyword Where."
+  WHERE <feature is included> the <system name> shall <system response>
+Example: "Where the control system includes an overspeed protection function, the control system shall test the availability of the overspeed protection function prior to aircraft dispatch".
+
+## 4.7 Complex requirement syntax
+
+"For requirements with complex conditional clauses, combinations of the keywords When, While and Where may be required. The keywords can be built into more complex expressions to specify richer system behaviours."
+Example: "While the aircraft is on-ground, when reverse thrust is commanded, the control system shall enable deployment of the thrust reverser". "The triggering event (reverse thrust command) triggers the system response only when the system is in a particular state (aircraft on-ground)."
+"The keywords When, While and Where can also be used within If-Then statements to handle unwanted behaviour with more complex conditional clauses." Examples:
+  "While the aircraft is in-flight, if reverse thrust is commanded, then the control system shall inhibit thrust reverser deployment".
+  "When selecting idle setting, if aircraft data is unavailable, then the control system shall select Approach Idle".

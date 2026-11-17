@@ -1,0 +1,13 @@
+{"id": "LM-01_FSM-N01", "raw_nl": "Exceeding sensor limits shall latch an autopilot pullup when the pilot is not in control (not standby) and the system is supported without failures (not apfail).", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N02", "raw_nl": "The autopilot shall change states from TRANSITION to STANDBY when the pilot is in control (standby).", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N03", "raw_nl": "The autopilot shall change states from TRANSITION to NOMINAL when the system is supported and sensor data is good.", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N04", "raw_nl": "The autopilot shall change states from NOMINAL to MANEUVER when the sensor data is not good.", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N05", "raw_nl": "The autopilot shall change states from NOMINAL to STANDBY when the pilot is in control (standby).", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N06", "raw_nl": "The autopilot shall change states from MANEUVER to STANDBY when the pilot is in control (standby) and sensor data is good.", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N07", "raw_nl": "The autopilot shall change states from PULLUP to TRANSITION when the system is supported and sensor data is good.", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N08", "raw_nl": "The autopilot shall change states from STANDBY to TRANSITION when the pilot is not in control (not standby).", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N09", "raw_nl": "The autopilot shall change states from STANDBY to MANEUVER when a failure occurs (apfail).", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N10", "raw_nl": "The sensor shall change states from NOMINAL to FAULT when limits are exceeded.", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N11", "raw_nl": "The sensor shall change states from NOMINAL to TRANSITION when the autopilot is not requesting support (not request).", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N12", "raw_nl": "The sensor shall change states from FAULT to TRANSITION when the autopilot is not requesting support (not request) and limits are not exceeded (not limits).", "family": "01_FSM", "challenge": "01_FSM"}
+{"id": "LM-01_FSM-N13", "raw_nl": "The sensor shall change states from TRANSITION to NOMINAL when the autopilot is requesting support (request) and the autopilot reports the correct active mode (mode).", "family": "01_FSM", "challenge": "01_FSM"}
