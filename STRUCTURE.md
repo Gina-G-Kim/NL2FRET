@@ -4,25 +4,24 @@ Cleanup date: 2026-11-08. All moves were made with plain `mv`; no git commands w
 
 ## 1. Layout
 
+Current layout (since 2026-11-17, sections 4i and 4j). Earlier layouts are described in the sections 4 to 4h.
+
 ```
-nl2semiformal/                  root (name and location unchanged)
-  README.md  STRUCTURE.md  MOVE_LOG.csv  Makefile  .gitignore
+nl2semiformal/                  root: the research workspace only
+  README.md  STRUCTURE.md
   testnote.md                   run instructions maintained by the project owner, kept at the root
-  docs/                         paper (in progress, excluded from git), references, analysis-format document, survey notes of this cleanup (refactor_plan, excluded from git)
-  prompts/current/              the current prompts as files: model-facing prompts, assembled system prompts, instruction prompts (added 2026-11-11, see section 4c)
-  prompts/INDEX.md              index of the current prompts and of the historical prompt and instruction documents (historical originals are inside the experiment folders)
-  nl2fret_tool/                 the final tool, release 1.4 (113 files; release 1.2.0 is in archive/nl2fret_tool/v1.2.0/; see sections 4c and 4f)
-  docker/                       build recipes of the Docker images fret-lab and cst-nusmv (added 2026-11-11, see section 4c)
-  assets/  archive/  VERSIONS.md  versioned copies of the assets of the experiments, older versions after a version-up, and the version index (added 2026-11-13, see section 4d)
-  data/INDEX.md                 index of the input data with hashes (originals are inside the experiment folders)
-  data/cases/                   organized input cases: nasa_papers/ (183), lockheed_martin/ (49), fsm/ (12; original membership in ORIGIN_MAP.csv). Each folder has a SOURCES.md
-  tools/build_cases.py          script that rebuilds data/cases from experiments/
-  tools/render_prompts.py       renders prompts/current/system_prompts/ from nl2fret_tool/bench (and checks them with --check)
-  results/INDEX.md              index of the result folders (originals are inside the experiment folders)
-  experiments/                  14 experiment run folders (12 existing ones with names and internal structure unchanged, plus nusmv_paper and judge_recording added on 2026-11-09)
-  packages/ltlpack/             NuSMV/Spot comparison study (formerly ltl_engines; includes pack/, scripts/, notes/ and others)
-  tests/run_selftests.sh        wrapper that runs the existing selftests and a representative metric
-  unsorted/                     files whose purpose could not be determined (excluded from git)
+  nl2fret_tool/                 the tool (a PyPA project) and everything that belongs to it
+    pyproject.toml  VERSION  VERSIONS.md  Makefile  README.md  .gitignore
+    src/                        nl2fret (generation pipeline), nl2fret_judge (judging), legacy (alignment candidates of the judge)
+    tests/  scripts/            tests; run scripts and maintenance scripts (render_prompts.py, build_cases.py, verify_lm_docx.py, run_selftests.sh)
+    prompts/                    current/: the current prompts as files; INDEX.md
+    data/                       dataset/, dictionary/, reference/, audit/, cases/ (organized input cases), INDEX.md
+    assets/  archive/           versioned copies of the assets; older releases (archive/releases/), removed features, old documents (version index: VERSIONS.md)
+    external/docker/            build recipes of the Docker images fret-lab and cst-nusmv (external programs)
+    docs/                       RUNBOOK, DESIGN, V20_BATCH_DESIGN, TOOL_PROCESS_GUIDE and others
+    runs/                       run output (not tracked)
+  experiments/                  one folder per experiment (000_INDEX.md numbers them and carries the folder rule of section 4k, RESULTS_INDEX.md indexes the result folders)
+  docs/                         project documents: the analysis-format document, references/, paper/ (excluded from git), refactor_plan/ (excluded from git), records/ (MOVE_LOG.csv, UNVERIFIED.md)
 ```
 
 ## 2. Classification rules (none newly created)
@@ -127,6 +126,142 @@ At the request of the project owner the main directory always holds the latest v
 | `docs/TOOL_PROCESS_GUIDE.md` added | process-by-process description of release 1.4 with one worked example; all paths are relative to the main directory |
 | Not changed | `assets/` (the data assets `dataset`, `dictionary` and `reference` v1 are byte-identical to `nl2fret_tool/data/`), `docs/PROCESS_LIFECYCLE.md` (its `nl2fret_tool/` paths describe the layout of release 1.2.0, now in `archive/nl2fret_tool/v1.2.0/`), `experiments/` (each experiment keeps its own copy of the package) |
 
+## 4g. Later changes (2026-11-16): the final tool is updated to release 2.0
+
+The package `nl2fret_tool_v1.6.zip` (sha256 `b5fc55e257951d117cbb77bef949b8394242e0dee863c68cbde8475591e5b185`) was installed as release 2.0 (instruction `testnote.md`, work in `experiments/025_tool_v20_install/`). The main directory holds the installed tool; the experiment folder holds the unpacked original, the work copy and the checks.
+
+| Change | Detail |
+|---|---|
+| `nl2fret_tool/` replaced | release 2.0, 191 files: the unpacked package plus the edits listed in `experiments/025_tool_v20_install/notes/CHANGES.md`; `bench/FROZEN_MANIFEST.sha256` regenerated (74 entries, the shipped file list, 4 changed entries); `python3 -m pytest tests -q`: 50 passed; the judging folder is byte-identical to release 1.4 (v1.0.0 line, no freeze files) |
+| `archive/nl2fret_tool/v1.4/` added | the previous release 1.4 moved as it was (113 files) |
+| `prompts/current/` | `fretish_guide.md` and the five `templates/` now hold the release 2.0 documents (`bench/prompts/fretish_reference.md`, `bench/templates_v15/`), `sources_v15.json` added, `system_prompts/` holds the 17 prompts of the 11 approaches (hashes equal those of the shipped smoke run), `SHA256SUMS` recomputed (34 files) |
+| `tools/render_prompts.py` | sets the switches of release 2.0 like `batch_pipeline.main()` (adds `--fret-reference`, `--intent-decl` off) |
+| `prompts/INDEX.md`, `README.md`, `VERSIONS.md`, `archive/README.md`, `STRUCTURE.md` | updated for release 2.0 |
+| `docs/TOOL_PROCESS_GUIDE.md` rewritten | process-by-process description of release 2.0 with one worked example from a real run (challenge `06_EB`, item `LM-06_EB-N1`); built from the tool files by `experiments/025_tool_v20_install/scripts/guide/build_guide_v20.py` and checked by `verify_guide_v20.py` (59 checks) |
+| `assets/dictionary/v2/` added | dictionary v2 = v1 plus the columns `alias_of` and `alias_evidence` (9 alias pairs with an original text evidence in the NASA requirement EB-001; 33 candidate pairs without evidence are unknown); `build_alias_v2.py`, `alias_evidence.json`; v1 moved to `archive/dictionary/v1/`; `nl2fret_tool/data/dictionary/lm_dictionary.csv` is the v2 file; the dictionary text that the model sees (`bench/data/sigdict.json`) is unchanged | (superseded on 2026-11-17, see 4h: v2 moved to the extension overlay, v1 is current again)
+| Measurement rules | `docs/V20_BATCH_DESIGN.md` section 7 (N-LIT and the primary and secondary rule for Realizability), implemented in `bench/fret_check/tools/litnorm.py`, `bench/fret_check/group_rlz.py`, `bench/fret_check/check.py` (the J+def and alias parts of the first version of this row were withdrawn on 2026-11-17, see 4h) |
+| Not changed | `docs/PROCESS_LIFECYCLE.md` (describes release 1.2.0), `assets/` other than the dictionary, `experiments/` |
+
+## 4h. Later changes (2026-11-17): the tool is tidied up to the original design
+
+| Item | Change |
+|---|---|
+| `docs/V20_BATCH_DESIGN.md` | research question at the top, roles of reference and dictionary, decisions (strict judgment primary, agent definition, known limits), section 8 (extension modules), section 9 (withdrawn) |
+| `archive/removed_features/` added | J+def (`make_def_inputs.py`, functions of `litnorm.py`, `judgedef` step, `rt_effect_strict.json` split), their tests and the withdrawn design sections; `README.md` there gives reason and restore method |
+| `nl2fret_tool/bench/ext/` added | extension hook (`__init__.py`) and the extension `dictionary` (`README.md`, `attach.py`, `judge_input.py`, `build.py`, `versions/v1/`, `overlays/v2/`); flag `--ext` in `run_pipeline.py` and `batch_pipeline.py`, variable `EXT` (default `dictionary`) in `exp/fsm/run_batch.sh` |
+| `assets/dictionary/v1/` | current again (moved back from `archive/dictionary/v1/`); the v2 files moved to the extension overlay; `nl2fret_tool/data/dictionary/lm_dictionary.csv` is the v1 file again (sha256 cf3752af...) |
+| Not changed | the 17 system prompts (with the extension on), `judging/` (19 code files), input data, `bench/data/sigdict.json` |
+
+## 4i. Later changes (2026-11-17): PyPA structure (experiment `experiments/026_pypa_restructure/`, plan and gates in its `notes/PLAN.md`)
+
+Basis: the Python Packaging User Guide (pyproject.toml with `[build-system]` and `[project]`, src layout, tests outside the package, package data declared, `python -m build`). The request was to restructure by PyPA rules and not only to move directories.
+
+| Item | Change |
+|---|---|
+| `nl2fret_tool/pyproject.toml` added | setuptools build, project name `nl2fret`, version from `VERSION`, dependency `z3-solver`, extra `test`, scripts `nl2fret-batch`, `nl2fret-run`, `nl2fret-judge`, package data, pytest settings |
+| `nl2fret_tool/bench/` -> `src/nl2fret/` | the folder was renamed as a whole, so its inner structure (`data/`, `prompts/`, `templates*/`, `tools/`, `fret_check/`, `ext/`) is unchanged. The flat imports (`import common`) became package imports (124 import lines) and 46 `sys.path.insert` helper lines were removed; `paths.py` (PACKAGE, PROJECT) replaces path computations that reached above the old `bench/` folder. 27 Python files changed, 249 changed lines; all changed lines are imports, path computations, usage lines of docstrings and blank lines (the list is in `experiments/026_pypa_restructure/notes/BYTE_CHANGES.md`). 59 manifest files are byte-identical (the 29 others are the 27 Python files and two non-code files: the dictionary extension README and its version record) |
+| `nl2fret_tool/judging/nl2fret_judge/`, `judging/legacy/` -> `src/nl2fret_judge/`, `src/legacy/` | moved only, all 19 code files byte-identical (`align.py` finds `legacy` next to the package folder, so the siblings stay siblings) |
+| `nl2fret_tool/exp/fsm/*.sh` -> `scripts/` | the three scripts call `python -m nl2fret...` through the variable `PYTHON` |
+| `nl2fret_tool/tests/` | `sys.path` helper lines removed; the tests import the installed package |
+| `nl2fret_tool/Makefile`, `README.md`, `docs/RUNBOOK.md`, `docs/DESIGN.md` | rewritten for release 2.0 (originals in `archive/nl2fret_tool_docs/v1.4/`, together with `EXPERIMENT_FSM.md`, `controls_nusmv512/`, `old_prompts/`, `NL2FRET_PROMPT_FSM_V14_MAC.md` and `requirements.txt`); `ANALYSIS_PLAN.md`, `V14_GUIDE_SUPPLEMENT.md`, `V14_INTENT_TEST.md` stay in `docs/` because code or scripts of release 2.0 cite them |
+| `src/nl2fret/FROZEN_MANIFEST.sha256` | regenerated at the new path (93 entries; the former 88-entry list is kept in `experiments/026_pypa_restructure/notes/FROZEN_MANIFEST_before_pypa.sha256`) |
+| root files | `MOVE_LOG.csv` and `UNVERIFIED.md` -> `docs/records/`; `results/INDEX.md` -> `experiments/RESULTS_INDEX.md`; `unsorted/` -> `archive/unsorted/`; `tests/run_selftests.sh` -> `tools/run_selftests.sh`; `docs/PROCESS_LIFECYCLE.md` -> `archive/process_lifecycle_doc/v1/`; `.gitignore` entries follow the new paths |
+| `tools/render_prompts.py` | imports the installed package instead of adding `bench/` to the path |
+| `docs/TOOL_PROCESS_GUIDE.md` | rebuilt with the new paths |
+| Not changed | the 17 system prompts, `src/nl2fret_judge/` and `src/legacy/` code, the input data, `sigdict.json`, dictionary v1, `experiments/` (other folders) and `archive/` contents, `packages/ltlpack/`, `docker/`, `testnote.md` |
+
+## 4j. Later changes (2026-11-17): everything that belongs to the tool moves into the tool folder (experiment `experiments/027_workspace_layout/`, plan in its `notes/PLAN.md`)
+
+Request of the project owner: the root `tools/` duplicated `nl2fret_tool/`, and prompts, packages, assets and data belong inside the tool folder; the Docker folder holds external programs and does not belong at the root. All moves were made with plain `mv` (file counts before and after are in the experiment notes); no files were deleted.
+
+| Before (root) | After (inside `nl2fret_tool/`) |
+|---|---|
+| `tools/` (render_prompts.py, build_cases.py, verify_lm_docx.py, run_selftests.sh) | `scripts/` (next to the run scripts; the path constants of the scripts were adapted) |
+| `prompts/` | `prompts/` |
+| `assets/`, `VERSIONS.md` | `assets/`, `VERSIONS.md` |
+| `archive/` (`archive/nl2fret_tool/` renamed to `archive/releases/`) | `archive/` |
+| `data/` (INDEX.md, cases/) | merged into `data/` (the former empty `data/cases/` was replaced) |
+| `packages/ltlpack/` | `studies/ltlpack/` |
+| `docker/` | `external/docker/` |
+| `docs/TOOL_PROCESS_GUIDE.md` | `docs/TOOL_PROCESS_GUIDE.md` |
+| `Makefile` (root; text kept in the experiment notes) | the target `selftest` of the tool `Makefile` |
+
+Hash list removed at the same time (request: remove what is not needed): `src/nl2fret/FROZEN_MANIFEST.sha256`, `make freeze-check`, its `package-data` entry and the sha256 column of `VERSIONS.md` (moved to `archive/removed_features/`, reason and restore method in its README); the code is fixed by a git release tag. Kept: run snapshots, judge headers, the parser fingerprint, `render_prompts.py --check`, the `SHA256SUMS` files inside the asset folders.
+Documents inside the tool folder name paths relative to the tool folder; `.gitignore`: the tool patterns `runs/` and `inputs/` are anchored to the tool root (the unanchored `inputs/` would have hidden `studies/ltlpack/inputs/`), the entry of `archive/unsorted/` follows the move. Not changed: `experiments/` (the historical documents of the experiment folders keep the old paths), `testnote.md`, the history sections of this file.
+
+## 4k. Later changes (2026-11-17): experiment folder rule
+
+Instruction of the project owner: `experiments/` organizes, per experiment, only the data the experiment needs, the test package that the owner placed in the main directory, and a copy of `testnote.md`; the tool is the one in `nl2fret_tool/`. Answers to the follow-up questions: the rule applies from the new experiments on (028 and later; 001 to 027 stay as records), and the results are produced by the tool at its designated place (`nl2fret_tool/runs/`), then copied by the assistant into the experiment folder and zipped for the owner.
+
+| Item | Rule for 028 and later |
+|---|---|
+| `experiments/NNN_slug/inputs/` | data, the test package zip, `testnote.md` copy |
+| `experiments/NNN_slug/results/` | copy of the run output taken from `nl2fret_tool/runs/`; `REPORT.md`, `notes/` (pre-registration, change record) and `logs/` next to it when needed |
+| `experiments/NNN_slug/zips/` | the zip given to the owner |
+| tool code | never copied into an experiment folder; the run uses `nl2fret_tool/` |
+| `experiments/000_INDEX.md` | carries the rule at its head and numbers the folders |
+
+## 4l. Later changes (2026-11-17): tool documents consolidated, SHA files moved (experiment 027)
+
+Request of the project owner: keep only the latest documents in `nl2fret_tool/docs/` and move the old ones to the archive; merge when there are too many; and since the hash features were removed, clean up the SHA files as well.
+
+| Item | Change |
+|---|---|
+| `nl2fret_tool/docs/` now | `DESIGN.md`, `RUNBOOK.md`, `V20_BATCH_DESIGN.md` (normative pre-registration), `TOOL_PROCESS_GUIDE.md`. The README of the tool is the entry document |
+| moved to `archive/nl2fret_tool_docs/v1.4/docs/` | `ANALYSIS_PLAN.md`, `V14_GUIDE_SUPPLEMENT.md`, `V14_INTENT_TEST.md` (specifications of the release 1.4 tests; the docstrings of `analyze_run.py`, `compare_runs.py`, `prompt_lint.py` and the comments of `run_intent.sh` now name the archive path), `DATA_VERSIONING.md` (the version-up rule is at the head of `VERSIONS.md`), `TRACE_FORMAT.md` (describes the `gen/ inputs/ judge/` layout of release 1.4 runs, which the batch layout of release 2.0 does not use) |
+| moved | `docs/paper_passage_AP003c.txt` -> `data/paper_passage_AP003c.txt` (a data text read by the lint, not a document); `src/nl2fret/NL2FRET_PROMPT_v8_DICT_SMOKE.md` -> `archive/nl2fret_tool_docs/v1.4/package/` (a v8 instruction prompt inside the package; a copy is in `prompts/current/instructions/`) |
+| SHA files | the 22 `SHA256SUMS` files of the tool (19 asset folders, `prompts/current/`, `ext/dictionary/versions/v1/`, `ext/dictionary/overlays/v2/`) -> `archive/removed_features/sha_files/` with the same relative paths; `build.py` of the dictionary extension no longer reads or writes them and `EVIDENCE.json` lost its generator hash. Kept on purpose: the hash files inside the archived releases (snapshots), `external/docker/cst-nusmv/nusmv_context.sha256` (integrity check of a downloaded third-party binary context), the records of `studies/ltlpack/`, `prompts/current/system_prompts/MANIFEST.csv` (a table of the rendered prompts; its sha256 column is not a check) and the hashing inside the code (prompt hashes of the run snapshots, parser fingerprint) |
+| `docs/TOOL_PROCESS_GUIDE.md` | rebuilt (verification 66 checks) |
+
+## 4m. Later changes (2026-11-17): prompt text with the paper rules (experiment 028)
+
+Package `prompts_paper_rules_final.zip` of the project owner (instruction `MAC_INSTRUCTION.md`, `CHANGES.md`); plan, byte comparison and report in `experiments/028_prompt_paper_rules/`.
+
+| Item | Change |
+|---|---|
+| `nl2fret_tool/src/nl2fret/common.py` | wording G1 to G4 in the v1.5 constants and assembly; the assembled system prompts equal the 12 files of the package byte for byte |
+| `nl2fret_tool/prompts/current/system_prompts/` | 12 files (the 5 BF files, byte identical to the B files, are no longer kept); the 17 earlier files are in `archive/prompts/system_prompts_before_paper_rules/` |
+| run snapshot | no BF prompt files; hash stays in `run_info.json` |
+| `nl2fret_tool/prompts/current/instructions/` | moved to `archive/instructions/` (records of instructions to the executor, not model-facing prompts) |
+| `src/nl2fret/prompts/sources_v15.json` | replaced by the package file (entry `task_rules` added) |
+| `docs/V20_BATCH_DESIGN.md` | section 10 (dated) |
+| the uploaded zip | moved from the root to `experiments/028_prompt_paper_rules/inputs/` (experiment folder rule) |
+
+## 4n. Later changes (2026-11-17): the comparison study leaves the tool folder
+
+Question of the project owner: why are `studies/` and `tests/` in the tool folder, and should they not be in `experiments/`, `archive/` or `docs/`? Answer: `tests/` is the pytest suite of the package (PyPA keeps tests next to the package, outside `src/`) and stays. `studies/ltlpack/` is a research study with its own data, logs and results (NuSMV and Spot comparison on 610 pairs); no code of the tool imports it (only `scripts/run_selftests.sh` runs its selftest), so under the experiment folder rule it belongs to `experiments/`.
+
+| Before | After |
+|---|---|
+| `nl2fret_tool/studies/ltlpack/` (851 files) | `experiments/ltlpack/` (same files; `nl2fret_tool/studies/` removed) |
+
+`experiments/` is excluded from git (`.gitignore`, decision of 2026-11-08), so the study would have left git tracking with the move. To keep it tracked the `.gitignore` entry `experiments/` became `experiments/*` with the exceptions `!experiments/ltlpack/`, `!experiments/000_INDEX.md` and `!experiments/RESULTS_INDEX.md` (a file cannot be re-included while its parent folder is ignored, so the pattern had to change from the folder to its entries). The paths in the documents and in `scripts/run_selftests.sh` were updated; the historical documents of other experiment folders that name `packages/ltlpack` or `studies/ltlpack` were not changed. The Docker recipes of the external programs stay in `nl2fret_tool/external/docker/` (the Spot recipe is inside the study: `experiments/ltlpack/scripts/docker_spot/`).
+
+## 4o. Later changes (2026-11-17): prompt text, paper rules version 2 (experiment 029)
+
+Package `prompts_paper_rules_final_v2.zip` of the project owner (supersedes the first package of experiment 028); plan, byte comparison and report in `experiments/029_prompt_paper_rules_v2/`.
+
+| Item | Change |
+|---|---|
+| `nl2fret_tool/src/nl2fret/common.py`, `prompts3.py` | G4 (notation block after the template specification), G5 (`NOTATION_FRETISH_V15` after the FRETish guide in B, D and S2), G6 (`_writing_first`: section order of the guide inside the prompt); the assembled prompts equal the 12 files of the package byte for byte |
+| `nl2fret_tool/prompts/current/system_prompts/`, `MANIFEST.csv`, `sources_v15.json` | replaced by version 2; the 12 files of version 1 are in `archive/prompts/system_prompts_paper_rules_v1/` |
+| `tests/test_v15_reference.py` | one expectation changed: the prompt must hold every section of the guide verbatim and "Writing requirements" before the grammar (the old test required the whole guide in file order, which G6 changes on purpose) |
+| `docs/V20_BATCH_DESIGN.md` section 10, `prompts/INDEX.md`, `docs/TOOL_PROCESS_GUIDE.md` | updated |
+| the uploaded zip | moved from the root to `experiments/029_prompt_paper_rules_v2/inputs/` |
+
+## 4p. Later changes (2026-11-17): keyword check step KC (experiment 030)
+
+Package `kc_stage_package.zip` of the project owner (`KC_STAGE_SPEC.md`, `MAC_KC_INSTRUCTION.md`, five reference documents); plan, report and verification in `experiments/030_kc_stage/`.
+
+| Item | Change |
+|---|---|
+| `nl2fret_tool/src/nl2fret/kc_stage.py` (new), `prompts/kc/KC_*.md` (new, 5 files) | the step: groups from the fields of the FRET parser output, message, adoption rule, unit state, variant chain; reference documents are copies of lines of the FRETish guide |
+| `batch_pipeline.py`, `run_pipeline.py` (snapshot), `tools/make_judge_inputs.py`, `tools/rt_effect.py`, `tools/prompt_v15_lint.py`, `scripts/run_batch.sh` | phase KC between the feedback and RT1 (`--no-kc`, `NO_KC=1`); RT1 starts from the adopted kc answer; variants v0, vf, kc, rt; keyword distribution table; `kc_doc_sha` in `run_info.json`; V-STYLE list extended (KC and the paper-rule constants) |
+| `prompts/sources_v15.json` (two copies) | entry `keyword_reference` |
+| `tests/test_v20_kc.py`, `tests/data/kc_parser_fields.json` (new) | 18 unit tests |
+| `docs/V20_BATCH_DESIGN.md` (sections 2, 3, 11), `docs/RUNBOOK.md`, `docs/TOOL_PROCESS_GUIDE.md`, `prompts/INDEX.md` | updated |
+| the uploaded zip | moved from the root to `experiments/030_kc_stage/inputs/` |
+
 ## 5. Path repairs (no logic changes)
 
 | Target | Change |
@@ -143,17 +278,17 @@ At the request of the project owner the main directory always holds the latest v
 
 | Component | Location | Notes |
 |---|---|---|
-| Prompts | current: `prompts/current/`; historical: `experiments/*/NL2FRET_*.md`, `experiments/*/prompts/`, `templates/` | `prompts/INDEX.md` |
-| Data | `experiments/*/data/` | `data/INDEX.md` |
-| Conversion runner | final: `nl2fret_tool/bench/run_pipeline.py`, `cli.py`, `units3.py`, `prompts3.py`, `common.py`; earlier runs: `experiments/*/` | per-run copies in `experiments/` |
-| FRET compile | final: `nl2fret_tool/bench/fretparse.py`, `fret_check/`; earlier runs: `experiments/*/` | requires the Docker image `fret-lab` |
-| Kind2 realizability | final: `nl2fret_tool/bench/fret_check/check.py`, `fret_check/tools/fret_rlz.py`; earlier runs: `experiments/*/fret_check/check.py` | the engine is inside the Docker image |
-| z3/NuSMV/Spot judgment | final judge: `nl2fret_tool/judging/nl2fret_judge/`; comparison study: `packages/ltlpack/pack/tools/ltl_engines.py` | |
-| Control experiments | `packages/ltlpack/pack/data/pairs.jsonl` | |
+| Prompts | current: `nl2fret_tool/prompts/current/`; historical: `experiments/*/NL2FRET_*.md`, `experiments/*/prompts/`, `templates/` | `nl2fret_tool/prompts/INDEX.md` |
+| Data | `experiments/*/data/` | `nl2fret_tool/data/INDEX.md` |
+| Conversion runner | final: `nl2fret_tool/src/nl2fret/batch_pipeline.py`, `run_pipeline.py`, `cli.py`, `units3.py`, `prompts3.py`, `common.py`; earlier runs: `experiments/*/` | per-run copies in `experiments/` |
+| FRET compile | final: `nl2fret_tool/src/nl2fret/fretparse.py`, `fret_check/`; earlier runs: `experiments/*/` | requires the Docker image `fret-lab` |
+| Kind2 realizability | final: `nl2fret_tool/src/nl2fret/fret_check/check.py`, `group_rlz.py`, `fret_check/tools/fret_rlz.py`; earlier runs: `experiments/*/fret_check/check.py` | the engine is inside the Docker image |
+| z3/NuSMV/Spot judgment | final judge: `nl2fret_tool/src/nl2fret_judge/`; comparison study: `experiments/ltlpack/pack/tools/ltl_engines.py` | |
+| Control experiments | `experiments/ltlpack/pack/data/pairs.jsonl` | |
 | RQ analysis | `experiments/nl3/analyze3.py`, `nl2fret/tools_extra/`, `score3.py`, `score_lm.py`, `analysis/` in the result folders | |
 | Reports | `REPORT*.md`, `FINAL_REPORT*.md`, `RUN_RECORD.md`, `DEV_RECORD.md` and `RLZ_RECORD.md` in the result folders, `docs/paper` | |
 | judge3/judge4/judge5, `sk.py`, `rq.py` | **Not found on this machine** | Unknown |
 
 ## 7. Known limitations
-- The Docker images (`fret-lab:latest`, `ltl-spot:local`, `cst-nusmv:local`) live outside the repository; their build recipes are in `docker/fret-lab/`, `docker/cst-nusmv/` and `packages/ltlpack/scripts/docker_spot/`. See "External engines" in `README.md` (formerly `engines/README.md`). The images were not rebuilt from these recipes, so the rebuilt images have not been compared with the existing ones.
-- No `requirements.txt` was created. There is no pinned dependency list (the 4 lines of `experiments/nl2fret/requirements.txt` are mostly unpinned), and the instructions from v4 onward state that the Python commands use only the standard library (z3b in `ltl_engines` is optional).
+- The Docker images (`fret-lab:latest`, `ltl-spot:local`, `cst-nusmv:local`) live outside the repository; their build recipes are in `nl2fret_tool/external/docker/fret-lab/`, `nl2fret_tool/external/docker/cst-nusmv/` and `experiments/ltlpack/scripts/docker_spot/`. See "External engines" in `README.md` (formerly `engines/README.md`). The images were not rebuilt from these recipes, so the rebuilt images have not been compared with the existing ones.
+- No `requirements.txt` was created. There is no pinned dependency list (the 4 lines of `experiments/nl2fret/requirements.txt` are mostly unpinned), and the instructions from v4 onward state that the Python commands use only the standard library (z3b in `ltl_engines` is optional). Since 2026-11-17 the tool declares its dependencies in `nl2fret_tool/pyproject.toml` (`z3-solver`, extra `test` with `pytest`; both unpinned).

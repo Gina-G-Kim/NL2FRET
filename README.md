@@ -1,62 +1,50 @@
 # NL2FRET Experiment Repository
 
-A collection of experiments and tools that compare methods for converting natural-language requirements into FRETish (DIRECT, five templates, +R, +V, +D, and others) on the same items. The final tool (release 1.4) is in `nl2fret_tool/` and the current prompts are in `prompts/current/`. The structure and cleanup decisions are described in `STRUCTURE.md`, the file move log is in `MOVE_LOG.csv`, and the verification results and unverified items are in `UNVERIFIED.md`.
+A research workspace around one tool, NL2FRET (release 2.0). The research question: safe software needs a formal specification (LTL), but writing LTL needs expert domain knowledge; FRET turns FRETish into LTL, but writing good FRETish is manual. This work checks whether going through a template (a semi-formal intermediate form) lets an LLM write FRETish whose LTL means the same as (SAME) or implies (PROOF) the LTL of the expert (NASA) FRETish. The core comparison is the template route against Direct. The full statement, the roles of the reference and the dictionary, and the decisions are at the top of `nl2fret_tool/docs/V20_BATCH_DESIGN.md`.
 
-## Process
+## Layout
+
+The project root holds the research workspace only. Everything that belongs to the tool is inside the tool folder.
 
 ```
-natural-language items (data) --> [conversion runner: Claude CLI call with a per-method prompt] --> generated FRETish
-   --> [official FRET parser compile (Docker fret-lab)] --> LTL
-   --> [Kind2 realizability (fret_check, Docker)]            : realizable / unrealizable / unknown / not_run
-   --> [LTL judgment: bounded z3 check, NuSMV, Spot (packages/ltlpack)]
-   --> [scoring, RQ analysis, reports (REPORT, RUN_RECORD, DEV_RECORD)]
+nl2semiformal/
+  README.md  STRUCTURE.md  testnote.md
+  nl2fret_tool/    the tool, a PyPA project (pyproject.toml, src/ layout, tests/), release 2.0, with everything that belongs to it:
+    src/             packages nl2fret (generation pipeline), nl2fret_judge (judging), legacy (alignment candidates of the judge)
+    tests/  scripts/ tests; run scripts (run_batch.sh ...) and maintenance scripts (render_prompts.py, build_cases.py, ...)
+    prompts/         the current prompts as files and their index
+    data/            research data: dataset, dictionary, reference answers, audit, input cases (cases/), index of input data
+    assets/          versioned copies of the assets of the experiments (assets/<asset>/v<N>/); VERSIONS.md is the version index
+    archive/         older releases (releases/), removed features, old documents, files whose purpose is unknown
+    external/docker/ build recipes of the Docker images for the external programs FRET and NuSMV
+    docs/            tool documents: RUNBOOK, DESIGN, V20_BATCH_DESIGN (pre-registration), TOOL_PROCESS_GUIDE, ...
+    runs/            run output (not tracked)
+  experiments/     one folder per experiment or study (NNN_slug; ltlpack = the NuSMV and Spot comparison study), with 000_INDEX.md and RESULTS_INDEX.md
+  docs/            project documents: paper in progress (excluded from git), references, analysis-format document, records/ (MOVE_LOG.csv, UNVERIFIED.md)
 ```
 
-## Final tool: `nl2fret_tool/`
+`testnote.md` is the current run instruction maintained by the project owner and is not edited here. `STRUCTURE.md` explains where each kind of file lives (current layout in section 1, history of the changes in the later sections). `nl2fret_tool/VERSIONS.md` lists every versioned asset.
 
-Release 1.4 of the NL2FRET tool (11 approaches: DIRECT, five templates with rule text `+G`, five templates with rule assembly `+R2`): 113 files, byte-identical to the unpacked release package (sha256 of the zip `af896dde6673a6bb0f41807a2a67de63b3711ae3d2d76fa3fa44e72da1b2e93e`; the five `.pytest_cache` files of the zip are not part of the tool). The bench code is pinned by `nl2fret_tool/bench/FROZEN_MANIFEST.sha256`, so it is not edited in place: a change needs a new release (see `nl2fret_tool/README.md`, Korean). The process is described step by step in `docs/TOOL_PROCESS_GUIDE.md`. The previous release 1.2.0 (75 files, with the frozen judging module) is kept in `archive/nl2fret_tool/v1.2.0/`.
+## The tool: `nl2fret_tool/`
 
-| Stage of the process | Where in `nl2fret_tool/` |
-|---|---|
-| conversion runner (one Claude CLI call per stage, prompt per approach, FRET feedback rounds) | `bench/run_pipeline.py`, `cli.py`, `prompts3.py`, `common.py`, `units3.py`; rule layer `tpl_rules.py`, `fretlint.py` |
-| official FRET compile (Docker image `fret-lab`) | `bench/fretparse.py`, `bench/fret_check/` |
-| judge inputs, per-unit trace, analysis, version comparison, pre-run checks | `bench/tools/` |
-| judging (name alignment by the dictionary, Boolean abstraction, NuSMV queries, role verdicts SAME/PROOF/REFUTE/NEITHER, counterexample records, part-level results) | `judging/nl2fret_judge/`; `judging/legacy/` (judge2, judge4, judge5 as alignment candidates) |
-| step commands of the FSM test | `exp/fsm/run_intent.sh`, `exp/fsm/run_fsm.sh` |
-| input data: dataset, dictionary, reference answers | `data/` (`dataset/`, `dictionary/`, `reference/`, `audit/`); the bench inputs are in `bench/data/` |
-| design, run procedure, analysis plan | `docs/DESIGN.md`, `docs/RUNBOOK.md`, `docs/ANALYSIS_PLAN.md`, `docs/V14_INTENT_TEST.md` |
-| tests (z3 engine; no NuSMV needed) | `tests/` |
-
-`nl2fret_tool/Makefile` targets: `test`, `selfcheck`, `judge`, `aggregate`, `freeze-check`, `fsm-dryrun`, `fsm-all`. Check that the tool is intact (no model calls, no Docker):
+Read `nl2fret_tool/README.md` first. In short:
 
 ```bash
-cd nl2fret_tool && make test            # 29 tests
-cd nl2fret_tool && make freeze-check    # 55 files, all OK
+cd nl2fret_tool
+python3 -m venv .venv && . .venv/bin/activate
+pip install -e ".[test]"
+make test            # 64 tests, no model calls, no Docker
+make build           # sdist and wheel into dist/
+ONLY=06_EB REPS=1 NUSMV=/path/to/NuSMV bash scripts/run_batch.sh all runs/batch_06EB      # a batch run (needs the claude CLI, the Docker image fret-lab and NuSMV 2.6.0)
 ```
 
-The prompts of this tool are stored as files in `prompts/current/` (see `prompts/INDEX.md`). The input data are registered in `assets/` (`dataset`, `dictionary`, `reference`, see `VERSIONS.md`).
+The code of the tool is fixed by a git release tag (`v2.0`). The prompts are stored as files in `nl2fret_tool/prompts/current/` and are rendered from the code by `scripts/render_prompts.py` (`--check` compares without writing). Releases 1.4 and 1.2.0 are in `nl2fret_tool/archive/releases/`.
 
-## Directories
-
-| Location | Contents |
-|---|---|
-| `experiments/` | 14 experiment runs. Each folder holds the code copy of that run, its input data, results and hash manifests. Folder names and internal structure are unchanged |
-| `packages/ltlpack/` | NuSMV and Spot comparison study (610 pairs), Docker wrappers, and the Dockerfile of the Spot image |
-| `docs/` | Paper in progress (`docs/paper/`, excluded from git), references, the analysis-format document, and the survey notes of this cleanup (`docs/refactor_plan/`, excluded from git) |
-| `data/cases/` | Input cases in three groups: `nasa_papers` (NASA reports and other papers, 183), `lockheed_martin` (49) and `fsm` (12 cases whose natural-language text occurs identically in both sources). `SOURCES.md` in each folder records where the cases were collected; `fsm/ORIGIN_MAP.csv` records their original membership |
-| `nl2fret_tool/` | The final tool, release 1.4 (see the section above); release 1.2.0 in `archive/nl2fret_tool/v1.2.0/` |
-| `docker/` | Build recipes of the Docker images `fret-lab` and `cst-nusmv` (see "External engines") |
-| `prompts/` | `current/`: the current prompts as files (model-facing prompts, the assembled system prompts, instruction prompts). `INDEX.md` indexes the current prompts and the historical ones, whose originals are inside the experiment folders |
-| `data/`, `results/` | Location indexes (`INDEX.md`). The originals are inside the experiment folders |
-| `tools/` | Helper scripts: `build_cases.py`, `verify_lm_docx.py`, and `render_prompts.py` (renders `prompts/current/system_prompts/` from `nl2fret_tool/bench`) |
-| `assets/`, `archive/`, `VERSIONS.md` | Versioned copies of the assets of the experiments (`assets/<asset>/v1/` with a `SHA256SUMS` per asset), older versions after a version-up (`archive/<asset>/v<N>/`), and the version index with the version-up rule (`VERSIONS.md`) |
-| `docs/PROCESS_LIFECYCLE.md` | The whole process from the natural-language requirement to the judging tables: a table of the stages and one block per stage (input, process, output, evidence paths) |
-| `docs/TOOL_PROCESS_GUIDE.md` | Process-by-process description of release 1.4 of the tool: what each process does, its input and output, the code, prompt and data files, one worked example (`LM-01_FSM-N13`) |
-| `tests/` | Wrapper that runs the existing selftests and a representative metric |
-| `unsorted/` | Files whose purpose could not be determined (excluded from git) |
-| `testnote.md` | Current run instructions (maintained by the project owner) |
+New experiments (028 and later) get their own folder `experiments/NNN_slug/` (next number in `experiments/000_INDEX.md`). The folder holds only what the experiment needs as input in `inputs/` (the data, the test package placed in the main directory, and a copy of `testnote.md`); the tool is always the one in `nl2fret_tool/`, never a copy. The tool writes its output to its designated place (`nl2fret_tool/runs/<experiment>/`); at the end a copy of the results goes into `results/` of the experiment folder (with `REPORT.md`, `notes/`, `logs/` as needed) and a zip for the project owner into `zips/`. Experiments 001 to 027 stay as they are; the code copies in them are records.
 
 ## Experiment runs
+
+`experiments/000_INDEX.md` lists all experiment folders in numbered order. `experiments/RESULTS_INDEX.md` indexes the result folders. Earlier runs:
 
 | Folder | Contents |
 |---|---|
@@ -67,39 +55,27 @@ The prompts of this tool are stored as files in `prompts/current/` (see `prompts
 | `experiments/nl6`, `nl7` | v6 LM preflight (first attempt), then rerun and main run (61 items) |
 | `experiments/v7_dev0`, `v7_dev1` | v7 development set, first and second run (94 items) |
 | `experiments/v8_dict8` | v8 signal-dictionary smoke run and realizability stage |
-| `experiments/nusmv_paper` | NuSMV judgment in the style of Danso et al. (SecDev '26): Equiv, Sound, Compl and N/M on the 610 stored pairs of `packages/ltlpack`, comparison with the stored judge4 verdicts, and a check of the paper's author repository |
-| `experiments/judge_recording` | Recording extension of the paper-style NuSMV judge (per-pair raw records: queries, SMV files, NuSMV output, atom abstraction, run header) and a regression check on 27 pairs; no measurement was made |
-| `experiments/fret_template_bench`, `fret_retest_v2` | Earlier experiments (classification unknown; names preserved) |
-
-Runs added after 2026-11-09 (the checks and patches that led to release 1.2.0 of the tool, the input conversion for the 61 items, and the 61-item main generation run) are listed in order in `experiments/000_INDEX.md`.
-
-## How to run
-
-The run commands of each experiment are in that folder's instruction document (`NL2FRET_*.md`) and in `scripts/` or `run_*.sh`. The code is a per-run copy, so use the code in the respective folder as it is. New runs start from the final tool: take a writable copy of `nl2fret_tool/` (or of its release zip) for the run and leave `nl2fret_tool/` itself untouched. Model calls use only the subscription login of the `claude` CLI and never an API key. The official parser and the realizability checks require the Docker image `fret-lab:latest` (see "External engines" below).
-
-Lightweight check (no model calls, no Docker):
-
-```bash
-make selftest        # or: bash tests/run_selftests.sh
-```
+| `experiments/nusmv_paper` | NuSMV judgment in the style of Danso et al. (SecDev '26) on the 610 stored pairs of `experiments/ltlpack` |
+| `experiments/judge_recording` | recording extension of the paper-style NuSMV judge and a regression check on 27 pairs |
+| `experiments/fret_template_bench`, `fret_retest_v2` | earlier experiments (classification unknown; names preserved) |
+| `experiments/025_tool_v20_install`, `026_pypa_restructure`, `027_workspace_layout` | installation and tidy-up of release 2.0; the PyPA restructure; the move of everything that belongs to the tool into the tool folder |
 
 ## External engines
 
-This repository does not contain the engines themselves. The engines are local Docker images. Only what was verified on this machine is listed. (This section replaces the former `engines/README.md`; the folder was removed on 2026-11-11 at the request of the project owner and stays in the git history.)
+The engines themselves are not in this repository; they are local Docker images. Only what was verified on this machine is listed.
 
-| Engine | Docker image | Purpose | How it is built, or where it comes from |
+| Engine | Docker image | Purpose | Build recipe or source |
 |---|---|---|---|
-| FRET official parser, LTL translation, Kind2 realizability (the image also holds NuSMV 2.7.1, JKind 2.2, Z3 and AE-VAL) | `fret-lab:latest` (id eb13a1115267) | Compilation and realizability for all experiments | Build recipe in `docker/fret-lab/` (Dockerfile and `fret.sh`, copied from the project `~/fret`): NASA FRET v3.1.0 and Kind2 3.0.0, all five optional tools enabled. Its README has the build command and the evidence that this recipe built the image |
-| Spot 2.16.1 (`ltlfilt`) | `ltl-spot:local` (id abb8d639c12a) | ltlpack comparison study | Dockerfile: `packages/ltlpack/scripts/docker_spot/Dockerfile`; build script: `packages/ltlpack/scripts/build_spot_image.sh` |
-| NuSMV 2.6.0 | `cst-nusmv:local` (id 910e958e8920) | ltlpack comparison study; the Mac check runs of `nl2fret_tool` | Build recipe in `docker/cst-nusmv/` (three-line Dockerfile; the build context is the `bin/` and `share/` folders of the official NuSMV 2.6.0 Linux tarball, which is not stored here; its README has the tarball hash and a manifest of the 175 context files) |
+| FRET official parser, LTL translation, Kind2 realizability (the image also holds NuSMV 2.7.1, JKind 2.2, Z3 and AE-VAL) | `fret-lab:latest` | compilation and realizability | `nl2fret_tool/external/docker/fret-lab/` (NASA FRET v3.1.0 and Kind2 3.0.0, all five optional tools enabled) |
+| Spot 2.16.1 (`ltlfilt`) | `ltl-spot:local` | ltlpack comparison study | `experiments/ltlpack/scripts/docker_spot/Dockerfile`, `experiments/ltlpack/scripts/build_spot_image.sh` |
+| NuSMV 2.6.0 | `cst-nusmv:local` | ltlpack study; judging runs of the tool | `nl2fret_tool/external/docker/cst-nusmv/` (the build context is the `bin/` and `share/` folders of the official NuSMV 2.6.0 Linux tarball, which is not stored here) |
 
-- Installation attempt log: `packages/ltlpack/pack/INSTALL_NOTES.md`
-- Docker container wrappers: `packages/ltlpack/scripts/bin/`
-- Mac-specific note: Homebrew provides no bottles for Intel Macs, so Spot was built from source inside Docker (see the notes above).
+- Installation attempt log: `experiments/ltlpack/pack/INSTALL_NOTES.md`; container wrappers: `experiments/ltlpack/scripts/bin/`.
+- Homebrew provides no bottles for Intel Macs, so Spot was built from source inside Docker.
 
 ## Notes
 
-- The `snapshot/` folders and the `FROZEN*.sha256` and `MANIFEST.sha256` files inside the experiment folders are evidence records. Moving or editing the contents of a folder breaks the hash verification (`sha256sum -c`).
+- The `snapshot/` folders and the `FROZEN*.sha256` and `MANIFEST.sha256` files inside the experiment folders are evidence records of those experiments. Moving or editing the contents of a folder breaks their hash verification (`sha256sum -c`).
 - `experiments/nl2fret/.venv` (1.2 GB) is a virtual environment with hard-coded absolute paths and is not tracked.
-- judge3/judge4/judge5, `sk.py` and `rq.py` were not found on this machine.
-- This repository is not a git repository yet. The home directory (`~`) is already a git repository (0 tracked files), so running `git init` in this folder would nest repositories.
+- judge3, `sk.py` and `rq.py` were not found on this machine.
+- `MOVE_LOG.csv` and `UNVERIFIED.md` are in `docs/records/`.
