@@ -1,6 +1,6 @@
 # .gitignore for the NL2FRET repository
-# Principle: final results (jsonl files, judgment results, reports, MANIFEST and FROZEN*.sha256 files) are tracked,
-# except those under experiments/, which is excluded as a whole (see the end of this file).
+# Principle: the tool (nl2fret_tool/) and the project documents are tracked. experiments/ (run records, inputs, results) is excluded except the entries
+# listed as exceptions below; the tool's own run output (nl2fret_tool/runs/) is excluded by nl2fret_tool/.gitignore.
 
 # Python
 __pycache__/
@@ -47,14 +47,24 @@ results_mock/
 
 # Exclusions decided by the project owner (2026-11-08): local instructions, experiment records, and the paper in progress
 testnote.md
-UNVERIFIED.md
-experiments/
+docs/records/UNVERIFIED.md
+experiments/*
 docs/paper/
+
+# Exceptions inside experiments/ (2026-11-17). `experiments/` itself must not be ignored (a file cannot be re-included when its parent folder is ignored), so the
+# pattern above ignores the entries of the folder and these lines take three of them back:
+#   ltlpack/            the NuSMV and Spot comparison study (it was tracked as packages/ltlpack before it moved into experiments/)
+#   000_INDEX.md        numbering of the experiment folders and the experiment folder rule
+#   RESULTS_INDEX.md    index of the result folders
+# Files inside ltlpack/ that match another pattern of this file (*.zip, work/, __pycache__/) stay ignored, as before.
+!experiments/ltlpack/
+!experiments/000_INDEX.md
+!experiments/RESULTS_INDEX.md
 
 # Added 2026-11-11 at the project owner's request: survey notes of the cleanup, and files whose purpose could not be determined
 # (A .gitignore entry does not affect files that are already tracked; see STRUCTURE.md section 4c.)
 docs/refactor_plan/
-unsorted/
+nl2fret_tool/archive/unsorted/
 
 # ---- Open items (whether to track them is for the project owner to decide) ----
 # 1. Large result folders: experiments/nl7/results_lm (about 67 MB), experiments/nl3/results_nl3 (about 36 MB), etc.
@@ -66,5 +76,5 @@ unsorted/
 # 3. Run logs (run.log, console.log, *_console.log) are run records and are kept tracked.
 # 4. Because *.zip is excluded, the original input archives (inputs/*.zip) are not in git. Store them elsewhere
 #    if they must be preserved.
-# 5. Because experiments/ is excluded as a whole, items 1 to 3 above (tracking of results inside the experiment
-#    folders) do not currently apply.
+# 5. Because the entries of experiments/ are excluded (except the exceptions above), items 1 to 3 above (tracking of results
+#    inside the experiment folders) do not currently apply.
