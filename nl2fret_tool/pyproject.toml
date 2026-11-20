@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "NL2FRET: natural-language requirements to FRETish through semi-formal templates, judged against NASA FRETish with NuSMV"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["z3-solver"]
+dependencies = ["z3-solver", "openpyxl"]
 
 [project.optional-dependencies]
 test = ["pytest"]
