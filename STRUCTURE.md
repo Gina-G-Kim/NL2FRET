@@ -262,6 +262,85 @@ Package `kc_stage_package.zip` of the project owner (`KC_STAGE_SPEC.md`, `MAC_KC
 | `docs/V20_BATCH_DESIGN.md` (sections 2, 3, 11), `docs/RUNBOOK.md`, `docs/TOOL_PROCESS_GUIDE.md`, `prompts/INDEX.md` | updated |
 | the uploaded zip | moved from the root to `experiments/030_kc_stage/inputs/` |
 
+## 4q. Later changes (2026-11-17/18): FSM retest, paper rules v2 against release 2.0 (experiment 031)
+
+Package `fsm_retest_package.zip` of the project owner (`MAC_FSM_RETEST_INSTRUCTION.md`, prompt files); plan, report, tables and logs in `experiments/031_fsm_retest_paper2/`. No change to `nl2fret_tool/`.
+
+| Item | Content |
+|---|---|
+| runs | two paired runs of 01_FSM (13 items, 11 arms, 3 repetitions, 429 units each): A = code before the PyPA restructure with release 2.0 prompts (backup zip of experiment 026), B = current code with paper rules v2 prompts, `--no-kc`; both ran in scratch copies (deleted afterwards) because the group step writes into `fret_check/work/` |
+| results | `experiments/031_fsm_retest_paper2/results/runs/fsm_rel20_20261117`, `fsm_paper2_20261117`; seven tables in `results/analysis/tables/`; `REPORT.md`; `zips/fsm_retest_results.zip` |
+
+## 4r. Later changes (2026-11-18): FSM diagnostic and tool fix (experiment 032)
+
+Package `fsm_diag_pack.zip` of the project owner (instruction, pre-registration, `und17.csv`); plan, report, tables, patches and logs in `experiments/032_fsm_diag/`. No model call.
+
+| Item | Change |
+|---|---|
+| `nl2fret_tool/src/nl2fret/batch_pipeline.py` | stage S schema retry (`SCHEMA_RETRIES = 2`, `schema_retry`, `schema_retry_note`); rows that need no retry are byte-identical to the earlier version (checked by replay of the stored replies of experiment 031) |
+| `nl2fret_tool/src/nl2fret/tools/retry_counts.py` (new), `tests/test_v20_schema_retry.py` (new) | per-approach retry counts; 9 tests (pytest 82 -> 91 passed) |
+| `docs/V20_BATCH_DESIGN.md`, `docs/RUNBOOK.md`, `docs/TOOL_PROCESS_GUIDE.md` | stage S schema retry described (the guide was edited in place; its generator in experiment 025 is a record and was not changed) |
+| not applied (proposals) | `experiments/032_fsm_diag/proposals/`: D1 unknown names, D2 signal coverage, D3 slot condition kept, D4 unique message ids, T1 prompt set argument |
+| the uploaded zip | moved from the root to `experiments/032_fsm_diag/inputs/` |
+
+## 4s. Later changes (2026-11-18): FSM pack 2 (experiment 033)
+
+Package `fsm_pack2.zip` of the project owner (instruction, decisions); plan, report, check tables and logs in `experiments/033_fsm_pack2/`. No model call.
+
+| Item | Change |
+|---|---|
+| `nl2fret_tool/src/nl2fret/batch_pipeline.py`, `kc_stage.py` | unique message ids when one batch message holds the same item id several times (`<item id>@<approach>`; D4 of experiment 032); no change when ids are not repeated (142 stored batches replayed byte-identical) |
+| `src/nl2fret/prompts3.py` (`ARMS_FSM5`), `batch_pipeline.py` (`--arms` default), `scripts/run_batch.sh` (`ARMS`) | default arm set of the batch run = DIRECT, Adv-EARS+G, Boilerplate+G, MASTeR+G, SPIDER+G (195 units); EARS and +R2 stay in the code and are selected with `--arms` |
+| `nl2fret_tool/prompts/current/kc/` (new, 8 files + MANIFEST), `scripts/render_prompts.py`, `prompts/INDEX.md` | prompts of the keyword check step KC stored as files and checked together with the system prompts |
+| `src/nl2fret/tools/readable_report.py` (new), `scripts/run_batch.sh` (step `readable`), `tests/test_v20_readable.py` (new) | human-readable result files (Korean outline Markdown per item, INDEX.md, results_flat.csv) in `$RUN/readable/`; copied into `experiments/<NNN>/results/` |
+| `experiments/031_fsm_retest_paper2/results/readable/` (new) | first use of the readable report on the two runs of experiment 031 |
+| `docs/V20_BATCH_DESIGN.md` (section 12), `docs/RUNBOOK.md`, `docs/TOOL_PROCESS_GUIDE.md` | updated |
+| the uploaded zip | moved from the root to `experiments/033_fsm_pack2/inputs/` |
+
+## 4t. Later changes (2026-11-18): FSM pack 3 investigation (experiment 034)
+
+Package `fsm_pack3.zip` of the project owner; report, tables, FRET inputs and CLI outputs in `experiments/034_fsm_pack3/`. Investigation only: no change in `nl2fret_tool/`, no model call (docker `fret-lab` only). The uploaded zip was moved from the root to `experiments/034_fsm_pack3/inputs/`.
+
+## 4u. Later changes (2026-11-18): FSM pack 4, dataset exclusions (experiment 035)
+
+Package `fsm_pack4.zip`; report, tables, CLI outputs and change record in `experiments/035_fsm_pack4/`. Tool: `data/dataset_exclusions.json` (new, FSM N03, N05, N07, N09, N11), `src/nl2fret/tools/apply_exclusions.py` (new), `scripts/run_batch.sh` (uses filtered copies in `$RUN/filtered/`), `tests/test_v20_exclusions.py` (new), docs; the original data files are not changed. The uploaded zip was moved from the root to `experiments/035_fsm_pack4/inputs/`.
+
+## 4v. Later changes (2026-11-19): FSM pack 6, variable table of the group stage and FSM rerun (experiment 037)
+
+Package `fsm_pack6.zip`; report, tables, change record, CLI records and the copy of the rerun results in `experiments/037_fsm_pack6/`. Tool: `src/nl2fret/fret_check/tools/fretexpr.py` (`analyze` classifies further expression fields), `src/nl2fret/fret_check/tools/fret_rlz.py` (`sentence_info` passes `scope_mode` and `stop_condition`), `tests/test_v20_rlz_variable_table.py` and `tests/data/rlz_sem_fields.json` (new), `docs/V20_BATCH_DESIGN.md` (section 14), `docs/TOOL_PROCESS_GUIDE.md` (one sentence in P12). The run folder of the FSM rerun (120 units) is `nl2fret_tool/runs/fsm_pack6_20261119/`. The uploaded zip was moved from the root to `experiments/037_fsm_pack6/inputs/`.
+
+## 4w. Later changes (2026-11-19): FSM pack 7, confound audit (experiment 038)
+
+Package `fsm_pack7.zip`; report, tables (md and csv), scripts, Kind2 inputs and outputs of the 600 s re-run and the group queries without N13 in `experiments/038_fsm_pack7/`. Observation only: no change of the tool, prompts, dataset, exclusion list, dictionary or judge, no model call. New files only under `experiments/038_fsm_pack7/` (`scripts/`, `analysis/`, `notes/`, `logs/`, `zips/fsm_pack7_results.zip`).
+
+## 4x. Later changes (2026-11-19): FSM pack 8, intent declaration on (experiment 039)
+
+Package `fsm_pack8.zip`; report, tables (md and csv), scripts, the A/B checks of the declaration paragraph and a run summary in `experiments/039_fsm_pack8/`. New run folder `nl2fret_tool/runs/fsm_pack8_20261119/` (8 items x 5 approaches x 3 repetitions = 120 units, only `intent_decl` differs from the pack 6 run; `--intent-decl` was appended by the wrapper `experiments/039_fsm_pack8/scripts/py_intent.sh`, no change of the tool, `run_batch.sh`, prompts, dataset, exclusion list, dictionary or judge). Model calls: 73 batch calls of the run and one isolation probe call. `experiments/000_INDEX.md` has a row 039.
+
+## 4y. Later changes (2026-11-19): FSM pack 9 step 1, read-only code check (experiment 040)
+
+Package `fsm_pack9.zip`; report, tables (md and csv), code quotes and the report generator in `experiments/040_fsm_pack9_step1/`. Read only: no change of the tool, prompts, dictionary, judge, parser, dataset, exclusion list or settings, no model call, no new run folder. New files only under `experiments/040_fsm_pack9_step1/` and the row 040 of `experiments/000_INDEX.md`.
+
+## 4z. Later changes (2026-11-19): FSM pack 9 step 2, structure-preserving edits M1, M2, M3 (experiment 041)
+
+Package `fsm_pack9_mod.zip`; report, tables, rendered messages (before and after), code quotes, the diff against the saved originals and the scripts in `experiments/041_fsm_pack9_mod1/`. No model call, no new run folder. Tool changes (10 files, listed in REPORT.md section 0): stage A dictionary (`common.user_prompt_A`, `prompts3.build_system_A3`, `batch_pipeline.phase_A`, `run_pipeline.sd_of_a`, new `src/nl2fret/prompts/stage_a_dict_rules.txt`), term correspondences (`ext/dictionary/attach.py` `term_block` and `prompt_text`, new `data/dictionary/term_correspondence/01_FSM.md`), KC COND note (`kc_stage.cond_note`, new `src/nl2fret/prompts/kc/KC_COND_authors_note.md`), new test file `tests/test_v20_mod1.py`. `prompts/current/` was not re-rendered (`render_prompts.py --check` lists 6 files).
+
+## 4aa. Later changes (2026-11-20): FSM pack 10, 120-unit rerun with the stage A dictionary rules only (experiment 043)
+
+Package `fsm_pack10_run.zip` (first version and rev2 kept in `experiments/043_fsm_pack10_run/inputs/`; rev2 followed). Report, tables, results, quoted prompts and scripts in `experiments/043_fsm_pack10_run/`; run folder `nl2fret_tool/runs/fsm_pack10_m1only`. Tool tree changes: `KC_COND_authors_note.md` and `data/dictionary/term_correspondence/01_FSM.md` moved to `experiments/043_fsm_pack10_run/work/removed/` (not deleted, not restored); `prompts/current/system_prompts/` stage A files re-rendered (6 files differ in content). No code, prompt source, dictionary, judge, parser, dataset or exclusion list change. `experiments/042_fsm_pack9_run/` holds the pack 9 step 3 input only (never run).
+
+## 4ab. Later changes (2026-11-20): FSM pack 11, 120-unit rerun with the term correspondence row `mode | activeMode` (experiment 044)
+
+Package `fsm_pack11_run.zip` (first upload and second upload kept in `experiments/044_fsm_pack11_run/inputs/`; the second, without the git start condition and with the baseline ledger, was followed). Report, tables, results, quoted prompts and scripts in `experiments/044_fsm_pack11_run/`; run folder `nl2fret_tool/runs/fsm_pack11_termrow`; baseline ledger `nl2fret_tool/runs/baseline_pack11/BASELINE_LEDGER.md` (ignored path). Tool tree change: one new file `nl2fret_tool/data/dictionary/term_correspondence/01_FSM.md` (184 bytes, sha256 `c62ef2ee...a456`, copied from the package); `prompts/current/` re-rendered with identical content. The KC authors quote file stays outside the tool tree. No git command was run; the commit is the user's.
+
+## 4ac. Later changes (2026-11-20): FSM pack 12, 120-unit rerun with NL substitution outside the tool (experiment 045)
+
+Package `fsm_pack12_run.zip` (in `experiments/045_fsm_pack12_run/inputs/`). Report, tables, results, substituted dataset copy (`work/dataset_substituted/items.jsonl`), substitution log, quoted prompts and scripts in `experiments/045_fsm_pack12_run/`; run folder `nl2fret_tool/runs/fsm_pack12_nlsubst`; baseline ledger `nl2fret_tool/runs/baseline_pack12/BASELINE_LEDGER.md` (ignored path). Tool tree change: `data/dictionary/term_correspondence/01_FSM.md` moved to `experiments/045_fsm_pack12_run/work/removed/term_correspondence_01_FSM_pack11.md` (the folder is empty). The dataset path of the run points to the substituted copy through the `PYTHON` hook (`scripts/py_subst.sh`), which rewrites the value of the existing `--data` option; tool code unchanged. No git command was run; the commit is the user's (suggested branch `pack12-nlsubst`).
+
+## 4ad. Later changes (2026-11-20): result tables of a run for people (experiment 046)
+
+Package `readable_tables_pkg.zip` (first upload stopped at step 0.1, second upload implemented; both in `experiments/046_readable_tables/inputs/`). New `nl2fret_tool/scripts/make_readable_tables.py` (reads the stored results of a run folder, writes `results_tables_<challenge>.xlsx` + 7 CSV files per challenge, default `<run>/readable/tables/<challenge>/`), one call line in the `readable` step of `scripts/run_batch.sh` (a failure only writes `<run>/readable/tables_failed.txt`), test `tests/test_readable_tables.py`, `openpyxl` added to `pyproject.toml` dependencies and installed in the tool venv (3.1.5 + et_xmlfile 2.0.0). Report, checks (`check_pack12/`, `check_pack11/`), comparison tables and zip in `experiments/046_readable_tables/`; ledger `nl2fret_tool/runs/baseline_readable_tables/BASELINE_LEDGER.md`
+
 ## 5. Path repairs (no logic changes)
 
 | Target | Change |
